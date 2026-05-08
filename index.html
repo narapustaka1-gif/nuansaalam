@@ -1,148 +1,168 @@
-<!DOCTYPE html>
-<html lang="id">
+<!--
+NARA COFFEE LIVE DEMO SYSTEM
+✔ Responsive Professional
+✔ Same Layout Desktop & Mobile
+✔ Dynamic Resize Only
+✔ Live Order Demo
+✔ Kasir Dashboard Active
+✔ Realtime Simulation
+✔ Spreadsheet Ready
+✔ Premium Typography
+✔ Luxury Responsive UI
+-->
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script>
 
-  <title>Nara Coffee</title>
+const API_URL =
+'https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec';
 
-  <script src="https://cdn.tailwindcss.com"></script>
+</script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
 
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+html{
+scroll-behavior:smooth;
+}
 
-  <style>
+body{
+overflow-x:hidden;
+background:#f4ede4;
+font-family:'Manrope',sans-serif;
+}
 
-    *{
-      font-family:'Manrope',sans-serif;
-    }
+.paragraph{
+text-align:justify;
+line-height:2;
+}
 
-    html{
-      scroll-behavior:smooth;
-    }
+.responsive-title{
+font-size:clamp(42px,7vw,92px);
+line-height:1.08;
+}
 
-    body{
-      background:#f4ede4;
-      overflow-x:hidden;
-      color:#2d2d2d;
-    }
+.responsive-sub{
+font-size:clamp(14px,2vw,18px);
+}
 
-    .glass{
-      backdrop-filter:blur(18px);
-      background:rgba(255,255,255,.08);
-    }
+.same-layout{
+width:min(100%,1400px);
+margin:auto;
+padding-inline:clamp(20px,4vw,60px);
+}
 
-    .hero{
-      background:
-      linear-gradient(to right, rgba(0,0,0,.72), rgba(0,0,0,.45)),
-      url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1600&auto=format&fit=crop');
+.menu-card{
+width:clamp(280px,30vw,360px);
+flex-shrink:0;
+}
 
-      background-size:cover;
-      background-position:center;
-    }
+.hero{
+background:
+linear-gradient(to right,rgba(0,0,0,.72),rgba(0,0,0,.42)),
+url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1600&auto=format&fit=crop');
 
-    .gallery{
-      background:
-      linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.65)),
-      url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1600&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+}
 
-      background-size:cover;
-      background-position:center;
-      background-attachment:fixed;
-    }
+.gallery{
+background:
+linear-gradient(to bottom,rgba(0,0,0,.65),rgba(0,0,0,.65)),
+url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1600&auto=format&fit=crop');
 
-    .paragraph{
-      text-align:justify;
-      line-height:2;
-    }
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+}
 
-    .card{
-      transition:.4s;
-    }
+.glass{
+backdrop-filter:blur(16px);
+background:rgba(255,255,255,.08);
+}
 
-    .card:hover{
-      transform:translateY(-8px);
-      box-shadow:0 25px 70px rgba(0,0,0,.12);
-    }
+.hide-scroll::-webkit-scrollbar{
+display:none;
+}
 
-    .hide-scroll::-webkit-scrollbar{
-      display:none;
-    }
+.card{
+transition:.4s;
+}
 
-    .menu-slider{
-      scroll-snap-type:x mandatory;
-    }
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 25px 70px rgba(0,0,0,.12);
+}
 
-    .menu-card{
-      scroll-snap-align:start;
-    }
+.popup{
+backdrop-filter:blur(12px);
+}
 
-    .floating{
-      animation:floating 3s ease-in-out infinite;
-    }
+.floating{
+animation:floating 3s ease-in-out infinite;
+}
 
-    @keyframes floating{
-      0%{
-        transform:translateY(0);
-      }
-      50%{
-        transform:translateY(-8px);
-      }
-      100%{
-        transform:translateY(0);
-      }
-    }
+@keyframes floating{
 
-  </style>
-</head>
+0%{
+transform:translateY(0);
+}
 
-<body>
+50%{
+transform:translateY(-7px);
+}
+
+100%{
+transform:translateY(0);
+}
+
+}
+
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
 
 <!-- NAVBAR -->
 
 <nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/10">
 
-  <div class="max-w-7xl mx-auto px-5 lg:px-8 py-5 flex items-center justify-between">
+<div class="same-layout py-5 flex justify-between items-center">
 
-    <div>
+<h1 class="text-white font-bold tracking-wide text-[clamp(20px,3vw,28px)]">
+Nara Coffee
+</h1>
 
-      <h1 class="text-white font-bold tracking-wide text-[clamp(20px,3vw,28px)]">
-        Nara Coffee
-      </h1>
+<div class="hidden lg:flex items-center gap-10 text-white text-sm">
 
-    </div>
+<a href="#menu">
+Menu
+</a>
 
-    <div class="hidden lg:flex items-center gap-10 text-white text-sm">
+<a href="#gallery">
+Gallery
+</a>
 
-      <a href="#menu" class="hover:text-[#d6b08b] transition">
-        Menu
-      </a>
+<a href="#about">
+About
+</a>
 
-      <a href="#gallery" class="hover:text-[#d6b08b] transition">
-        Gallery
-      </a>
+<a href="#reservation">
+Reservation
+</a>
 
-      <a href="#about" class="hover:text-[#d6b08b] transition">
-        About
-      </a>
+<button
+onclick="openKasir()"
+class="bg-[#c89b6d] text-black px-6 py-3 rounded-full font-semibold">
 
-      <a href="#reservation" class="hover:text-[#d6b08b] transition">
-        Reservation
-      </a>
+Kasir Login
 
-      <button
-      onclick="openKasir()"
-      class="bg-[#c89b6d] text-black px-6 py-3 rounded-full font-semibold hover:scale-105 transition">
+</button>
 
-        Kasir Login
+</div>
 
-      </button>
-
-    </div>
-
-  </div>
+</div>
 
 </nav>
 
@@ -150,56 +170,57 @@
 
 <section class="hero min-h-screen flex items-center">
 
-  <div class="max-w-7xl mx-auto px-5 lg:px-8 w-full pt-24">
+<div class="same-layout pt-28">
 
-    <div class="max-w-3xl">
+<div class="max-w-3xl">
 
-      <p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-6">
+<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-6">
 
-        Premium Coffee Experience
+Premium Coffee Experience
 
-      </p>
+</p>
 
-      <h1 class="text-[clamp(42px,7vw,90px)] font-bold text-white leading-[1.1] mb-8">
+<h1 class="responsive-title text-white font-bold mb-8">
 
-        Fresh Coffee & Handmade Pastry <br>
+Fresh Coffee & <br>
+Handmade Pastry
 
-      </h1>
+</h1>
 
-      <p class="paragraph text-white/80 text-[clamp(14px,2vw,18px)] max-w-2xl mb-10">
+<p class="paragraph responsive-sub text-white/80 max-w-2xl mb-10">
 
-        Nikmati pengalaman memesan kopi dan pastry
-        secara modern tanpa antre.
-        Cukup scan QR meja,
-        pilih menu,
-        lakukan pembayaran,
-        lalu tunggu pesanan datang dengan nyaman.
+Nikmati pengalaman memesan kopi dan pastry
+secara modern tanpa antre.
+Cukup scan QR meja,
+pilih menu,
+lakukan pembayaran,
+lalu tunggu pesanan datang dengan nyaman.
 
-      </p>
+</p>
 
-      <div class="flex flex-wrap gap-5">
+<div class="flex flex-wrap gap-5">
 
-        <a
-        href="#menu"
-        class="bg-[#c89b6d] text-black px-8 py-4 rounded-full font-semibold hover:scale-105 transition">
+<a
+href="#menu"
+class="bg-[#c89b6d] text-black px-8 py-4 rounded-full font-semibold">
 
-          Pesan Sekarang
+Pesan Sekarang
 
-        </a>
+</a>
 
-        <button
-        onclick="openKasir()"
-        class="border border-white/20 text-white px-8 py-4 rounded-full hover:bg-white hover:text-black transition">
+<button
+onclick="openKasir()"
+class="border border-white/20 text-white px-8 py-4 rounded-full">
 
-          Dashboard Kasir
+Dashboard Kasir
 
-        </button>
+</button>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
@@ -207,59 +228,60 @@
 
 <section id="menu" class="py-24">
 
-  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+<div class="same-layout">
 
-    <div class="mb-14">
+<div class="mb-14">
 
-      <p class="uppercase tracking-[5px] text-[#8d6b4f] text-xs lg:text-sm mb-5">
+<p class="uppercase tracking-[5px] text-[#8d6b4f] text-xs lg:text-sm mb-5">
 
-        Best Seller Menu
+Best Seller Menu
 
-      </p>
+</p>
 
-      <h2 class="text-[clamp(36px,5vw,60px)] font-bold leading-[1.2] max-w-2xl">
+<h2 class="text-[clamp(34px,5vw,60px)] font-bold leading-[1.2] max-w-2xl">
 
-        Pilihan menu premium dengan cita rasa hangat.
+Pilihan menu premium
+dengan cita rasa hangat.
 
-      </h2>
+</h2>
 
-    </div>
+</div>
 
-    <!-- CATEGORY -->
+<!-- CATEGORY -->
 
-    <div class="flex gap-4 overflow-x-auto hide-scroll pb-2 mb-12">
+<div class="flex gap-4 overflow-x-auto hide-scroll pb-2 mb-12">
 
-      <button class="bg-[#44533d] text-white px-7 py-3 rounded-full whitespace-nowrap">
-        Coffee
-      </button>
+<button class="bg-[#44533d] text-white px-7 py-3 rounded-full whitespace-nowrap">
+Coffee
+</button>
 
-      <button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
-        Pastry
-      </button>
+<button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
+Pastry
+</button>
 
-      <button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
-        Dessert
-      </button>
+<button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
+Dessert
+</button>
 
-      <button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
-        Breakfast
-      </button>
+<button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
+Breakfast
+</button>
 
-    </div>
+</div>
 
-    <!-- MENU SLIDER -->
+<!-- MENU SLIDER -->
 
-    <div class="overflow-x-auto hide-scroll menu-slider">
+<div class="overflow-x-auto hide-scroll">
 
-      <div
-      id="menuContainer"
-      class="flex gap-7 w-max pb-5">
+<div
+id="menuContainer"
+class="flex gap-7 w-max pb-6">
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
@@ -269,35 +291,36 @@
 id="gallery"
 class="gallery min-h-screen flex items-center">
 
-  <div class="max-w-7xl mx-auto px-5 lg:px-8 w-full">
+<div class="same-layout">
 
-    <div class="max-w-2xl">
+<div class="max-w-2xl">
 
-      <p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
+<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
 
-        Cafe Atmosphere
+Cafe Atmosphere
 
-      </p>
+</p>
 
-      <h2 class="text-[clamp(38px,6vw,72px)] font-bold text-white leading-[1.15] mb-8">
+<h2 class="text-[clamp(36px,6vw,72px)] font-bold text-white leading-[1.15] mb-8">
 
-        Tempat nyaman untuk menikmati setiap cerita.
+Tempat nyaman untuk
+menikmati setiap cerita.
 
-      </h2>
+</h2>
 
-      <p class="paragraph text-white/80 text-[clamp(14px,2vw,18px)]">
+<p class="paragraph responsive-sub text-white/80">
 
-        Kami menghadirkan ruang hangat
-        untuk menikmati kopi,
-        percakapan kecil,
-        dan suasana yang menenangkan
-        di tengah aktivitas sehari-hari.
+Kami menghadirkan ruang hangat
+untuk menikmati kopi,
+percakapan kecil,
+dan suasana yang menenangkan
+di tengah aktivitas sehari-hari.
 
-      </p>
+</p>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
@@ -305,67 +328,35 @@ class="gallery min-h-screen flex items-center">
 
 <section id="about" class="py-24">
 
-  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+<div class="same-layout">
 
-    <div class="bg-[#5b4331] rounded-[40px] p-10 lg:p-16 text-white">
+<div class="bg-[#5b4331] rounded-[40px] p-[clamp(28px,5vw,70px)] text-white">
 
-      <p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
+<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
 
-        About Cafe
+About Cafe
 
-      </p>
+</p>
 
-      <h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
+<h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
 
-        Crafted with warmth, served with comfort.
+Crafted with warmth,
+served with comfort.
 
-      </h2>
+</h2>
 
-      <p class="paragraph text-white/80 text-[clamp(14px,2vw,18px)] max-w-4xl">
+<p class="paragraph responsive-sub text-white/80 max-w-4xl">
 
-        Nara Coffee hadir sebagai ruang modern yang menggabungkan pengalaman menikmati kopi, pastry, dan suasana aesthetic dalam satu tempat.
+Nara Coffee hadir sebagai ruang modern
+yang menggabungkan pengalaman menikmati kopi,
+pastry,
+dan suasana aesthetic dalam satu tempat.
 
-      </p>
+</p>
 
-    </div>
+</div>
 
-  </div>
-
-</section>
-
-<!-- PARTNERSHIP -->
-
-<section class="pb-24">
-
-  <div class="max-w-7xl mx-auto px-5 lg:px-8">
-
-    <div class="border border-[#8d6b4f] rounded-[40px] p-10 lg:p-16">
-
-      <p class="uppercase tracking-[5px] text-[#8d6b4f] text-xs lg:text-sm mb-5">
-
-        Partnership
-
-      </p>
-
-      <h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
-
-        Open collaboration for every creative idea.
-
-      </h2>
-
-      <p class="paragraph text-[clamp(14px,2vw,18px)] text-gray-600 max-w-4xl">
-
-        Kami membuka kesempatan kerjasama
-        untuk berbagai event,
-        gathering,
-        komunitas,
-        maupun kolaborasi kreatif lainnya.
-
-      </p>
-
-    </div>
-
-  </div>
+</div>
 
 </section>
 
@@ -373,33 +364,34 @@ class="gallery min-h-screen flex items-center">
 
 <section id="reservation" class="pb-32">
 
-  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+<div class="same-layout">
 
-    <div class="bg-[#44533d] rounded-[40px] p-10 lg:p-16 text-white">
+<div class="bg-[#44533d] rounded-[40px] p-[clamp(28px,5vw,70px)] text-white">
 
-      <p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
+<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
 
-        Reservation
+Reservation
 
-      </p>
+</p>
 
-      <h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
+<h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
 
-        Reservasi tempat langsung melalui WhatsApp.
+Reservasi tempat
+langsung melalui WhatsApp.
 
-      </h2>
+</h2>
 
-      <button
-      onclick="alert('Simulasi Reservasi WhatsApp')"
-      class="bg-[#c89b6d] text-black px-8 py-4 rounded-full font-semibold hover:scale-105 transition">
+<button
+onclick="alert('Simulasi Reservasi WhatsApp')"
+class="bg-[#c89b6d] text-black px-8 py-4 rounded-full font-semibold">
 
-        Reserve Now
+Reserve Now
 
-      </button>
+</button>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
@@ -409,7 +401,7 @@ class="gallery min-h-screen flex items-center">
 onclick="openCart()"
 class="fixed bottom-6 right-6 z-50 bg-[#44533d] text-white px-6 py-4 rounded-full shadow-2xl cursor-pointer floating">
 
-  🛒 Cart (<span id="cartCount">0</span>)
+🛒 Cart (<span id="cartCount">0</span>)
 
 </div>
 
@@ -417,72 +409,109 @@ class="fixed bottom-6 right-6 z-50 bg-[#44533d] text-white px-6 py-4 rounded-ful
 
 <div
 id="cartPopup"
-class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-5">
+class="fixed inset-0 bg-black/60 popup hidden items-center justify-center z-50 p-5">
 
-  <div class="bg-white rounded-[40px] p-8 max-w-lg w-full">
+<div class="bg-white rounded-[40px] p-8 max-w-lg w-full">
 
-    <div class="flex items-center justify-between mb-8">
+<div class="flex justify-between items-center mb-8">
 
-      <h2 class="text-3xl font-bold">
-        Checkout
-      </h2>
+<h2 class="text-3xl font-bold">
+Checkout
+</h2>
 
-      <button
-      onclick="closeCart()"
-      class="text-2xl">
-        ✕
-      </button>
+<button
+onclick="closeCart()"
+class="text-2xl">
+✕
+</button>
 
-    </div>
+</div>
 
-    <div
-    id="cartItems"
-    class="space-y-4 mb-6">
+<div
+id="cartItems"
+class="space-y-4 mb-6">
 
-    </div>
+</div>
 
-    <div class="border-t pt-5 mb-6">
+<div class="border-t pt-5 mb-6">
 
-      <div class="flex justify-between text-2xl font-bold">
+<div class="flex justify-between text-2xl font-bold">
 
-        <span>Total</span>
+<span>Total</span>
 
-        <span id="totalPrice">
-          Rp0
-        </span>
+<span id="totalPrice">
+Rp0
+</span>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-    <input
-    type="text"
-    placeholder="Nama Customer"
-    class="w-full border p-4 rounded-2xl mb-4">
+<input
+id="customerName"
+type="text"
+placeholder="Nama Customer"
+class="w-full border p-4 rounded-2xl mb-4">
 
-    <select
-    class="w-full border p-4 rounded-2xl mb-4">
+<select
+id="tableNumber"
+class="w-full border p-4 rounded-2xl mb-4">
 
-      <option>Meja 01</option>
-      <option>Meja 02</option>
-      <option>Meja 03</option>
+<option>Meja 01</option>
+<option>Meja 02</option>
+<option>Meja 03</option>
 
-    </select>
+</select>
 
-    <input
-    readonly
-    value="A001"
-    class="w-full border p-4 rounded-2xl bg-gray-100 mb-6">
+<input
+id="queueNumber"
+readonly
+class="w-full border p-4 rounded-2xl bg-gray-100 mb-6">
 
-    <button
-    onclick="checkout()"
-    class="bg-[#44533d] text-white w-full py-5 rounded-2xl hover:scale-[1.02] transition">
+<button
+onclick="checkout()"
+class="bg-[#44533d] text-white w-full py-5 rounded-2xl">
 
-      Pesan Sekarang
+Pesan Sekarang
 
-    </button>
+</button>
 
-  </div>
+</div>
+
+</div>
+
+<!-- PAYMENT -->
+
+<div
+id="paymentPopup"
+class="fixed inset-0 bg-black/60 popup hidden items-center justify-center z-50 p-5">
+
+<div class="bg-white rounded-[40px] p-10 max-w-md w-full text-center">
+
+<h2 class="text-4xl font-bold mb-6">
+QR Payment
+</h2>
+
+<img
+src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NARA-CAFE"
+class="mx-auto rounded-2xl mb-5">
+
+<p class="text-2xl font-bold mb-6">
+
+Total:
+<span id="paymentTotal"></span>
+
+</p>
+
+<button
+onclick="finishPayment()"
+class="bg-[#44533d] text-white px-8 py-4 rounded-full">
+
+Selesai
+
+</button>
+
+</div>
 
 </div>
 
@@ -490,223 +519,348 @@ class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-5">
 
 <div
 id="kasirPopup"
-class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-5">
+class="fixed inset-0 bg-black/60 popup hidden items-center justify-center z-50 p-5">
 
-  <div class="bg-white rounded-[40px] p-8 max-w-md w-full">
+<div class="bg-white rounded-[40px] p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
 
-    <div class="flex justify-between items-center mb-8">
+<div class="flex justify-between items-center mb-8">
 
-      <h2 class="text-3xl font-bold">
-        Kasir Login
-      </h2>
+<h2 class="text-3xl font-bold">
+Dashboard Kasir
+</h2>
 
-      <button
-      onclick="closeKasir()"
-      class="text-2xl">
-        ✕
-      </button>
+<button
+onclick="closeKasir()"
+class="text-2xl">
+✕
+</button>
 
-    </div>
+</div>
 
-    <input
-    type="text"
-    placeholder="Username"
-    class="w-full border p-4 rounded-2xl mb-4">
+<div
+id="kasirOrders"
+class="space-y-4">
 
-    <input
-    type="password"
-    placeholder="Password"
-    class="w-full border p-4 rounded-2xl mb-6">
+</div>
 
-    <button
-    onclick="alert('Simulasi Login Kasir')"
-    class="bg-[#44533d] text-white w-full py-5 rounded-2xl">
-
-      Login Dashboard
-
-    </button>
-
-  </div>
+</div>
 
 </div>
 
 <script>
 
+let cart = [];
+
+let orders = [];
+
 const menus = [
 
 {
-  name:'Latte Coffee',
-  price:25000,
-  image:'https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1200&auto=format&fit=crop',
-  desc:'Perpaduan espresso premium dan susu creamy.'
+name:'Latte Coffee',
+price:25000,
+image:'https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1200&auto=format&fit=crop',
+desc:'Perpaduan espresso premium dan susu creamy.'
 },
 
 {
-  name:'Butter Croissant',
-  price:18000,
-  image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop',
-  desc:'Pastry hangat dengan aroma butter premium.'
+name:'Butter Croissant',
+price:18000,
+image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop',
+desc:'Pastry hangat dengan aroma butter premium.'
 },
 
 {
-  name:'Signature Cake',
-  price:35000,
-  image:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop',
-  desc:'Cake lembut dengan tampilan aesthetic.'
+name:'Signature Cake',
+price:35000,
+image:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop',
+desc:'Cake lembut dengan tampilan aesthetic.'
 }
 
 ];
 
-let cart = [];
-
 function renderMenu(){
 
-  let html = '';
+let html = '';
 
-  menus.forEach(menu=>{
+menus.forEach(menu=>{
 
-    html += `
+html += `
 
-    <div class="bg-white rounded-[32px] overflow-hidden w-[320px] lg:w-[360px] card menu-card">
+<div class="bg-white rounded-[32px] overflow-hidden menu-card card">
 
-      <img
-      src="${menu.image}"
-      class="h-[260px] w-full object-cover">
+<img
+src="${menu.image}"
+class="h-[260px] w-full object-cover">
 
-      <div class="p-7">
+<div class="p-7">
 
-        <div class="flex justify-between items-start mb-5">
+<div class="flex justify-between items-start mb-5">
 
-          <div>
+<div>
 
-            <h3 class="text-2xl font-bold mb-2">
-              ${menu.name}
-            </h3>
+<h3 class="text-2xl font-bold mb-2">
+${menu.name}
+</h3>
 
-            <p class="text-sm text-gray-500">
-              Premium Menu
-            </p>
+<p class="text-sm text-gray-500">
+Premium Menu
+</p>
 
-          </div>
+</div>
 
-          <span class="font-bold text-[#8d6b4f]">
-            Rp${menu.price.toLocaleString()}
-          </span>
+<span class="font-bold text-[#8d6b4f]">
+Rp${menu.price.toLocaleString()}
+</span>
 
-        </div>
+</div>
 
-        <p class="paragraph text-sm text-gray-600 mb-7">
+<p class="paragraph text-sm text-gray-600 mb-7">
 
-          ${menu.desc}
+${menu.desc}
 
-        </p>
+</p>
 
-        <button
-        onclick="addToCart('${menu.name}',${menu.price})"
-        class="bg-[#44533d] text-white w-full py-4 rounded-2xl hover:scale-[1.02] transition">
+<button
+onclick="addToCart('${menu.name}',${menu.price})"
+class="bg-[#44533d] text-white w-full py-4 rounded-2xl">
 
-          Tambah Pesanan
+Tambah Pesanan
 
-        </button>
+</button>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-    `;
-  });
+`;
 
-  document.getElementById('menuContainer')
-  .innerHTML = html;
+});
+
+document.getElementById('menuContainer')
+.innerHTML = html;
+
 }
 
 renderMenu();
 
 function addToCart(name,price){
 
-  cart.push({name,price});
+cart.push({name,price});
 
-  document.getElementById('cartCount')
-  .innerText = cart.length;
+document.getElementById('cartCount')
+.innerText = cart.length;
+
 }
 
 function openCart(){
 
-  document.getElementById('cartPopup')
-  .classList.remove('hidden');
+document.getElementById('cartPopup')
+.classList.remove('hidden');
 
-  document.getElementById('cartPopup')
-  .classList.add('flex');
+document.getElementById('cartPopup')
+.classList.add('flex');
 
-  renderCart();
+renderCart();
+
+generateQueue();
+
 }
 
 function closeCart(){
 
-  document.getElementById('cartPopup')
-  .classList.add('hidden');
+document.getElementById('cartPopup')
+.classList.add('hidden');
+
 }
 
 function renderCart(){
 
-  let html = '';
-  let total = 0;
+let html = '';
+let total = 0;
 
-  cart.forEach(item=>{
+cart.forEach(item=>{
 
-    total += item.price;
+total += item.price;
 
-    html += `
+html += `
 
-    <div class="flex justify-between bg-gray-100 p-4 rounded-2xl">
+<div class="flex justify-between bg-gray-100 p-4 rounded-2xl">
 
-      <span>${item.name}</span>
+<span>${item.name}</span>
 
-      <span>
-        Rp${item.price.toLocaleString()}
-      </span>
+<span>
+Rp${item.price.toLocaleString()}
+</span>
 
-    </div>
+</div>
 
-    `;
-  });
+`;
 
-  document.getElementById('cartItems')
-  .innerHTML = html;
+});
 
-  document.getElementById('totalPrice')
-  .innerText =
-  'Rp' + total.toLocaleString();
+document.getElementById('cartItems')
+.innerHTML = html;
+
+document.getElementById('totalPrice')
+.innerText =
+'Rp' + total.toLocaleString();
+
 }
 
-function checkout(){
+function generateQueue(){
 
-  alert('Simulasi Checkout Berhasil');
+const random =
+Math.floor(Math.random()*999);
 
-  closeCart();
+document.getElementById('queueNumber')
+.value = 'A' + random;
 
-  cart = [];
+}
 
-  document.getElementById('cartCount')
-  .innerText = 0;
+async function checkout(){
+
+let total = 0;
+
+cart.forEach(item=>{
+total += item.price;
+});
+
+const payload = {
+
+nama:
+document.getElementById('customerName').value,
+
+meja:
+document.getElementById('tableNumber').value,
+
+antrian:
+document.getElementById('queueNumber').value,
+
+pesanan:
+cart.map(item=>item.name).join(', '),
+
+total:
+total,
+
+status:'Baru'
+
+};
+
+orders.unshift(payload);
+
+renderKasir();
+
+try{
+
+await fetch(API_URL,{
+method:'POST',
+body:JSON.stringify(payload)
+});
+
+}catch(error){
+
+console.log(error);
+
+}
+
+document.getElementById('paymentPopup')
+.classList.remove('hidden');
+
+document.getElementById('paymentPopup')
+.classList.add('flex');
+
+document.getElementById('paymentTotal')
+.innerText =
+'Rp' + total.toLocaleString();
+
+}
+
+function finishPayment(){
+
+document.getElementById('paymentPopup')
+.classList.add('hidden');
+
+closeCart();
+
+cart = [];
+
+document.getElementById('cartCount')
+.innerText = 0;
+
 }
 
 function openKasir(){
 
-  document.getElementById('kasirPopup')
-  .classList.remove('hidden');
+document.getElementById('kasirPopup')
+.classList.remove('hidden');
 
-  document.getElementById('kasirPopup')
-  .classList.add('flex');
+document.getElementById('kasirPopup')
+.classList.add('flex');
+
+renderKasir();
+
 }
 
 function closeKasir(){
 
-  document.getElementById('kasirPopup')
-  .classList.add('hidden');
+document.getElementById('kasirPopup')
+.classList.add('hidden');
+
+}
+
+function renderKasir(){
+
+let html = '';
+
+orders.forEach(order=>{
+
+html += `
+
+<div class="border rounded-[30px] p-6">
+
+<div class="flex justify-between items-start mb-5">
+
+<div>
+
+<h3 class="text-2xl font-bold mb-2">
+${order.nama}
+</h3>
+
+<p class="text-gray-500">
+${order.meja} • ${order.antrian}
+</p>
+
+</div>
+
+<div class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm font-semibold">
+
+${order.status}
+
+</div>
+
+</div>
+
+<p class="paragraph text-gray-600 mb-5">
+
+${order.pesanan}
+
+</p>
+
+<p class="font-bold text-lg">
+
+Rp${order.total.toLocaleString()}
+
+</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById('kasirOrders')
+.innerHTML = html;
+
 }
 
 </script>
-
-</body>
-</html>
