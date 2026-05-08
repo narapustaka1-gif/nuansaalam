@@ -1,866 +1,332 @@
-<!--
-NARA COFFEE LIVE DEMO SYSTEM
-✔ Responsive Professional
-✔ Same Layout Desktop & Mobile
-✔ Dynamic Resize Only
-✔ Live Order Demo
-✔ Kasir Dashboard Active
-✔ Realtime Simulation
-✔ Spreadsheet Ready
-✔ Premium Typography
-✔ Luxury Responsive UI
--->
-
-<script>
-
-const API_URL =
-'https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec';
-
-</script>
-
-<style>
-
-html{
-scroll-behavior:smooth;
-}
-
-body{
-overflow-x:hidden;
-background:#f4ede4;
-font-family:'Manrope',sans-serif;
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nara Cafe Ordering System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#d2b08c] min-h-screen text-gray-800">
+
+  <!-- NAVBAR -->
+  <nav class="bg-[#44533d] text-white px-6 py-4 flex justify-between items-center shadow-lg">
+    <h1 class="text-2xl font-bold">☕ Nara Cafe</h1>
+
+    <div class="flex gap-3">
+      <button onclick="showPage('customer')" class="bg-[#d2b08c] text-black px-4 py-2 rounded-full font-semibold">
+        Customer View
+      </button>
+
+      <button onclick="showPage('cashier')" class="bg-white text-black px-4 py-2 rounded-full font-semibold">
+        Kasir View
+      </button>
+    </div>
+  </nav>
+
+  <!-- CUSTOMER PAGE -->
+  <section id="customerPage" class="p-6">
+
+    <div class="grid lg:grid-cols-2 gap-10 items-center bg-[#44533d] rounded-3xl p-8 text-white">
+
+      <div>
+        <h1 class="text-5xl font-serif leading-tight mb-6">
+          Fresh Coffee <br>
+          & Pastries,
+          Every Day
+        </h1>
+
+        <p class="text-gray-200 mb-8 leading-relaxed">
+          Pesan langsung dari meja tanpa antre. Tinggal scan QR, pilih menu,
+          bayar, dan tunggu pesanan datang.
+        </p>
+
+        <div class="flex gap-4">
+          <button class="bg-[#d2b08c] text-black px-5 py-3 rounded-full font-semibold">
+            Order Online
+          </button>
+
+          <button class="border border-white px-5 py-3 rounded-full">
+            Browse Menu
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <img
+          src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop"
+          class="rounded-3xl shadow-2xl h-[500px] w-full object-cover"
+        >
+      </div>
+    </div>
 
-.paragraph{
-text-align:justify;
-line-height:2;
-}
+
+    <!-- FORM ORDER -->
 
-.responsive-title{
-font-size:clamp(42px,7vw,92px);
-line-height:1.08;
-}
+    <div class="bg-white mt-10 rounded-3xl p-8 shadow-xl">
 
-.responsive-sub{
-font-size:clamp(14px,2vw,18px);
-}
+      <h2 class="text-3xl font-bold mb-8">
+        🍰 Order Menu
+      </h2>
 
-.same-layout{
-width:min(100%,1400px);
-margin:auto;
-padding-inline:clamp(20px,4vw,60px);
-}
+      <div class="grid lg:grid-cols-2 gap-10">
 
-.menu-card{
-width:clamp(280px,30vw,360px);
-flex-shrink:0;
-}
+        <div>
+          <label class="block mb-2 font-semibold">Nama Customer</label>
+          <input id="customerName" type="text" placeholder="Masukkan nama"
+            class="w-full border p-3 rounded-xl mb-5">
 
-.hero{
-background:
-linear-gradient(to right,rgba(0,0,0,.72),rgba(0,0,0,.42)),
-url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1600&auto=format&fit=crop');
+          <label class="block mb-2 font-semibold">Nomor Meja</label>
+          <select id="tableNumber" class="w-full border p-3 rounded-xl mb-5">
+            <option>Meja 01</option>
+            <option>Meja 02</option>
+            <option>Meja 03</option>
+            <option>Meja 04</option>
+          </select>
 
-background-size:cover;
-background-position:center;
-}
+          <label class="block mb-2 font-semibold">Nomor Antrian</label>
+          <input id="queueNumber" value="A00" readonly
+            class="w-full border p-3 rounded-xl mb-5 bg-gray-100">
+        </div>
+
 
-.gallery{
-background:
-linear-gradient(to bottom,rgba(0,0,0,.65),rgba(0,0,0,.65)),
-url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1600&auto=format&fit=crop');
+        <div>
+          <label class="block mb-2 font-semibold">Pilih Menu</label>
 
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-}
+          <div class="space-y-3">
 
-.glass{
-backdrop-filter:blur(16px);
-background:rgba(255,255,255,.08);
-}
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Latte</span>
+              <input type="checkbox" value="Latte" class="menuItem">
+            </label>
 
-.hide-scroll::-webkit-scrollbar{
-display:none;
-}
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Cappuccino</span>
+              <input type="checkbox" value="Cappuccino" class="menuItem">
+            </label>
 
-.card{
-transition:.4s;
-}
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Croissant</span>
+              <input type="checkbox" value="Croissant" class="menuItem">
+            </label>
 
-.card:hover{
-transform:translateY(-8px);
-box-shadow:0 25px 70px rgba(0,0,0,.12);
-}
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Signature Cupcake</span>
+              <input type="checkbox" value="Signature Cupcake" class="menuItem">
+            </label>
 
-.popup{
-backdrop-filter:blur(12px);
-}
+          </div>
+        </div>
+      </div>
 
-.floating{
-animation:floating 3s ease-in-out infinite;
-}
 
-@keyframes floating{
+      <!-- QR SIMULATION -->
 
-0%{
-transform:translateY(0);
-}
+      <div class="mt-10 bg-[#f8f4ef] rounded-2xl p-6 border">
+        <h3 class="text-2xl font-bold mb-4">💳 Simulasi Pembayaran QRIS</h3>
 
-50%{
-transform:translateY(-7px);
-}
+        <div class="flex flex-col items-center">
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NARA-CAFE-PAYMENT"
+            class="rounded-xl shadow-lg mb-4"
+          >
 
-100%{
-transform:translateY(0);
-}
+          <p class="text-gray-600 text-center">
+            Scan QR untuk simulasi pembayaran.
+          </p>
+        </div>
+      </div>
 
-}
 
-</style>
+      <button
+        onclick="submitOrder()"
+        class="mt-8 bg-[#44533d] hover:bg-[#2f3a2b] transition text-white px-8 py-4 rounded-full text-lg font-semibold w-full">
+        Kirim Pesanan
+      </button>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    </div>
+  </section>
 
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://cdn.tailwindcss.com"></script>
+  <!-- CASHIER PAGE -->
 
-<!-- NAVBAR -->
+  <section id="cashierPage" class="hidden p-6">
 
-<nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/10">
+    <div class="bg-white rounded-3xl shadow-xl p-8">
 
-<div class="same-layout py-5 flex justify-between items-center">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-bold">📋 Dashboard Kasir</h2>
 
-<h1 class="text-white font-bold tracking-wide text-[clamp(20px,3vw,28px)]">
-Nara Coffee
-</h1>
+        <div class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
+          Realtime Order Active
+        </div>
+      </div>
 
-<div class="hidden lg:flex items-center gap-10 text-white text-sm">
 
-<a href="#menu">
-Menu
-</a>
+      <!-- NOTIFICATION -->
 
-<a href="#gallery">
-Gallery
-</a>
+      <div id="notificationBox" class="hidden bg-yellow-100 border border-yellow-400 p-4 rounded-xl mb-6 text-yellow-800 font-semibold">
+        🔔 Pesanan baru masuk!
+      </div>
 
-<a href="#about">
-About
-</a>
 
-<a href="#reservation">
-Reservation
-</a>
+      <!-- ORDER TABLE -->
 
-<button
-onclick="openKasir()"
-class="bg-[#c89b6d] text-black px-6 py-3 rounded-full font-semibold">
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-[#44533d] text-white">
+              <th class="p-4 text-left">No</th>
+              <th class="p-4 text-left">Nama</th>
+              <th class="p-4 text-left">Meja</th>
+              <th class="p-4 text-left">Pesanan</th>
+              <th class="p-4 text-left">Status</th>
+            </tr>
+          </thead>
 
-Kasir Login
+          <tbody id="orderList">
+          </tbody>
+        </table>
+      </div>
 
-</button>
+    </div>
+  </section>
 
-</div>
 
-</div>
+  <script>
 
-</nav>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec";
 
-<!-- HERO -->
+    let lastOrderCount = 0;
 
-<section class="hero min-h-screen flex items-center">
 
-<div class="same-layout pt-28">
+    function showPage(page) {
+      document.getElementById('customerPage').classList.add('hidden');
+      document.getElementById('cashierPage').classList.add('hidden');
 
-<div class="max-w-3xl">
+      if (page === 'customer') {
+        document.getElementById('customerPage').classList.remove('hidden');
+      }
 
-<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-6">
+      if (page === 'cashier') {
+        document.getElementById('cashierPage').classList.remove('hidden');
+      }
+    }
 
-Premium Coffee Experience
 
-</p>
+    function generateQueue() {
+      const random = Math.floor(Math.random() * 999);
+      document.getElementById('queueNumber').value = 'A' + random;
+    }
 
-<h1 class="responsive-title text-white font-bold mb-8">
+    generateQueue();
 
-Fresh Coffee & <br>
-Handmade Pastry
 
-</h1>
+    async function submitOrder() {
 
-<p class="paragraph responsive-sub text-white/80 max-w-2xl mb-10">
+      const name = document.getElementById('customerName').value;
+      const table = document.getElementById('tableNumber').value;
+      const queue = document.getElementById('queueNumber').value;
 
-Nikmati pengalaman memesan kopi dan pastry
-secara modern tanpa antre.
-Cukup scan QR meja,
-pilih menu,
-lakukan pembayaran,
-lalu tunggu pesanan datang dengan nyaman.
+      const menus = [...document.querySelectorAll('.menuItem:checked')]
+        .map(item => item.value)
+        .join(', ');
 
-</p>
 
-<div class="flex flex-wrap gap-5">
+      if (!name || !menus) {
+        alert('Lengkapi pesanan terlebih dahulu');
+        return;
+      }
 
-<a
-href="#menu"
-class="bg-[#c89b6d] text-black px-8 py-4 rounded-full font-semibold">
 
-Pesan Sekarang
+      const payload = {
+        nama: name,
+        meja: table,
+        antrian: queue,
+        pesanan: menus,
+        status: 'Baru'
+      };
 
-</a>
 
-<button
-onclick="openKasir()"
-class="border border-white/20 text-white px-8 py-4 rounded-full">
+      try {
 
-Dashboard Kasir
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
 
-</button>
+        alert('Pesanan berhasil dikirim!');
 
-</div>
+        document.getElementById('customerName').value = '';
 
-</div>
+        document.querySelectorAll('.menuItem').forEach(item => {
+          item.checked = false;
+        });
 
-</div>
+        generateQueue();
 
-</section>
+      } catch (error) {
+        console.error(error);
+        alert('Gagal mengirim pesanan');
+      }
+    }
 
-<!-- MENU -->
 
-<section id="menu" class="py-24">
+    async function loadOrders() {
 
-<div class="same-layout">
+      try {
 
-<div class="mb-14">
+        const response = await fetch(API_URL);
+        const data = await response.json();
 
-<p class="uppercase tracking-[5px] text-[#8d6b4f] text-xs lg:text-sm mb-5">
+        const orderList = document.getElementById('orderList');
 
-Best Seller Menu
+        orderList.innerHTML = '';
 
-</p>
+        if (data.length > lastOrderCount && lastOrderCount !== 0) {
 
-<h2 class="text-[clamp(34px,5vw,60px)] font-bold leading-[1.2] max-w-2xl">
+          const notif = document.getElementById('notificationBox');
+          notif.classList.remove('hidden');
 
-Pilihan menu premium
-dengan cita rasa hangat.
+          const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
+          audio.play();
 
-</h2>
+          setTimeout(() => {
+            notif.classList.add('hidden');
+          }, 5000);
+        }
 
-</div>
 
-<!-- CATEGORY -->
+        lastOrderCount = data.length;
 
-<div class="flex gap-4 overflow-x-auto hide-scroll pb-2 mb-12">
 
-<button class="bg-[#44533d] text-white px-7 py-3 rounded-full whitespace-nowrap">
-Coffee
-</button>
+        data.reverse().forEach((order, index) => {
 
-<button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
-Pastry
-</button>
+          orderList.innerHTML += `
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-4">${index + 1}</td>
+              <td class="p-4">${order.nama}</td>
+              <td class="p-4">${order.meja}</td>
+              <td class="p-4">${order.pesanan}</td>
+              <td class="p-4">
+                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">
+                  ${order.status}
+                </span>
+              </td>
+            </tr>
+          `;
+        });
 
-<button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
-Dessert
-</button>
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
-<button class="bg-white px-7 py-3 rounded-full whitespace-nowrap">
-Breakfast
-</button>
 
-</div>
+    loadOrders();
 
-<!-- MENU SLIDER -->
+    setInterval(loadOrders, 5000);
 
-<div class="overflow-x-auto hide-scroll">
+  </script>
 
-<div
-id="menuContainer"
-class="flex gap-7 w-max pb-6">
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- GALLERY -->
-
-<section
-id="gallery"
-class="gallery min-h-screen flex items-center">
-
-<div class="same-layout">
-
-<div class="max-w-2xl">
-
-<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
-
-Cafe Atmosphere
-
-</p>
-
-<h2 class="text-[clamp(36px,6vw,72px)] font-bold text-white leading-[1.15] mb-8">
-
-Tempat nyaman untuk
-menikmati setiap cerita.
-
-</h2>
-
-<p class="paragraph responsive-sub text-white/80">
-
-Kami menghadirkan ruang hangat
-untuk menikmati kopi,
-percakapan kecil,
-dan suasana yang menenangkan
-di tengah aktivitas sehari-hari.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ABOUT -->
-
-<section id="about" class="py-24">
-
-<div class="same-layout">
-
-<div class="bg-[#5b4331] rounded-[40px] p-[clamp(28px,5vw,70px)] text-white">
-
-<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
-
-About Cafe
-
-</p>
-
-<h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
-
-Crafted with warmth,
-served with comfort.
-
-</h2>
-
-<p class="paragraph responsive-sub text-white/80 max-w-4xl">
-
-Nara Coffee hadir sebagai ruang modern
-yang menggabungkan pengalaman menikmati kopi,
-pastry,
-dan suasana aesthetic dalam satu tempat.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- RESERVATION -->
-
-<section id="reservation" class="pb-32">
-
-<div class="same-layout">
-
-<div class="bg-[#44533d] rounded-[40px] p-[clamp(28px,5vw,70px)] text-white">
-
-<p class="uppercase tracking-[5px] text-[#d6b08b] text-xs lg:text-sm mb-5">
-
-Reservation
-
-</p>
-
-<h2 class="text-[clamp(34px,5vw,58px)] font-bold leading-[1.2] max-w-3xl mb-8">
-
-Reservasi tempat
-langsung melalui WhatsApp.
-
-</h2>
-
-<button
-onclick="alert('Simulasi Reservasi WhatsApp')"
-class="bg-[#c89b6d] text-black px-8 py-4 rounded-full font-semibold">
-
-Reserve Now
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- FLOATING CART -->
-
-<div
-onclick="openCart()"
-class="fixed bottom-6 right-6 z-50 bg-[#44533d] text-white px-6 py-4 rounded-full shadow-2xl cursor-pointer floating">
-
-🛒 Cart (<span id="cartCount">0</span>)
-
-</div>
-
-<!-- CART POPUP -->
-
-<div
-id="cartPopup"
-class="fixed inset-0 bg-black/60 popup hidden items-center justify-center z-50 p-5">
-
-<div class="bg-white rounded-[40px] p-8 max-w-lg w-full">
-
-<div class="flex justify-between items-center mb-8">
-
-<h2 class="text-3xl font-bold">
-Checkout
-</h2>
-
-<button
-onclick="closeCart()"
-class="text-2xl">
-✕
-</button>
-
-</div>
-
-<div
-id="cartItems"
-class="space-y-4 mb-6">
-
-</div>
-
-<div class="border-t pt-5 mb-6">
-
-<div class="flex justify-between text-2xl font-bold">
-
-<span>Total</span>
-
-<span id="totalPrice">
-Rp0
-</span>
-
-</div>
-
-</div>
-
-<input
-id="customerName"
-type="text"
-placeholder="Nama Customer"
-class="w-full border p-4 rounded-2xl mb-4">
-
-<select
-id="tableNumber"
-class="w-full border p-4 rounded-2xl mb-4">
-
-<option>Meja 01</option>
-<option>Meja 02</option>
-<option>Meja 03</option>
-
-</select>
-
-<input
-id="queueNumber"
-readonly
-class="w-full border p-4 rounded-2xl bg-gray-100 mb-6">
-
-<button
-onclick="checkout()"
-class="bg-[#44533d] text-white w-full py-5 rounded-2xl">
-
-Pesan Sekarang
-
-</button>
-
-</div>
-
-</div>
-
-<!-- PAYMENT -->
-
-<div
-id="paymentPopup"
-class="fixed inset-0 bg-black/60 popup hidden items-center justify-center z-50 p-5">
-
-<div class="bg-white rounded-[40px] p-10 max-w-md w-full text-center">
-
-<h2 class="text-4xl font-bold mb-6">
-QR Payment
-</h2>
-
-<img
-src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NARA-CAFE"
-class="mx-auto rounded-2xl mb-5">
-
-<p class="text-2xl font-bold mb-6">
-
-Total:
-<span id="paymentTotal"></span>
-
-</p>
-
-<button
-onclick="finishPayment()"
-class="bg-[#44533d] text-white px-8 py-4 rounded-full">
-
-Selesai
-
-</button>
-
-</div>
-
-</div>
-
-<!-- KASIR -->
-
-<div
-id="kasirPopup"
-class="fixed inset-0 bg-black/60 popup hidden items-center justify-center z-50 p-5">
-
-<div class="bg-white rounded-[40px] p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-
-<div class="flex justify-between items-center mb-8">
-
-<h2 class="text-3xl font-bold">
-Dashboard Kasir
-</h2>
-
-<button
-onclick="closeKasir()"
-class="text-2xl">
-✕
-</button>
-
-</div>
-
-<div
-id="kasirOrders"
-class="space-y-4">
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-let cart = [];
-
-let orders = [];
-
-const menus = [
-
-{
-name:'Latte Coffee',
-price:25000,
-image:'https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1200&auto=format&fit=crop',
-desc:'Perpaduan espresso premium dan susu creamy.'
-},
-
-{
-name:'Butter Croissant',
-price:18000,
-image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop',
-desc:'Pastry hangat dengan aroma butter premium.'
-},
-
-{
-name:'Signature Cake',
-price:35000,
-image:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop',
-desc:'Cake lembut dengan tampilan aesthetic.'
-}
-
-];
-
-function renderMenu(){
-
-let html = '';
-
-menus.forEach(menu=>{
-
-html += `
-
-<div class="bg-white rounded-[32px] overflow-hidden menu-card card">
-
-<img
-src="${menu.image}"
-class="h-[260px] w-full object-cover">
-
-<div class="p-7">
-
-<div class="flex justify-between items-start mb-5">
-
-<div>
-
-<h3 class="text-2xl font-bold mb-2">
-${menu.name}
-</h3>
-
-<p class="text-sm text-gray-500">
-Premium Menu
-</p>
-
-</div>
-
-<span class="font-bold text-[#8d6b4f]">
-Rp${menu.price.toLocaleString()}
-</span>
-
-</div>
-
-<p class="paragraph text-sm text-gray-600 mb-7">
-
-${menu.desc}
-
-</p>
-
-<button
-onclick="addToCart('${menu.name}',${menu.price})"
-class="bg-[#44533d] text-white w-full py-4 rounded-2xl">
-
-Tambah Pesanan
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-document.getElementById('menuContainer')
-.innerHTML = html;
-
-}
-
-renderMenu();
-
-function addToCart(name,price){
-
-cart.push({name,price});
-
-document.getElementById('cartCount')
-.innerText = cart.length;
-
-}
-
-function openCart(){
-
-document.getElementById('cartPopup')
-.classList.remove('hidden');
-
-document.getElementById('cartPopup')
-.classList.add('flex');
-
-renderCart();
-
-generateQueue();
-
-}
-
-function closeCart(){
-
-document.getElementById('cartPopup')
-.classList.add('hidden');
-
-}
-
-function renderCart(){
-
-let html = '';
-let total = 0;
-
-cart.forEach(item=>{
-
-total += item.price;
-
-html += `
-
-<div class="flex justify-between bg-gray-100 p-4 rounded-2xl">
-
-<span>${item.name}</span>
-
-<span>
-Rp${item.price.toLocaleString()}
-</span>
-
-</div>
-
-`;
-
-});
-
-document.getElementById('cartItems')
-.innerHTML = html;
-
-document.getElementById('totalPrice')
-.innerText =
-'Rp' + total.toLocaleString();
-
-}
-
-function generateQueue(){
-
-const random =
-Math.floor(Math.random()*999);
-
-document.getElementById('queueNumber')
-.value = 'A' + random;
-
-}
-
-async function checkout(){
-
-let total = 0;
-
-cart.forEach(item=>{
-total += item.price;
-});
-
-const payload = {
-
-nama:
-document.getElementById('customerName').value,
-
-meja:
-document.getElementById('tableNumber').value,
-
-antrian:
-document.getElementById('queueNumber').value,
-
-pesanan:
-cart.map(item=>item.name).join(', '),
-
-total:
-total,
-
-status:'Baru'
-
-};
-
-orders.unshift(payload);
-
-renderKasir();
-
-try{
-
-await fetch(API_URL,{
-method:'POST',
-body:JSON.stringify(payload)
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-document.getElementById('paymentPopup')
-.classList.remove('hidden');
-
-document.getElementById('paymentPopup')
-.classList.add('flex');
-
-document.getElementById('paymentTotal')
-.innerText =
-'Rp' + total.toLocaleString();
-
-}
-
-function finishPayment(){
-
-document.getElementById('paymentPopup')
-.classList.add('hidden');
-
-closeCart();
-
-cart = [];
-
-document.getElementById('cartCount')
-.innerText = 0;
-
-}
-
-function openKasir(){
-
-document.getElementById('kasirPopup')
-.classList.remove('hidden');
-
-document.getElementById('kasirPopup')
-.classList.add('flex');
-
-renderKasir();
-
-}
-
-function closeKasir(){
-
-document.getElementById('kasirPopup')
-.classList.add('hidden');
-
-}
-
-function renderKasir(){
-
-let html = '';
-
-orders.forEach(order=>{
-
-html += `
-
-<div class="border rounded-[30px] p-6">
-
-<div class="flex justify-between items-start mb-5">
-
-<div>
-
-<h3 class="text-2xl font-bold mb-2">
-${order.nama}
-</h3>
-
-<p class="text-gray-500">
-${order.meja} • ${order.antrian}
-</p>
-
-</div>
-
-<div class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm font-semibold">
-
-${order.status}
-
-</div>
-
-</div>
-
-<p class="paragraph text-gray-600 mb-5">
-
-${order.pesanan}
-
-</p>
-
-<p class="font-bold text-lg">
-
-Rp${order.total.toLocaleString()}
-
-</p>
-
-</div>
-
-`;
-
-});
-
-document.getElementById('kasirOrders')
-.innerHTML = html;
-
-}
-
-</script>
+</body>
+</html>
