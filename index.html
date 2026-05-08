@@ -564,7 +564,7 @@
           Total : <span id="totalPrice">Rp0</span>
         </div>
 
-        <button class="btn" id="openCheckout" style="margin-top:25px; border:none; cursor:pointer;">
+        <button type="button" class="btn" id="openCheckout" style="margin-top:25px; border:none; cursor:pointer;">
           Lanjut Checkout
         </button>
 
@@ -684,55 +684,11 @@
 
 <script>
 
-/*
-========================================
-TUTORIAL QRIS OTOMATIS (MIDTRANS)
-========================================
 
-1. Daftar akun Midtrans
-2. Ambil:
-   - Client Key
-   - Server Key
-3. Aktifkan QRIS di dashboard Midtrans
-4. Tambahkan script Midtrans:
-
-<script type="text/javascript"
-src="https://app.sandbox.midtrans.com/snap/snap.js"
-data-client-key="CLIENT_KEY_KAMU"></script>
-
-5. Saat checkout:
-- Website mengirim total pembayaran
-- Midtrans membuat QRIS otomatis
-- Customer scan & bayar
-- Status pembayaran otomatis sukses
-
-========================================
-ALUR SISTEM
-========================================
-Customer Pesan
-↓
-Masuk Keranjang
-↓
-Checkout
-↓
-QRIS Otomatis Muncul
-↓
-Customer Bayar
-↓
-Pesanan Masuk Dashboard Kasir
-
-========================================
-NOTE
-========================================
-Untuk production:
-- gunakan backend Node.js/PHP
-- simpan Server Key di backend
-- jangan taruh Server Key di frontend
-
-========================================
-*/
 
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyBpF-spi2HXPEzHgvf-6En5OzkpZrcrVU6poc71CumxxYDcgsXl2271RkFf4oJfR7P/exec';
+
+// NUANSA ALAM ORDER SYSTEM
 
 let lastOrderTime = '';
 
