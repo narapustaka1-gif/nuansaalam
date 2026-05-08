@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Nuansa Alam Cafe</title>
 
@@ -19,9 +19,9 @@ scroll-behavior:smooth;
 
 body{
 font-family:'Poppins',sans-serif;
-background:#efe7df;
-color:#2d1d16;
+background:#f3ece6;
 overflow-x:hidden;
+color:#2d1d16;
 }
 
 .container{
@@ -34,17 +34,17 @@ margin:auto;
 
 nav{
 margin-top:20px;
-background:rgba(255,255,255,0.45);
-backdrop-filter:blur(12px);
 padding:18px 28px;
-border-radius:28px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+border-radius:30px;
+background:rgba(255,255,255,0.45);
+backdrop-filter:blur(12px);
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
 position:sticky;
 top:12px;
 z-index:999;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
 }
 
 .logo{
@@ -66,9 +66,9 @@ font-weight:500;
 }
 
 .contact-btn{
+padding:12px 24px;
 background:#5a3422;
 color:white;
-padding:12px 24px;
 border-radius:40px;
 text-decoration:none;
 }
@@ -80,10 +80,10 @@ margin-top:25px;
 min-height:85vh;
 border-radius:40px;
 overflow:hidden;
-position:relative;
 display:flex;
 align-items:center;
 padding:60px;
+position:relative;
 background:
 linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),
 url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600');
@@ -94,7 +94,6 @@ background-position:center;
 .hero-content{
 max-width:650px;
 color:white;
-z-index:2;
 }
 
 .hero h1{
@@ -106,8 +105,6 @@ margin-bottom:20px;
 
 .hero p{
 line-height:1.8;
-font-size:1rem;
-opacity:0.9;
 margin-bottom:30px;
 }
 
@@ -116,18 +113,19 @@ padding:16px 34px;
 border:none;
 border-radius:40px;
 background:white;
-color:#2d1d16;
 font-weight:600;
 cursor:pointer;
 }
 
-/* MENU */
+/* SECTION */
 
 .section-title{
 font-family:'Playfair Display',serif;
 font-size:3rem;
 margin:70px 0 30px;
 }
+
+/* MENU */
 
 .menu-grid{
 display:grid;
@@ -163,20 +161,20 @@ margin-bottom:8px;
 }
 
 .price{
-color:#5a3422;
 font-weight:700;
-margin:10px 0;
+color:#5a3422;
+margin:12px 0;
 }
 
 .add-cart{
 width:100%;
 padding:14px;
 border:none;
+border-radius:18px;
 background:#5a3422;
 color:white;
-border-radius:18px;
-cursor:pointer;
 font-weight:600;
+cursor:pointer;
 }
 
 /* CART */
@@ -192,8 +190,8 @@ box-shadow:0 10px 30px rgba(0,0,0,0.05);
 .cart-item{
 display:flex;
 justify-content:space-between;
-margin-bottom:12px;
 padding-bottom:12px;
+margin-bottom:12px;
 border-bottom:1px solid #eee;
 }
 
@@ -231,13 +229,13 @@ z-index:99999;
 background:#f4ece5;
 width:100%;
 max-width:700px;
-border-radius:38px;
 padding:40px;
+border-radius:38px;
 position:relative;
-animation:fadeUp .35s ease;
+animation:popup .35s ease;
 }
 
-@keyframes fadeUp{
+@keyframes popup{
 from{
 opacity:0;
 transform:translateY(30px);
@@ -250,8 +248,8 @@ transform:translateY(0);
 
 .close{
 position:absolute;
-right:28px;
-top:20px;
+right:25px;
+top:18px;
 font-size:2.5rem;
 cursor:pointer;
 }
@@ -259,7 +257,7 @@ cursor:pointer;
 .popup h2{
 font-family:'Playfair Display',serif;
 font-size:3rem;
-margin-bottom:30px;
+margin-bottom:25px;
 }
 
 .form-grid{
@@ -275,7 +273,6 @@ padding:18px;
 border:none;
 border-radius:18px;
 font-family:'Poppins';
-font-size:1rem;
 }
 
 textarea{
@@ -301,7 +298,7 @@ color:#5a3422;
 .payment-box img{
 width:220px;
 max-width:100%;
-border-radius:20px;
+border-radius:18px;
 }
 
 .payment-box p{
@@ -315,27 +312,40 @@ color:#666;
 width:100%;
 padding:18px;
 border:none;
+border-radius:20px;
 background:#5a3422;
 color:white;
 font-size:1rem;
 font-weight:600;
-border-radius:20px;
 cursor:pointer;
 }
 
 /* NOTIF */
 
-#notif{
+#notif-box{
 position:fixed;
 top:20px;
 right:20px;
 background:#5a3422;
 color:white;
-padding:18px 22px;
-border-radius:18px;
-display:none;
+padding:22px;
+border-radius:22px;
 z-index:999999;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+display:none;
+min-width:320px;
+box-shadow:0 10px 35px rgba(0,0,0,0.25);
+animation:slideNotif .4s ease;
+}
+
+@keyframes slideNotif{
+from{
+opacity:0;
+transform:translateY(-20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 /* FOOTER */
@@ -351,10 +361,6 @@ color:#666;
 /* MOBILE */
 
 @media(max-width:768px){
-
-body{
-overflow-x:hidden;
-}
 
 .container{
 width:94%;
@@ -450,7 +456,6 @@ overflow-y:auto;
 
 .popup h2{
 font-size:2rem;
-margin-bottom:20px;
 }
 
 .form-grid{
@@ -461,7 +466,6 @@ gap:12px;
 input, textarea{
 padding:14px;
 font-size:0.82rem;
-border-radius:16px;
 }
 
 .payment-box{
@@ -472,8 +476,12 @@ padding:18px;
 font-size:1.5rem;
 }
 
-.submit-btn{
-padding:16px;
+#notif-box{
+top:15px;
+right:15px;
+left:15px;
+min-width:auto;
+padding:18px;
 }
 
 footer{
@@ -491,31 +499,48 @@ padding-bottom:40px;
 <div class="container">
 
 <nav>
-<div class="logo">Nuansa Alam</div>
+
+<div class="logo">
+Nuansa Alam
+</div>
 
 <ul>
 <li><a href="#">Home</a></li>
 <li><a href="#">Menu</a></li>
-<li><a href="#">About</a></li>
 <li><a href="#">Gallery</a></li>
+<li><a href="#">About</a></li>
 </ul>
 
-<a class="contact-btn">Contact</a>
+<a class="contact-btn">
+Contact
+</a>
+
 </nav>
 
 <section class="hero">
+
 <div class="hero-content">
-<h1>Nuansa Alam Cafe</h1>
+
+<h1>
+Nuansa Alam Cafe
+</h1>
+
 <p>
-Cafe modern dengan nuansa alam yang nyaman, aesthetic,
-dan cocok untuk nongkrong, meeting, maupun quality time.
+Cafe modern dengan nuansa aesthetic alami,
+nyaman untuk nongkrong, meeting, dan quality time.
 </p>
 
-<button>Lihat Menu</button>
+<button>
+Explore Menu
+</button>
+
 </div>
+
 </section>
 
-<h2 class="section-title">Menu Favorit</h2>
+<h2 class="section-title">
+Menu Favorit
+</h2>
 
 <div class="menu-grid">
 
@@ -575,7 +600,9 @@ Tambah
 
 <div class="cart-box">
 
-<h2 class="section-title">Keranjang</h2>
+<h2 class="section-title">
+Keranjang
+</h2>
 
 <div id="cartItems"></div>
 
@@ -605,15 +632,20 @@ Lanjut Checkout
 ×
 </div>
 
-<h2>Checkout Pesanan</h2>
+<h2>
+Checkout Pesanan
+</h2>
 
 <form id="checkoutForm">
 
 <input type="text" id="nama" placeholder="Nama Pemesan" required>
 
 <div class="form-grid">
+
 <input type="text" id="meja" placeholder="Nomor Kursi" required>
+
 <input type="number" id="jumlah" placeholder="Jumlah Pembelian" required>
+
 </div>
 
 <textarea id="catatan" placeholder="Catatan Pesanan"></textarea>
@@ -648,24 +680,32 @@ Konfirmasi Pesanan
 
 <!-- NOTIF -->
 
-<div id="notif">
-🔔 Pesanan berhasil dikirim
+<div id="notif-box">
+<h3>🔔 Pesanan Baru</h3>
+<p id="notif-text">
+Pesanan berhasil masuk
+</p>
 </div>
 
 <script>
 
-const scriptURL = 'https://script.google.com/macros/s/AKfycbzrTMO35q0WHV7Ff8AWG3ml4F33GoZvJCHMswSNgGFf2V_sv29BzsQy9RFeFw2cx8Sh/exec';
+const scriptURL =
+'https://script.google.com/macros/s/AKfycbzrTMO35q0WHV7Ff8AWG3ml4F33GoZvJCHMswSNgGFf2V_sv29BzsQy9RFeFw2cx8Sh/exec';
 
 let cart = [];
 
-const cartItems = document.getElementById('cartItems');
-const totalPrice = document.getElementById('totalPrice');
+const cartItems =
+document.getElementById('cartItems');
 
-const addButtons = document.querySelectorAll('.add-cart');
+const totalPrice =
+document.getElementById('totalPrice');
 
-addButtons.forEach(button => {
+const addButtons =
+document.querySelectorAll('.add-cart');
 
-button.addEventListener('click', () => {
+addButtons.forEach(button=>{
+
+button.addEventListener('click',()=>{
 
 const name = button.dataset.name;
 const price = parseInt(button.dataset.price);
@@ -683,11 +723,11 @@ renderCart();
 
 function renderCart(){
 
-cartItems.innerHTML = '';
+cartItems.innerHTML='';
 
-let total = 0;
+let total=0;
 
-cart.forEach(item => {
+cart.forEach(item=>{
 
 total += item.price;
 
@@ -700,49 +740,61 @@ cartItems.innerHTML += `
 
 });
 
-totalPrice.innerHTML = `
-Total : Rp${total.toLocaleString('id-ID')}
-`;
+totalPrice.innerHTML =
+`Total : Rp${total.toLocaleString('id-ID')}`;
 
-document.getElementById('checkoutTotal').innerHTML =
+document.getElementById('checkoutTotal')
+.innerHTML =
 `Rp${total.toLocaleString('id-ID')}`;
 
 }
 
-const checkoutLayer = document.getElementById('checkoutLayer');
+const checkoutLayer =
+document.getElementById('checkoutLayer');
 
 document.getElementById('openCheckout')
-.addEventListener('click', () => {
+.addEventListener('click',()=>{
 
-if(cart.length === 0){
+if(cart.length===0){
 alert('Keranjang masih kosong');
 return;
 }
 
-checkoutLayer.style.display = 'flex';
+checkoutLayer.style.display='flex';
 
 });
 
 document.getElementById('closePopup')
-.addEventListener('click', () => {
+.addEventListener('click',()=>{
 
-checkoutLayer.style.display = 'none';
+checkoutLayer.style.display='none';
 
 });
 
 document.getElementById('checkoutForm')
-.addEventListener('submit', async (e) => {
+.addEventListener('submit',async(e)=>{
 
 e.preventDefault();
 
 const data = {
 
-nama: document.getElementById('nama').value,
-meja: document.getElementById('meja').value,
-antrian: document.getElementById('jumlah').value,
-catatan: document.getElementById('catatan').value,
-pesanan: cart.map(item => item.name).join(', '),
-total: totalPrice.innerText
+nama:
+document.getElementById('nama').value,
+
+meja:
+document.getElementById('meja').value,
+
+antrian:
+document.getElementById('jumlah').value,
+
+catatan:
+document.getElementById('catatan').value,
+
+pesanan:
+cart.map(item=>item.name).join(', '),
+
+total:
+totalPrice.innerText
 
 };
 
@@ -753,13 +805,13 @@ method:'POST',
 body:JSON.stringify(data)
 });
 
-showNotif();
+showNotif(data);
 
-cart = [];
+cart=[];
 
 renderCart();
 
-checkoutLayer.style.display = 'none';
+checkoutLayer.style.display='none';
 
 document.getElementById('checkoutForm').reset();
 
@@ -773,21 +825,42 @@ alert('Gagal mengirim pesanan');
 
 });
 
-function showNotif(){
+function showNotif(order){
 
-const notif = document.getElementById('notif');
+const notifBox =
+document.getElementById('notif-box');
 
-notif.style.display = 'block';
+const notifText =
+document.getElementById('notif-text');
 
-const audio = new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+notifText.innerHTML = `
+👤 ${order.nama}<br>
+🍽️ Kursi ${order.meja}<br>
+🛒 ${order.pesanan}<br>
+💳 ${order.total}
+`;
 
-audio.play();
+notifBox.style.display='block';
 
-setTimeout(() => {
+const bell = new Audio(
+'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'
+);
 
-notif.style.display = 'none';
+bell.volume = 1.0;
 
-},4000);
+bell.play();
+
+setTimeout(()=>{
+bell.play();
+},1200);
+
+setTimeout(()=>{
+bell.play();
+},2400);
+
+setTimeout(()=>{
+notifBox.style.display='none';
+},9000);
 
 }
 
