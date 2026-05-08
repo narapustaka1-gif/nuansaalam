@@ -1,323 +1,288 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nara Coffee</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nara Coffee | Premium Bakery & Cafe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-dark: #2D3E2E; /* Hijau tua seperti di gambar */
+            --accent-brown: #BC8A5F; /* Cokelat emas */
+            --bg-cream: #F9F5F0;     /* Krem lembut */
+            --text-main: #333333;
+        }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#f5f5f5;
-  color:#222;
-}
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+        }
 
-/* ===== HERO CERAH ===== */
-.hero{
-  height:100vh;
-  background:url("https://images.unsplash.com/photo-1509042239860-f550ce710b93") center/cover;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  text-align:center;
-}
+        /* ===== NAVIGATION ===== */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: var(--primary-dark);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-.overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(255,255,255,0.4);
-}
+        nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
 
-.hero-content{
-  position:relative;
-}
+        nav .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
 
-h1{
-  font-size:56px;
-  color:#2b2b2b;
-}
+        /* ===== HERO SECTION ===== */
+        .hero {
+            display: flex;
+            height: 90vh;
+            background: var(--primary-dark);
+            color: white;
+            align-items: center;
+            padding: 0 8%;
+            overflow: hidden;
+        }
 
-/* BUTTON */
-.btn{
-  padding:12px 18px;
-  background:#d4a373;
-  border:none;
-  color:white;
-  margin:5px;
-  cursor:pointer;
-  border-radius:8px;
-}
+        .hero-text {
+            flex: 1;
+            padding-right: 50px;
+        }
 
-/* SECTION */
-.section{
-  padding:60px 30px;
-}
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
 
-/* ===== KATALOG ===== */
-.menu{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-}
+        .hero-image {
+            flex: 1;
+            height: 80%;
+            background: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80') center/cover;
+            border-radius: 20px;
+            box-shadow: 20px 20px 0px var(--accent-brown);
+        }
 
-.card{
-  background:white;
-  padding:10px;
-  border-radius:10px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
 
-.card img{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-  border-radius:10px;
-}
+        .btn-primary { background: var(--accent-brown); color: white; margin-right: 10px; }
+        .btn-outline { background: transparent; border: 1px solid white; color: white; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-/* CART */
-.cart-btn{
-  position:fixed;
-  top:20px;
-  right:20px;
-  background:#d4a373;
-  padding:10px;
-  color:white;
-  cursor:pointer;
-  border-radius:8px;
-}
+        /* ===== MENU SECTION ===== */
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin: 60px 0 40px;
+        }
 
-/* CART PANEL */
-.cart{
-  position:fixed;
-  right:0;
-  top:0;
-  width:350px;
-  height:100%;
-  background:white;
-  padding:15px;
-  display:none;
-  overflow:auto;
-}
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 0 8% 60px;
+        }
 
-/* POPUP CHECKOUT */
-.popup{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  padding:20px;
-  width:300px;
-  display:none;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
-}
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
 
-input{
-  width:100%;
-  padding:8px;
-  margin-top:8px;
-}
+        .menu-card:hover { transform: translateY(-10px); }
 
-/* GALLERY */
-.gallery{
-  column-count:3;
-  column-gap:10px;
-}
+        .menu-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
 
-.gallery img{
-  width:100%;
-  margin-bottom:10px;
-  border-radius:10px;
-}
+        .menu-info { padding: 20px; }
+        .menu-info h3 { margin: 0 0 10px; font-family: 'Playfair Display', serif; }
+        .menu-info p { color: var(--accent-brown); font-weight: 600; font-size: 18px; }
 
-/* ABOUT */
-.about{
-  background:url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085") center/cover;
-  padding:80px;
-  color:white;
-  position:relative;
-}
+        .add-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
 
-.about::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.4);
-}
+        /* ===== CART PANEL ===== */
+        .cart-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 350px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 2000;
+            padding: 30px;
+            transition: 0.5s;
+        }
 
-.about-content{
-  position:relative;
-  max-width:600px;
-}
-</style>
+        .cart-panel.active { right: 0; }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 40px; }
+            .hero-text h1 { font-size: 40px; }
+            .hero-image { width: 100%; height: 300px; margin-top: 30px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- CART BTN -->
-<div class="cart-btn" onclick="toggleCart()">
-Cart (<span id="count">0</span>)
-</div>
+<nav>
+    <div class="logo">NARA COFFEE</div>
+    <div class="nav-links">
+        <a href="#menu">Menu</a>
+        <a href="#" onclick="toggleCart()">Cart (<span id="count">0</span>)</a>
+    </div>
+</nav>
 
-<!-- HERO -->
-<div class="hero">
-<div class="overlay"></div>
-<div class="hero-content">
-<h1>Nara Coffee</h1>
-<p>Selamat Datang di Nara Coffee</p>
+<section class="hero">
+    <div class="hero-text">
+        <h1>Fresh Coffee & Pastries, Every Day</h1>
+        <p>Nikmati perpaduan biji kopi pilihan dan roti panggang hangat dalam suasana yang tenang.</p>
+        <div style="margin-top: 30px;">
+            <button class="btn btn-primary" onclick="scrollMenu()">Pesan Sekarang</button>
+            <button class="btn btn-outline" onclick="wa()">Reservasi Table</button>
+        </div>
+    </div>
+    <div class="hero-image"></div>
+</section>
 
-<button class="btn" onclick="scrollMenu()">Pesan Sekarang</button>
-<button class="btn" onclick="wa()">Reservasi</button>
-</div>
-</div>
+<section id="menu">
+    <h2 class="section-title">Menu Highlights</h2>
+    <div class="menu-grid" id="menuGrid">
+        </div>
+</section>
 
-<!-- MENU -->
-<div class="section" id="menuSection">
-<h2>Katalog Menu</h2>
-<div class="menu" id="menu"></div>
-</div>
-
-<!-- GALLERY -->
-<div class="section">
-<h2>Gallery Café</h2>
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb">
-<img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814">
-<img src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff">
-</div>
-</div>
-
-<!-- ABOUT -->
-<div class="about">
-<div class="about-content">
-<h2>Tentang Nara Coffee</h2>
-<p>
-Tempat hangat untuk menikmati kopi, cerita, dan waktu yang pelan.
-Nara Coffee hadir sebagai ruang tenang di tengah dunia yang sibuk.
-</p>
-</div>
-</div>
-
-<!-- CART -->
-<div class="cart" id="cartBox">
-<h2>Keranjang</h2>
-<div id="list"></div>
-<h3>Total: Rp <span id="total">0</span></h3>
-
-<button class="btn" onclick="openPopup()">Checkout</button>
-<button class="btn" onclick="toggleCart()">Tutup</button>
-</div>
-
-<!-- POPUP CHECKOUT -->
-<div class="popup" id="popup">
-<h3>Checkout</h3>
-
-<input id="nama" placeholder="Nama">
-<input id="bangku" placeholder="Nomor Bangku">
-
-<p id="detail"></p>
-<p>Total Bayar: Rp <span id="final"></span></p>
-
-<p>Barcode: #NCF2026</p>
-
-<button class="btn" onclick="confirmOrder()">Kirim Pesanan</button>
+<div class="cart-panel" id="cartBox">
+    <h2 style="font-family: 'Playfair Display';">Keranjang Anda</h2>
+    <hr>
+    <div id="list" style="margin: 20px 0;"></div>
+    <h3>Total: <span id="total" style="color: var(--accent-brown);">0</span></h3>
+    <button class="btn btn-primary" style="width: 100%;" onclick="confirmOrder()">Checkout Via WhatsApp</button>
+    <button class="btn btn-outline" style="width: 100%; color: #333; border-color: #ccc; margin-top: 10px;" onclick="toggleCart()">Kembali</button>
 </div>
 
 <script>
+    let menu = [];
+    let cart = [];
 
-let menu=[]
-let cart=[]
+    // URL Google Apps Script kamu
+    const API_URL = "https://script.google.com/macros/s/AKfycbzJULBVG1bMjlXnSNdhaSjIJ7BwjGsxV1rHSoZzuB1-hi0mrEFoBo-jqXyUSgXD_1Y/exec";
 
-fetch("https://script.google.com/macros/s/AKfycbzJULBVG1bMjlXnSNdhaSjIJ7BwjGsxV1rHSoZzuB1-hi0mrEFoBo-jqXyUSgXD_1Y/exec")
-.then(r=>r.json())
-.then(d=>{
-  menu=d
-  render()
-})
+    fetch(API_URL)
+    .then(r => r.json())
+    .then(d => {
+        menu = d;
+        render();
+    });
 
-function render(){
-  let el=document.getElementById("menu")
-  el.innerHTML=""
+    function render() {
+        let el = document.getElementById("menuGrid");
+        el.innerHTML = "";
+        menu.forEach((m, i) => {
+            el.innerHTML += `
+            <div class="menu-card">
+                <img src="${m.gambar || 'https://via.placeholder.com/300'}">
+                <div class="menu-info">
+                    <h3>${m.nama}</h3>
+                    <p>Rp ${m.harga}</p>
+                    <button class="add-btn" onclick="add(${i})">+</button>
+                </div>
+            </div>`;
+        });
+    }
 
-  menu.forEach((m,i)=>{
-    el.innerHTML+=`
-    <div class="card">
-      <img src="${m.gambar}">
-      <h3>${m.nama}</h3>
-      <p>${m.harga}</p>
-      <button onclick="add(${i})">+</button>
-    </div>`
-  })
-}
+    function add(i) {
+        let item = menu[i];
+        let exist = cart.find(x => x.nama === item.nama);
+        if(exist) exist.qty++;
+        else cart.push({...item, qty: 1});
+        update();
+        if(!document.getElementById("cartBox").classList.contains("active")) toggleCart();
+    }
 
-function add(i){
-  let item=menu[i]
-  let exist=cart.find(x=>x.nama===item.nama)
+    function update() {
+        document.getElementById("count").innerText = cart.length;
+        let el = document.getElementById("list");
+        el.innerHTML = "";
+        let total = 0;
+        cart.forEach(i => {
+            let hargaAngka = parseInt(i.harga.replace(/\D/g,''));
+            total += hargaAngka * i.qty;
+            el.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>${i.nama} (x${i.qty})</span>
+                <span>Rp ${hargaAngka * i.qty}</span>
+            </div>`;
+        });
+        document.getElementById("total").innerText = "Rp " + total.toLocaleString();
+    }
 
-  if(exist) exist.qty++
-  else cart.push({...item,qty:1})
+    function toggleCart() {
+        document.getElementById("cartBox").classList.toggle("active");
+    }
 
-  update()
-}
+    function confirmOrder() {
+        if(cart.length === 0) return alert("Keranjang masih kosong!");
+        
+        let pesan = "Halo Nara Coffee, saya mau pesan:%0A";
+        cart.forEach(i => {
+            pesan += `- ${i.nama} x ${i.qty}%0A`;
+        });
+        pesan += `%0ATotal: ${document.getElementById("total").innerText}`;
+        
+        window.open(`https://wa.me/6280000000000?text=${pesan}`);
+    }
 
-function update(){
-  document.getElementById("count").innerText=cart.length
+    function scrollMenu() {
+        document.getElementById("menu").scrollIntoView({behavior: "smooth"});
+    }
 
-  let el=document.getElementById("list")
-  el.innerHTML=""
-
-  let total=0
-
-  cart.forEach(i=>{
-    total+=parseInt(i.harga.replace(/\D/g,''))*i.qty
-    el.innerHTML+=`<div>${i.nama} x ${i.qty}</div>`
-  })
-
-  document.getElementById("total").innerText=total
-}
-
-function toggleCart(){
-  let c=document.getElementById("cartBox")
-  c.style.display=c.style.display==="block"?"none":"block"
-}
-
-function openPopup(){
-  document.getElementById("popup").style.display="block"
-
-  let text=""
-  let total=0
-
-  cart.forEach(i=>{
-    text+=i.nama+" x "+i.qty+"\n"
-    total+=parseInt(i.harga.replace(/\D/g,''))*i.qty
-  })
-
-  document.getElementById("detail").innerText=text
-  document.getElementById("final").innerText=total
-}
-
-function confirmOrder(){
-
-  alert("Pesanan sudah dikirim ✔")
-
-  cart=[]
-  update()
-
-  document.getElementById("popup").style.display="none"
-  document.getElementById("cartBox").style.display="none"
-}
-
-function wa(){
-  window.open("https://wa.me/6280000000000?text=Reservasi%20Nara%20Coffee")
-}
-
-function scrollMenu(){
-  document.getElementById("menuSection").scrollIntoView({behavior:"smooth"})
-}
-
+    function wa() {
+        window.open("https://wa.me/6280000000000?text=Halo%20Nara%20Coffee,%20saya%20ingin%20reservasi%20tempat.");
+    }
 </script>
-
 </body>
 </html>
