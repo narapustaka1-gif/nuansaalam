@@ -2,331 +2,647 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nara Cafe Ordering System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nara Coffee</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:#efe4d4;
+      overflow-x:hidden;
+      font-family: sans-serif;
+    }
+
+    .glass{
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.15);
+    }
+
+    .card-hover{
+      transition:.4s;
+    }
+
+    .card-hover:hover{
+      transform:translateY(-8px) scale(1.02);
+      box-shadow:0 20px 50px rgba(0,0,0,.15);
+    }
+
+    .fade-up{
+      animation:fadeUp 1s ease;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(40px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .hide-scroll::-webkit-scrollbar{
+      display:none;
+    }
+
+    .bg-overlay{
+      background:
+      linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,0,.5)),
+      url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1600&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+    }
+
+    .gallery-bg{
+      background:
+      linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.6)),
+      url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1600&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+  </style>
 </head>
-<body class="bg-[#d2b08c] min-h-screen text-gray-800">
 
-  <!-- NAVBAR -->
-  <nav class="bg-[#44533d] text-white px-6 py-4 flex justify-between items-center shadow-lg">
-    <h1 class="text-2xl font-bold">☕ Nara Cafe</h1>
+<body>
 
-    <div class="flex gap-3">
-      <button onclick="showPage('customer')" class="bg-[#d2b08c] text-black px-4 py-2 rounded-full font-semibold">
-        Customer View
-      </button>
+<!-- NAVBAR -->
 
-      <button onclick="showPage('cashier')" class="bg-white text-black px-4 py-2 rounded-full font-semibold">
-        Kasir View
-      </button>
+<nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/20">
+
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+    <h1 class="text-2xl font-bold text-white">
+      ☕ Nara Coffee
+    </h1>
+
+    <div class="hidden md:flex gap-8 text-white">
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+      <a href="#reservation">Reservation</a>
     </div>
-  </nav>
 
-  <!-- CUSTOMER PAGE -->
-  <section id="customerPage" class="p-6">
+  </div>
 
-    <div class="grid lg:grid-cols-2 gap-10 items-center bg-[#44533d] rounded-3xl p-8 text-white">
+</nav>
+
+<!-- HERO -->
+
+<section class="bg-overlay min-h-screen flex items-center">
+
+  <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-10 items-center">
+
+    <div class="text-white fade-up">
+
+      <p class="uppercase tracking-[5px] mb-5 text-sm">
+        Premium Coffee Experience
+      </p>
+
+      <h1 class="text-6xl lg:text-7xl font-bold leading-tight mb-6">
+        Fresh Coffee <br>
+        & Pastries
+      </h1>
+
+      <p class="text-white/80 text-lg leading-relaxed mb-8">
+        Pesan langsung dari meja tanpa antre.
+        Scan QR, pilih menu, bayar,
+        dan tunggu pesanan datang.
+      </p>
+
+      <a href="#menu"
+      class="bg-[#c89b6d] hover:scale-105 transition inline-block px-8 py-4 rounded-full text-black font-semibold">
+        Pesan Sekarang
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- MENU -->
+
+<section id="menu" class="py-24">
+
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="flex justify-between items-center mb-10">
 
       <div>
-        <h1 class="text-5xl font-serif leading-tight mb-6">
-          Fresh Coffee <br>
-          & Pastries,
-          Every Day
-        </h1>
-
-        <p class="text-gray-200 mb-8 leading-relaxed">
-          Pesan langsung dari meja tanpa antre. Tinggal scan QR, pilih menu,
-          bayar, dan tunggu pesanan datang.
+        <p class="uppercase text-sm tracking-[5px] text-[#7d5f45]">
+          Our Menu
         </p>
 
-        <div class="flex gap-4">
-          <button class="bg-[#d2b08c] text-black px-5 py-3 rounded-full font-semibold">
-            Order Online
-          </button>
-
-          <button class="border border-white px-5 py-3 rounded-full">
-            Browse Menu
-          </button>
-        </div>
+        <h2 class="text-5xl font-bold mt-3">
+          Best Seller Menu
+        </h2>
       </div>
 
-      <div>
-        <img
-          src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop"
-          class="rounded-3xl shadow-2xl h-[500px] w-full object-cover"
-        >
+      <div id="cartButton"
+      class="fixed bottom-6 right-6 bg-[#44533d] text-white px-6 py-4 rounded-full shadow-2xl cursor-pointer z-50 hover:scale-110 transition">
+
+        🛒 Cart (<span id="cartCount">0</span>)
+
       </div>
+
     </div>
 
+    <!-- CATEGORY -->
 
-    <!-- FORM ORDER -->
+    <div class="flex gap-4 overflow-x-auto hide-scroll mb-10">
 
-    <div class="bg-white mt-10 rounded-3xl p-8 shadow-xl">
+      <button class="bg-[#44533d] text-white px-6 py-3 rounded-full whitespace-nowrap">
+        Coffee
+      </button>
 
-      <h2 class="text-3xl font-bold mb-8">
-        🍰 Order Menu
-      </h2>
+      <button class="bg-white px-6 py-3 rounded-full whitespace-nowrap">
+        Dessert
+      </button>
 
-      <div class="grid lg:grid-cols-2 gap-10">
+      <button class="bg-white px-6 py-3 rounded-full whitespace-nowrap">
+        Pastry
+      </button>
 
-        <div>
-          <label class="block mb-2 font-semibold">Nama Customer</label>
-          <input id="customerName" type="text" placeholder="Masukkan nama"
-            class="w-full border p-3 rounded-xl mb-5">
-
-          <label class="block mb-2 font-semibold">Nomor Meja</label>
-          <select id="tableNumber" class="w-full border p-3 rounded-xl mb-5">
-            <option>Meja 01</option>
-            <option>Meja 02</option>
-            <option>Meja 03</option>
-            <option>Meja 04</option>
-          </select>
-
-          <label class="block mb-2 font-semibold">Nomor Antrian</label>
-          <input id="queueNumber" value="A00" readonly
-            class="w-full border p-3 rounded-xl mb-5 bg-gray-100">
-        </div>
-
-
-        <div>
-          <label class="block mb-2 font-semibold">Pilih Menu</label>
-
-          <div class="space-y-3">
-
-            <label class="flex justify-between border p-4 rounded-xl">
-              <span>Latte</span>
-              <input type="checkbox" value="Latte" class="menuItem">
-            </label>
-
-            <label class="flex justify-between border p-4 rounded-xl">
-              <span>Cappuccino</span>
-              <input type="checkbox" value="Cappuccino" class="menuItem">
-            </label>
-
-            <label class="flex justify-between border p-4 rounded-xl">
-              <span>Croissant</span>
-              <input type="checkbox" value="Croissant" class="menuItem">
-            </label>
-
-            <label class="flex justify-between border p-4 rounded-xl">
-              <span>Signature Cupcake</span>
-              <input type="checkbox" value="Signature Cupcake" class="menuItem">
-            </label>
-
-          </div>
-        </div>
-      </div>
-
-
-      <!-- QR SIMULATION -->
-
-      <div class="mt-10 bg-[#f8f4ef] rounded-2xl p-6 border">
-        <h3 class="text-2xl font-bold mb-4">💳 Simulasi Pembayaran QRIS</h3>
-
-        <div class="flex flex-col items-center">
-          <img
-            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NARA-CAFE-PAYMENT"
-            class="rounded-xl shadow-lg mb-4"
-          >
-
-          <p class="text-gray-600 text-center">
-            Scan QR untuk simulasi pembayaran.
-          </p>
-        </div>
-      </div>
-
-
-      <button
-        onclick="submitOrder()"
-        class="mt-8 bg-[#44533d] hover:bg-[#2f3a2b] transition text-white px-8 py-4 rounded-full text-lg font-semibold w-full">
-        Kirim Pesanan
+      <button class="bg-white px-6 py-3 rounded-full whitespace-nowrap">
+        Breakfast
       </button>
 
     </div>
-  </section>
 
+    <!-- CARD SLIDER -->
 
-  <!-- CASHIER PAGE -->
+    <div class="overflow-x-auto hide-scroll">
 
-  <section id="cashierPage" class="hidden p-6">
+      <div class="flex gap-8 w-max pb-5">
 
-    <div class="bg-white rounded-3xl shadow-xl p-8">
+        <!-- CARD -->
 
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold">📋 Dashboard Kasir</h2>
+        <div class="bg-white rounded-[30px] overflow-hidden w-[320px] card-hover">
 
-        <div class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
-          Realtime Order Active
+          <img
+          src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1200&auto=format&fit=crop"
+          class="h-[250px] w-full object-cover">
+
+          <div class="p-6">
+
+            <div class="flex justify-between items-center mb-4">
+
+              <h3 class="text-2xl font-bold">
+                Latte
+              </h3>
+
+              <span class="text-[#7d5f45] font-bold">
+                Rp25K
+              </span>
+
+            </div>
+
+            <p class="text-gray-500 mb-6 leading-relaxed">
+              Kopi creamy premium dengan rasa lembut.
+            </p>
+
+            <button
+            onclick="addToCart('Latte',25000)"
+            class="bg-[#44533d] text-white w-full py-4 rounded-2xl hover:scale-105 transition">
+
+              Tambah Pesanan
+
+            </button>
+
+          </div>
+
         </div>
-      </div>
 
+        <!-- CARD -->
 
-      <!-- NOTIFICATION -->
+        <div class="bg-white rounded-[30px] overflow-hidden w-[320px] card-hover">
 
-      <div id="notificationBox" class="hidden bg-yellow-100 border border-yellow-400 p-4 rounded-xl mb-6 text-yellow-800 font-semibold">
-        🔔 Pesanan baru masuk!
-      </div>
+          <img
+          src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop"
+          class="h-[250px] w-full object-cover">
 
+          <div class="p-6">
 
-      <!-- ORDER TABLE -->
+            <div class="flex justify-between items-center mb-4">
 
-      <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="bg-[#44533d] text-white">
-              <th class="p-4 text-left">No</th>
-              <th class="p-4 text-left">Nama</th>
-              <th class="p-4 text-left">Meja</th>
-              <th class="p-4 text-left">Pesanan</th>
-              <th class="p-4 text-left">Status</th>
-            </tr>
-          </thead>
+              <h3 class="text-2xl font-bold">
+                Croissant
+              </h3>
 
-          <tbody id="orderList">
-          </tbody>
-        </table>
+              <span class="text-[#7d5f45] font-bold">
+                Rp18K
+              </span>
+
+            </div>
+
+            <p class="text-gray-500 mb-6 leading-relaxed">
+              Pastry buttery hangat premium bakery.
+            </p>
+
+            <button
+            onclick="addToCart('Croissant',18000)"
+            class="bg-[#44533d] text-white w-full py-4 rounded-2xl hover:scale-105 transition">
+
+              Tambah Pesanan
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="bg-white rounded-[30px] overflow-hidden w-[320px] card-hover">
+
+          <img
+          src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop"
+          class="h-[250px] w-full object-cover">
+
+          <div class="p-6">
+
+            <div class="flex justify-between items-center mb-4">
+
+              <h3 class="text-2xl font-bold">
+                Signature Cake
+              </h3>
+
+              <span class="text-[#7d5f45] font-bold">
+                Rp35K
+              </span>
+
+            </div>
+
+            <p class="text-gray-500 mb-6 leading-relaxed">
+              Cake manis dengan tampilan aesthetic.
+            </p>
+
+            <button
+            onclick="addToCart('Cake',35000)"
+            class="bg-[#44533d] text-white w-full py-4 rounded-2xl hover:scale-105 transition">
+
+              Tambah Pesanan
+
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
-  </section>
 
+  </div>
 
-  <script>
+</section>
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec";
+<!-- POPUP CART -->
 
-    let lastOrderCount = 0;
+<div id="popup"
+class="fixed inset-0 bg-black/60 hidden justify-center items-center z-50 p-5">
 
+  <div class="bg-white rounded-[40px] max-w-lg w-full p-8 relative">
 
-    function showPage(page) {
-      document.getElementById('customerPage').classList.add('hidden');
-      document.getElementById('cashierPage').classList.add('hidden');
+    <button
+    onclick="closePopup()"
+    class="absolute top-5 right-5 text-2xl">
+      ✕
+    </button>
 
-      if (page === 'customer') {
-        document.getElementById('customerPage').classList.remove('hidden');
-      }
+    <h2 class="text-4xl font-bold mb-8">
+      Checkout
+    </h2>
 
-      if (page === 'cashier') {
-        document.getElementById('cashierPage').classList.remove('hidden');
-      }
-    }
+    <div id="cartItems" class="space-y-4 mb-6"></div>
 
+    <div class="border-t pt-5 mb-5">
 
-    function generateQueue() {
-      const random = Math.floor(Math.random() * 999);
-      document.getElementById('queueNumber').value = 'A' + random;
-    }
+      <div class="flex justify-between text-2xl font-bold">
+        <span>Total</span>
+        <span id="totalPrice">Rp0</span>
+      </div>
 
-    generateQueue();
+    </div>
 
+    <input
+    id="customerName"
+    type="text"
+    placeholder="Nama Customer"
+    class="w-full border p-4 rounded-2xl mb-4">
 
-    async function submitOrder() {
+    <select
+    id="tableNumber"
+    class="w-full border p-4 rounded-2xl mb-4">
 
-      const name = document.getElementById('customerName').value;
-      const table = document.getElementById('tableNumber').value;
-      const queue = document.getElementById('queueNumber').value;
+      <option>Meja 01</option>
+      <option>Meja 02</option>
+      <option>Meja 03</option>
 
-      const menus = [...document.querySelectorAll('.menuItem:checked')]
-        .map(item => item.value)
-        .join(', ');
+    </select>
 
+    <input
+    id="queueNumber"
+    readonly
+    class="w-full border p-4 rounded-2xl bg-gray-100 mb-6">
 
-      if (!name || !menus) {
-        alert('Lengkapi pesanan terlebih dahulu');
-        return;
-      }
+    <button
+    onclick="checkout()"
+    class="bg-[#44533d] text-white w-full py-5 rounded-2xl text-lg hover:scale-105 transition">
 
+      Pesan Sekarang
 
-      const payload = {
-        nama: name,
-        meja: table,
-        antrian: queue,
-        pesanan: menus,
-        status: 'Baru'
-      };
+    </button>
 
+  </div>
 
-      try {
+</div>
 
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
+<!-- PAYMENT -->
 
-        alert('Pesanan berhasil dikirim!');
+<div id="paymentPopup"
+class="fixed inset-0 bg-black/60 hidden justify-center items-center z-50 p-5">
 
-        document.getElementById('customerName').value = '';
+  <div class="bg-white rounded-[40px] p-10 max-w-md w-full text-center">
 
-        document.querySelectorAll('.menuItem').forEach(item => {
-          item.checked = false;
-        });
+    <h2 class="text-4xl font-bold mb-6">
+      QR Payment
+    </h2>
 
-        generateQueue();
+    <img
+    src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NARA-CAFE"
+    class="mx-auto rounded-2xl mb-5">
 
-      } catch (error) {
-        console.error(error);
-        alert('Gagal mengirim pesanan');
-      }
-    }
+    <p class="text-2xl font-bold mb-4">
+      Total:
+      <span id="paymentTotal"></span>
+    </p>
 
+    <button
+    onclick="closePayment()"
+    class="bg-[#44533d] text-white px-8 py-4 rounded-full mt-5">
 
-    async function loadOrders() {
+      Selesai
 
-      try {
+    </button>
 
-        const response = await fetch(API_URL);
-        const data = await response.json();
+  </div>
 
-        const orderList = document.getElementById('orderList');
+</div>
 
-        orderList.innerHTML = '';
+<!-- GALLERY -->
 
-        if (data.length > lastOrderCount && lastOrderCount !== 0) {
+<section id="gallery"
+class="gallery-bg min-h-screen flex items-center justify-center text-center text-white px-6">
 
-          const notif = document.getElementById('notificationBox');
-          notif.classList.remove('hidden');
+  <div class="max-w-4xl">
 
-          const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
-          audio.play();
+    <h2 class="text-6xl font-bold mb-8">
+      A Warm Place <br>
+      For Every Story
+    </h2>
 
-          setTimeout(() => {
-            notif.classList.add('hidden');
-          }, 5000);
-        }
+    <p class="text-xl leading-relaxed text-white/80">
+      Tempat nyaman untuk menikmati kopi,
+      percakapan kecil,
+      dan suasana yang hangat.
+    </p>
 
+  </div>
 
-        lastOrderCount = data.length;
+</section>
 
+<!-- ABOUT -->
 
-        data.reverse().forEach((order, index) => {
+<section id="about" class="py-24">
 
-          orderList.innerHTML += `
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-4">${index + 1}</td>
-              <td class="p-4">${order.nama}</td>
-              <td class="p-4">${order.meja}</td>
-              <td class="p-4">${order.pesanan}</td>
-              <td class="p-4">
-                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">
-                  ${order.status}
-                </span>
-              </td>
-            </tr>
-          `;
-        });
+  <div class="max-w-6xl mx-auto px-6">
 
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    <div class="bg-[#5c4330] rounded-[40px] p-16 text-white">
 
+      <p class="uppercase tracking-[5px] mb-5 text-sm">
+        About Cafe
+      </p>
 
-    loadOrders();
+      <h2 class="text-5xl font-bold mb-8">
+        Crafted With Warmth
+      </h2>
 
-    setInterval(loadOrders, 5000);
+      <p class="text-white/80 text-lg leading-loose">
+        Nara Coffee hadir sebagai ruang nyaman
+        untuk menikmati kopi premium,
+        pastry hangat,
+        dan suasana aesthetic modern.
+        Kami percaya bahwa secangkir kopi
+        bukan hanya tentang rasa,
+        tetapi tentang pengalaman.
+      </p>
 
-  </script>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- PARTNERSHIP -->
+
+<section class="pb-24">
+
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="border-2 border-[#5c4330] rounded-[40px] p-16 text-center">
+
+      <h2 class="text-5xl font-bold mb-8 text-[#5c4330]">
+        Open Partnership
+      </h2>
+
+      <p class="text-lg text-gray-600 leading-loose max-w-3xl mx-auto">
+        Kami membuka kerjasama untuk event,
+        komunitas,
+        gathering,
+        dan berbagai kolaborasi lainnya.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- RESERVATION -->
+
+<section id="reservation" class="pb-32">
+
+  <div class="max-w-4xl mx-auto px-6 text-center">
+
+    <h2 class="text-5xl font-bold mb-8">
+      Reservation
+    </h2>
+
+    <p class="text-lg text-gray-600 mb-10">
+      Reservasi tempat langsung melalui WhatsApp.
+    </p>
+
+    <a
+    href="https://wa.me/628123456789"
+    target="_blank"
+    class="bg-[#44533d] text-white px-10 py-5 rounded-full inline-block hover:scale-105 transition">
+
+      Reserve via WhatsApp
+
+    </a>
+
+  </div>
+
+</section>
+
+<script>
+
+const API_URL =
+'https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec';
+
+let cart = [];
+
+function addToCart(name,price){
+
+  cart.push({
+    name,
+    price
+  });
+
+  document.getElementById('cartCount')
+  .innerText = cart.length;
+}
+
+document.getElementById('cartButton')
+.addEventListener('click',()=>{
+
+  document.getElementById('popup')
+  .classList.remove('hidden');
+
+  document.getElementById('popup')
+  .classList.add('flex');
+
+  renderCart();
+
+  generateQueue();
+
+});
+
+function renderCart(){
+
+  let html = '';
+  let total = 0;
+
+  cart.forEach(item=>{
+
+    total += item.price;
+
+    html += `
+      <div class="flex justify-between bg-gray-100 p-4 rounded-2xl">
+        <span>${item.name}</span>
+        <span>Rp${item.price.toLocaleString()}</span>
+      </div>
+    `;
+  });
+
+  document.getElementById('cartItems')
+  .innerHTML = html;
+
+  document.getElementById('totalPrice')
+  .innerText =
+  'Rp' + total.toLocaleString();
+}
+
+function closePopup(){
+
+  document.getElementById('popup')
+  .classList.add('hidden');
+
+}
+
+function generateQueue(){
+
+  const random =
+  Math.floor(Math.random()*999);
+
+  document.getElementById('queueNumber')
+  .value = 'A' + random;
+}
+
+async function checkout(){
+
+  let total = 0;
+
+  cart.forEach(item=>{
+    total += item.price;
+  });
+
+  const payload = {
+
+    nama:
+    document.getElementById('customerName').value,
+
+    meja:
+    document.getElementById('tableNumber').value,
+
+    antrian:
+    document.getElementById('queueNumber').value,
+
+    pesanan:
+    cart.map(item=>item.name).join(', '),
+
+    total:
+    total
+
+  };
+
+  try{
+
+    await fetch(API_URL,{
+      method:'POST',
+      body:JSON.stringify(payload)
+    });
+
+  }catch(error){
+    console.log(error);
+  }
+
+  document.getElementById('paymentPopup')
+  .classList.remove('hidden');
+
+  document.getElementById('paymentPopup')
+  .classList.add('flex');
+
+  document.getElementById('paymentTotal')
+  .innerText =
+  'Rp' + total.toLocaleString();
+
+}
+
+function closePayment(){
+
+  document.getElementById('paymentPopup')
+  .classList.add('hidden');
+
+  cart = [];
+
+  document.getElementById('cartCount')
+  .innerText = 0;
+
+  closePopup();
+
+}
+
+</script>
 
 </body>
 </html>
