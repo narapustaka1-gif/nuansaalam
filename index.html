@@ -504,52 +504,109 @@
     </div>
   </section>
 
-  <section class="section" id="order">
+  <section class="section" id="menu">
     <div class="container">
 
       <div class="section-title">
-        <h2>Digital Self Ordering</h2>
-        <p>Scan QR di meja dan pesan langsung tanpa antri.</p>
+        <h2>Digital Menu Experience</h2>
+        <p>Pilih menu favorit dan masukkan langsung ke keranjang.</p>
       </div>
 
-      <div style="background: rgba(255,255,255,0.6); padding:40px; border-radius:35px; backdrop-filter:blur(10px); box-shadow:0 10px 30px rgba(0,0,0,0.08); max-width:900px; margin:auto;">
+      <div class="cards">
 
-        <form id="orderForm" style="display:grid; gap:20px;">
-
-          <input type="text" id="name" placeholder="Nama Pemesan" required style="padding:18px; border:none; border-radius:16px; font-size:1rem;">
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-            <input type="text" id="table" placeholder="Nomor Meja" required style="padding:18px; border:none; border-radius:16px; font-size:1rem;">
-
-            <input type="number" id="queue" placeholder="Nomor Antrian" required style="padding:18px; border:none; border-radius:16px; font-size:1rem;">
+        <div class="card menu-item" data-name="Cappuccino" data-price="28000">
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
+          <div class="card-content">
+            <h3>Cappuccino</h3>
+            <p>Rp28.000</p>
+            <button class="btn add-cart">Tambah</button>
           </div>
-
-          <select id="menuSelect" style="padding:18px; border:none; border-radius:16px; font-size:1rem;">
-            <option>Cappuccino - Rp28.000</option>
-            <option>Latte Signature - Rp32.000</option>
-            <option>Americano - Rp24.000</option>
-            <option>Croffle Caramel - Rp30.000</option>
-          </select>
-
-          <textarea id="notes" placeholder="Catatan Pesanan" rows="4" style="padding:18px; border:none; border-radius:16px; font-size:1rem;"></textarea>
-
-          <button type="submit" class="btn" style="border:none; cursor:pointer; width:fit-content;">
-            Checkout Pesanan
-          </button>
-
-        </form>
-
-        <div id="successBox" style="display:none; margin-top:30px; background:#5a3422; color:white; padding:30px; border-radius:25px;">
-          <h3 style="margin-bottom:10px;">Pesanan Berhasil Masuk</h3>
-          <p>Pesanan otomatis dikirim ke dashboard kasir Nuansa Alam.</p>
         </div>
+
+        <div class="card menu-item" data-name="Latte Signature" data-price="32000">
+          <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
+          <div class="card-content">
+            <h3>Latte Signature</h3>
+            <p>Rp32.000</p>
+            <button class="btn add-cart">Tambah</button>
+          </div>
+        </div>
+
+        <div class="card menu-item" data-name="Americano" data-price="24000">
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
+          <div class="card-content">
+            <h3>Americano</h3>
+            <p>Rp24.000</p>
+            <button class="btn add-cart">Tambah</button>
+          </div>
+        </div>
+
+        <div class="card menu-item" data-name="Croffle Caramel" data-price="30000">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
+          <div class="card-content">
+            <h3>Croffle Caramel</h3>
+            <p>Rp30.000</p>
+            <button class="btn add-cart">Tambah</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:50px; background:rgba(255,255,255,0.65); padding:35px; border-radius:30px; backdrop-filter:blur(10px);">
+
+        <h2 style="font-family:'Playfair Display', serif; margin-bottom:20px;">Keranjang Pesanan</h2>
+
+        <div id="cartItems" style="display:grid; gap:15px;"></div>
+
+        <div style="margin-top:25px; font-size:1.2rem; font-weight:600;">
+          Total : <span id="totalPrice">Rp0</span>
+        </div>
+
+        <button class="btn" id="openCheckout" style="margin-top:25px; border:none; cursor:pointer;">
+          Lanjut Checkout
+        </button>
 
       </div>
 
     </div>
   </section>
 
-  <section class="section" id="menu">
+  <div id="checkoutLayer" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:9999; padding:20px;">
+
+    <div style="background:#f7efe8; width:100%; max-width:650px; border-radius:35px; padding:40px; position:relative; animation:fadeUp 0.4s ease;">
+
+      <button id="closeCheckout" style="position:absolute; top:20px; right:20px; border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
+
+      <h2 style="font-family:'Playfair Display', serif; margin-bottom:25px;">Checkout Pesanan</h2>
+
+      <form id="orderForm" style="display:grid; gap:18px;">
+
+        <input type="text" id="name" placeholder="Nama Pemesan" required style="padding:18px; border:none; border-radius:16px;">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <input type="text" id="table" placeholder="Nomor Meja" required style="padding:18px; border:none; border-radius:16px;">
+
+          <input type="number" id="queue" placeholder="Nomor Antrian" required style="padding:18px; border:none; border-radius:16px;">
+        </div>
+
+        <textarea id="notes" rows="4" placeholder="Catatan Pesanan" style="padding:18px; border:none; border-radius:16px;"></textarea>
+
+        <button type="submit" class="btn" style="border:none; cursor:pointer; width:100%;">
+          Konfirmasi Pesanan
+        </button>
+
+      </form>
+
+      <div id="successBox" style="display:none; margin-top:25px; background:#5a3422; color:white; padding:25px; border-radius:22px;">
+        <h3>Pesanan Sedang Diproses</h3>
+        <p style="margin-top:10px; line-height:1.7;">Pesanan otomatis masuk ke dashboard kasir Nuansa Alam.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <section class="section" id="about">
     <div class="container">
 
       <div class="section-title">
@@ -660,6 +717,67 @@
 
 const scriptURL = 'PASTE_GOOGLE_APPS_SCRIPT_URL_DISINI';
 
+const cart = [];
+const cartItems = document.getElementById('cartItems');
+const totalPrice = document.getElementById('totalPrice');
+const addButtons = document.querySelectorAll('.add-cart');
+const checkoutLayer = document.getElementById('checkoutLayer');
+const openCheckout = document.getElementById('openCheckout');
+const closeCheckout = document.getElementById('closeCheckout');
+
+addButtons.forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+
+    const card = e.target.closest('.menu-item');
+
+    const item = {
+      name: card.dataset.name,
+      price: Number(card.dataset.price)
+    };
+
+    cart.push(item);
+
+    renderCart();
+  });
+});
+
+function renderCart() {
+
+  cartItems.innerHTML = '';
+
+  let total = 0;
+
+  cart.forEach((item) => {
+
+    total += item.price;
+
+    const div = document.createElement('div');
+
+    div.style.background = 'white';
+    div.style.padding = '18px';
+    div.style.borderRadius = '18px';
+
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong>${item.name}</strong>
+        <span>Rp${item.price.toLocaleString()}</span>
+      </div>
+    `;
+
+    cartItems.appendChild(div);
+  });
+
+  totalPrice.innerText = `Rp${total.toLocaleString()}`;
+}
+
+openCheckout.addEventListener('click', () => {
+  checkoutLayer.style.display = 'flex';
+});
+
+closeCheckout.addEventListener('click', () => {
+  checkoutLayer.style.display = 'none';
+});
+
 const form = document.getElementById('orderForm');
 const successBox = document.getElementById('successBox');
 
@@ -670,7 +788,8 @@ form.addEventListener('submit', async (e) => {
     nama: document.getElementById('name').value,
     meja: document.getElementById('table').value,
     antrian: document.getElementById('queue').value,
-    menu: document.getElementById('menuSelect').value,
+    pesanan: cart,
+    total: totalPrice.innerText,
     catatan: document.getElementById('notes').value,
     waktu: new Date().toLocaleString()
   };
@@ -685,6 +804,10 @@ form.addEventListener('submit', async (e) => {
     successBox.style.display = 'block';
 
     form.reset();
+
+    cart.length = 0;
+
+    renderCart();
 
   } catch (error) {
     alert('Gagal mengirim pesanan');
