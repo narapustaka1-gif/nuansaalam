@@ -9,82 +9,71 @@
 body{
   margin:0;
   font-family:Arial;
-  background:#0b0b0b;
-  color:white;
-  overflow-x:hidden;
+  background:#f5f5f5;
+  color:#222;
 }
 
-/* ===== HERO SLIDER ===== */
+/* ===== HERO CERAH ===== */
 .hero{
   height:100vh;
-  position:relative;
+  background:url("https://images.unsplash.com/photo-1509042239860-f550ce710b93") center/cover;
   display:flex;
   align-items:center;
   justify-content:center;
+  position:relative;
   text-align:center;
-  background:url("https://images.unsplash.com/photo-1442512595331-e89e73853f31") center/cover;
 }
 
 .overlay{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,0.65);
+  background:rgba(255,255,255,0.4);
 }
 
 .hero-content{
   position:relative;
-  z-index:2;
 }
 
 h1{
   font-size:56px;
-  margin:0;
+  color:#2b2b2b;
 }
 
 /* BUTTON */
 .btn{
   padding:12px 18px;
-  background:#6f4e37;
+  background:#d4a373;
   border:none;
   color:white;
   margin:5px;
   cursor:pointer;
+  border-radius:8px;
 }
 
-/* ===== SECTION ===== */
+/* SECTION */
 .section{
-  padding:60px 40px;
+  padding:60px 30px;
 }
 
-/* MENU HORIZONTAL */
-.menu-scroll{
-  display:flex;
-  overflow-x:auto;
+/* ===== KATALOG ===== */
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:15px;
-  padding-bottom:10px;
 }
 
 .card{
-  min-width:220px;
-  background:rgba(255,255,255,0.05);
+  background:white;
   padding:10px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
 .card img{
   width:100%;
   height:140px;
   object-fit:cover;
-}
-
-/* GALLERY */
-.gallery{
-  column-count:3;
-  column-gap:15px;
-}
-
-.gallery img{
-  width:100%;
-  margin-bottom:15px;
+  border-radius:10px;
 }
 
 /* CART */
@@ -92,130 +81,168 @@ h1{
   position:fixed;
   top:20px;
   right:20px;
-  background:#6f4e37;
+  background:#d4a373;
   padding:10px;
-  z-index:10;
+  color:white;
+  cursor:pointer;
+  border-radius:8px;
 }
 
-.cart-panel{
+/* CART PANEL */
+.cart{
   position:fixed;
   right:0;
   top:0;
-  width:320px;
+  width:350px;
   height:100%;
-  background:#111;
+  background:white;
   padding:15px;
   display:none;
   overflow:auto;
 }
 
-input,textarea{
+/* POPUP CHECKOUT */
+.popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  padding:20px;
+  width:300px;
+  display:none;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
+
+input{
   width:100%;
   padding:8px;
   margin-top:8px;
-  background:#222;
+}
+
+/* GALLERY */
+.gallery{
+  column-count:3;
+  column-gap:10px;
+}
+
+.gallery img{
+  width:100%;
+  margin-bottom:10px;
+  border-radius:10px;
+}
+
+/* ABOUT */
+.about{
+  background:url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085") center/cover;
+  padding:80px;
   color:white;
-  border:none;
+  position:relative;
+}
+
+.about::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+}
+
+.about-content{
+  position:relative;
+  max-width:600px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- CART BUTTON -->
+<!-- CART BTN -->
 <div class="cart-btn" onclick="toggleCart()">
 Cart (<span id="count">0</span>)
 </div>
 
-<!-- HERO SLIDER (SIMPLE VERSION) -->
-<section class="hero">
+<!-- HERO -->
+<div class="hero">
 <div class="overlay"></div>
 <div class="hero-content">
 <h1>Nara Coffee</h1>
 <p>Selamat Datang di Nara Coffee</p>
 
-<button class="btn">Pesan Sekarang</button>
-<button class="btn">Reservasi</button>
+<button class="btn" onclick="scrollMenu()">Pesan Sekarang</button>
+<button class="btn" onclick="wa()">Reservasi</button>
 </div>
-</section>
+</div>
 
 <!-- MENU -->
-<section class="section">
+<div class="section" id="menuSection">
 <h2>Katalog Menu</h2>
-
-<div class="menu-scroll" id="menu"></div>
-</section>
+<div class="menu" id="menu"></div>
+</div>
 
 <!-- GALLERY -->
-<section class="section">
-<h2>Gallery</h2>
+<div class="section">
+<h2>Gallery Café</h2>
 <div class="gallery">
-<img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93">
 <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb">
 <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814">
+<img src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff">
 </div>
-</section>
+</div>
 
 <!-- ABOUT -->
-<section class="section">
+<div class="about">
+<div class="about-content">
 <h2>Tentang Nara Coffee</h2>
 <p>
-Nara Coffee adalah ruang tenang untuk menikmati kopi,
-percakapan, dan waktu yang pelan di tengah hiruk pikuk kota.
+Tempat hangat untuk menikmati kopi, cerita, dan waktu yang pelan.
+Nara Coffee hadir sebagai ruang tenang di tengah dunia yang sibuk.
 </p>
-</section>
-
-<!-- RESERVATION -->
-<section class="section">
-<h2>Reservasi</h2>
-
-<input placeholder="Nama">
-<input placeholder="Jumlah Orang">
-<input type="date">
-<input type="time">
-<textarea placeholder="Catatan"></textarea>
-
-<button class="btn">Reservasi Sekarang</button>
-</section>
+</div>
+</div>
 
 <!-- CART -->
-<div class="cart-panel" id="cart">
-
-<h2>Cart</h2>
+<div class="cart" id="cartBox">
+<h2>Keranjang</h2>
 <div id="list"></div>
+<h3>Total: Rp <span id="total">0</span></h3>
 
-<h3 id="total">Total: 0</h3>
+<button class="btn" onclick="openPopup()">Checkout</button>
+<button class="btn" onclick="toggleCart()">Tutup</button>
+</div>
 
-<input id="name" placeholder="Nama">
-<input id="wa" placeholder="WA">
-<textarea id="note" placeholder="Catatan"></textarea>
+<!-- POPUP CHECKOUT -->
+<div class="popup" id="popup">
+<h3>Checkout</h3>
 
-<button onclick="checkout()" class="btn">Checkout</button>
-<button onclick="toggleCart()" class="btn">Tutup</button>
+<input id="nama" placeholder="Nama">
+<input id="bangku" placeholder="Nomor Bangku">
 
+<p id="detail"></p>
+<p>Total Bayar: Rp <span id="final"></span></p>
+
+<p>Barcode: #NCF2026</p>
+
+<button class="btn" onclick="confirmOrder()">Kirim Pesanan</button>
 </div>
 
 <script>
 
-const API = "https://script.google.com/macros/s/AKfycbzJULBVG1bMjlXnSNdhaSjIJ7BwjGsxV1rHSoZzuB1-hi0mrEFoBo-jqXyUSgXD_1Y/exec"
+let menu=[]
+let cart=[]
 
-let menu = []
-let cart = []
-
-// LOAD MENU
-fetch(API)
+fetch("https://script.google.com/macros/s/AKfycbzJULBVG1bMjlXnSNdhaSjIJ7BwjGsxV1rHSoZzuB1-hi0mrEFoBo-jqXyUSgXD_1Y/exec")
 .then(r=>r.json())
 .then(d=>{
-  menu = d
+  menu=d
   render()
 })
 
 function render(){
-  let el = document.getElementById("menu")
+  let el=document.getElementById("menu")
   el.innerHTML=""
 
   menu.forEach((m,i)=>{
-    el.innerHTML += `
+    el.innerHTML+=`
     <div class="card">
       <img src="${m.gambar}">
       <h3>${m.nama}</h3>
@@ -225,59 +252,69 @@ function render(){
   })
 }
 
-// CART
 function add(i){
-  let item = menu[i]
-
-  let exist = cart.find(x=>x.nama===item.nama)
+  let item=menu[i]
+  let exist=cart.find(x=>x.nama===item.nama)
 
   if(exist) exist.qty++
-  else cart.push({...item, qty:1})
+  else cart.push({...item,qty:1})
 
   update()
 }
 
 function update(){
-  document.getElementById("count").innerText = cart.length
+  document.getElementById("count").innerText=cart.length
 
-  let el = document.getElementById("list")
+  let el=document.getElementById("list")
   el.innerHTML=""
 
   let total=0
 
   cart.forEach(i=>{
-    total += parseInt(i.harga.replace(/\D/g,''))*i.qty
-
-    el.innerHTML += `
-      <div>${i.nama} x ${i.qty}</div>
-    `
+    total+=parseInt(i.harga.replace(/\D/g,''))*i.qty
+    el.innerHTML+=`<div>${i.nama} x ${i.qty}</div>`
   })
 
-  document.getElementById("total").innerText="Total: "+total
+  document.getElementById("total").innerText=total
 }
 
 function toggleCart(){
-  let c = document.getElementById("cart")
-  c.style.display = c.style.display==="block"?"none":"block"
+  let c=document.getElementById("cartBox")
+  c.style.display=c.style.display==="block"?"none":"block"
 }
 
-// CHECKOUT
-function checkout(){
-  fetch(API,{
-    method:"POST",
-    body:JSON.stringify({
-      name:document.getElementById("name").value,
-      wa:document.getElementById("wa").value,
-      note:document.getElementById("note").value,
-      cart,
-      total:cart.length
-    })
+function openPopup(){
+  document.getElementById("popup").style.display="block"
+
+  let text=""
+  let total=0
+
+  cart.forEach(i=>{
+    text+=i.nama+" x "+i.qty+"\n"
+    total+=parseInt(i.harga.replace(/\D/g,''))*i.qty
   })
 
-  alert("Order masuk")
+  document.getElementById("detail").innerText=text
+  document.getElementById("final").innerText=total
+}
+
+function confirmOrder(){
+
+  alert("Pesanan sudah dikirim ✔")
+
   cart=[]
   update()
-  toggleCart()
+
+  document.getElementById("popup").style.display="none"
+  document.getElementById("cartBox").style.display="none"
+}
+
+function wa(){
+  window.open("https://wa.me/6280000000000?text=Reservasi%20Nara%20Coffee")
+}
+
+function scrollMenu(){
+  document.getElementById("menuSection").scrollIntoView({behavior:"smooth"})
 }
 
 </script>
