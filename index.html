@@ -1,1012 +1,795 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuansa Alam Cafe</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
+<title>Nuansa Alam Cafe</title>
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #e8ddd3;
-      color: #3b2416;
-      overflow-x: hidden;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
-    .container {
-      width: 92%;
-      max-width: 1350px;
-      margin: auto;
-    }
+<style>
 
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      backdrop-filter: blur(12px);
-      background: rgba(255,255,255,0.2);
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 0;
-    }
-
-    .logo {
-      font-size: 2rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      color: #4b2d1f;
-    }
-
-    .menu {
-      display: flex;
-      gap: 35px;
-      list-style: none;
-    }
-
-    .menu a {
-      text-decoration: none;
-      color: #4b2d1f;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-
-    .menu a:hover {
-      color: #8b5a3c;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      background: #5a3422;
-      color: white;
-      border-radius: 999px;
-      text-decoration: none;
-      transition: 0.3s;
-      display: inline-block;
-      font-weight: 500;
-    }
-
-    .btn:hover {
-      background: #3d2115;
-      transform: translateY(-3px);
-    }
-
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-      url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      border-radius: 0 0 40px 40px;
-      overflow: hidden;
-    }
-
-    .hero-content {
-      color: white;
-      max-width: 700px;
-      padding-top: 90px;
-      animation: fadeUp 1s ease;
-    }
-
-    .hero span {
-      background: rgba(255,255,255,0.15);
-      padding: 8px 18px;
-      border-radius: 999px;
-      display: inline-block;
-      margin-bottom: 20px;
-      backdrop-filter: blur(10px);
-    }
-
-    .hero h1 {
-      font-size: 5rem;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 35px;
-      color: #f3f3f3;
-    }
-
-    .section {
-      padding: 110px 0;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title h2 {
-      font-size: 3rem;
-      font-family: 'Playfair Display', serif;
-      margin-bottom: 15px;
-    }
-
-    .section-title p {
-      color: #6e5648;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.6);
-      border-radius: 30px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      transition: 0.4s;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-    }
-
-    .card img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-    }
-
-    .card-content {
-      padding: 25px;
-    }
-
-    .card-content h3 {
-      margin-bottom: 10px;
-      font-size: 1.5rem;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .about {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 50px;
-      align-items: center;
-    }
-
-    .about img {
-      width: 100%;
-      border-radius: 30px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    }
-
-    .about-content h2 {
-      font-size: 3rem;
-      font-family: 'Playfair Display', serif;
-      margin-bottom: 20px;
-    }
-
-    .about-content p {
-      line-height: 1.9;
-      color: #5b4638;
-      margin-bottom: 25px;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .gallery img {
-      width: 100%;
-      height: 320px;
-      object-fit: cover;
-      border-radius: 25px;
-      transition: 0.4s;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.03);
-    }
-
-    .contact-box {
-      background: linear-gradient(135deg, #5a3422, #2c160d);
-      padding: 45px 30px;
-      border-radius: 28px;
-      text-align: center;
-      color: white;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    .contact-box h2 {
-      font-size: 2.2rem;
-      font-family: 'Playfair Display', serif;
-      margin-bottom: 20px;
-    }
-
-    #checkoutLayer > div {
-    box-sizing:border-box;
-    width:100%;
-  }
-
-  @media(max-width:768px){
-
-    #checkoutLayer {
-      align-items:flex-end;
-      padding:10px;
-      overflow-y:auto;
-    }
-
-    #checkoutLayer > div {
-      width:100%;
-      max-width:100%;
-      box-sizing:border-box;
-      border-radius:28px 28px 0 0;
-      padding:28px 20px;
-      max-height:92vh;
-      overflow-y:auto;
-    }
-
-    #checkoutLayer h2 {
-      font-size:1.5rem;
-    }
-  }
-
-footer {
-      text-align: center;
-      padding: 35px 20px;
-      color: #6f5a4c;
-    }
-
-    .floating {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: #25D366;
-      color: white;
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      text-decoration: none;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      z-index: 999;
-      transition: 0.3s;
-    }
-
-    .floating:hover {
-      transform: scale(1.1);
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media(max-width: 900px) {
-      .hero h1 {
-        font-size: 3rem;
-      }
-
-      .menu {
-        gap: 18px;
-      }
-
-      .menu a {
-        font-size: 0.9rem;
-      }
-
-      .btn {
-        padding: 10px 18px;
-        font-size: 0.9rem;
-      }
-
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .gallery {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media(max-width: 768px) {
-
-  body {
-    overflow-x: hidden;
-  }
-
-  .container {
-    width: 94%;
-  }
-
-  nav {
-    padding: 14px 18px;
-    border-radius: 18px;
-  }
-
-  nav ul {
-    gap: 12px;
-  }
-
-  nav ul li a {
-    font-size: 0.72rem;
-  }
-
-  .hero {
-    min-height: 78vh;
-    border-radius: 28px;
-    padding: 40px 20px;
-  }
-
-  .hero-content {
-    max-width: 100%;
-  }
-
-  .hero h1 {
-    font-size: 2.2rem;
-    line-height: 1.2;
-  }
-
-  .hero p {
-    font-size: 0.82rem;
-    line-height: 1.7;
-  }
-
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  .card {
-    border-radius: 20px;
-    overflow: hidden;
-  }
-
-  .card img,
-  .gallery img {
-    height: 140px;
-    object-fit: cover;
-  }
-
-  .card-content {
-    padding: 12px;
-  }
-
-  .card-content h3 {
-    font-size: 0.9rem;
-  }
-
-  .card-content p {
-    font-size: 0.72rem;
-  }
-
-  .btn {
-    padding: 10px 18px;
-    font-size: 0.72rem;
-    border-radius: 14px;
-  }
-
-  #order form,
-  #checkoutLayer form {
-    gap: 14px;
-  }
-
-  #order form > div,
-  #checkoutLayer form > div {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  input,
-  textarea,
-  select {
-    width:100%;
-    max-width:100%;
-    box-sizing:border-box;
-    padding: 12px !important;
-    font-size: 0.75rem !important;
-    border-radius: 14px !important;
-  }
-
-  .contact-box {
-    padding: 30px 20px;
-    border-radius: 22px;
-    max-width: 100%;
-  }
-
-  .contact-box h2 {
-    font-size: 1.5rem;
-  }
-
-  footer {
-    font-size: 0.72rem;
-    padding-bottom: 40px;
-  }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
 }
 
-      .about {
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
-        align-items: start;
-      }
+body{
+font-family:'Poppins',sans-serif;
+background:#efe7df;
+color:#2d1d16;
+overflow-x:hidden;
+}
 
-      .about img {
-        height: 320px;
-        object-fit: cover;
-      }
+.container{
+width:92%;
+max-width:1400px;
+margin:auto;
+}
 
-      #order form > div {
-        grid-template-columns: 1fr 1fr;
-      }
+/* NAVBAR */
 
-      .cards,
-      .gallery {
-        grid-template-columns: repeat(2, 1fr);
-      }
+nav{
+margin-top:20px;
+background:rgba(255,255,255,0.45);
+backdrop-filter:blur(12px);
+padding:18px 28px;
+border-radius:28px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:12px;
+z-index:999;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
 
-      .card {
-        border-radius: 18px;
-      }
+.logo{
+font-family:'Playfair Display',serif;
+font-size:2rem;
+font-weight:700;
+}
 
-      .card-content {
-        padding: 10px;
-      }
+nav ul{
+display:flex;
+gap:30px;
+list-style:none;
+}
 
-      .card-content h3 {
-        font-size: 0.9rem;
-      }
+nav ul li a{
+text-decoration:none;
+color:#2d1d16;
+font-weight:500;
+}
 
-      .card-content p {
-        font-size: 0.7rem;
-        line-height: 1.5;
-      }
+.contact-btn{
+background:#5a3422;
+color:white;
+padding:12px 24px;
+border-radius:40px;
+text-decoration:none;
+}
 
-      .card img,
-      .gallery img {
-        height: 140px;
-      }
+/* HERO */
 
-      .section {
-        padding: 55px 0;
-      }
+.hero{
+margin-top:25px;
+min-height:85vh;
+border-radius:40px;
+overflow:hidden;
+position:relative;
+display:flex;
+align-items:center;
+padding:60px;
+background:
+linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),
+url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600');
+background-size:cover;
+background-position:center;
+}
 
-      .hero-content {
-        max-width: 90%;
-      }
+.hero-content{
+max-width:650px;
+color:white;
+z-index:2;
+}
 
-      .hero h1 {
-        font-size: 2rem;
-      }
+.hero h1{
+font-family:'Playfair Display',serif;
+font-size:5rem;
+line-height:1.1;
+margin-bottom:20px;
+}
 
-      .hero p {
-        font-size: 0.78rem;
-        line-height: 1.6;
-      }
+.hero p{
+line-height:1.8;
+font-size:1rem;
+opacity:0.9;
+margin-bottom:30px;
+}
 
-      input,
-      select,
-      textarea {
-        font-size: 0.75rem !important;
-        padding: 12px !important;
-      }
+.hero button{
+padding:16px 34px;
+border:none;
+border-radius:40px;
+background:white;
+color:#2d1d16;
+font-weight:600;
+cursor:pointer;
+}
 
-      .contact-box {
-        border-radius: 24px;
-      }
+/* MENU */
 
-      .floating {
-        width: 48px;
-        height: 48px;
-        font-size: 1.2rem;
-      }
+.section-title{
+font-family:'Playfair Display',serif;
+font-size:3rem;
+margin:70px 0 30px;
+}
 
-      body {
-        overflow-x: hidden;
-      }
+.menu-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:22px;
+}
 
-      .logo {
-        font-size: 1.3rem;
-      }
+.card{
+background:white;
+border-radius:28px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.06);
+transition:0.3s;
+}
 
-      nav {
-        padding: 14px 0;
-      }
+.card:hover{
+transform:translateY(-6px);
+}
 
-      .menu {
-        gap: 10px;
-      }
+.card img{
+width:100%;
+height:230px;
+object-fit:cover;
+}
 
-      .menu a {
-        font-size: 0.7rem;
-      }
+.card-content{
+padding:18px;
+}
 
-      .btn {
-        padding: 8px 14px;
-        font-size: 0.7rem;
-      }
+.card-content h3{
+font-size:1.2rem;
+margin-bottom:8px;
+}
 
-      .hero {
-        min-height: 85vh;
-      }
+.price{
+color:#5a3422;
+font-weight:700;
+margin:10px 0;
+}
 
-      .hero h1 {
-        font-size: 2.2rem;
-      }
+.add-cart{
+width:100%;
+padding:14px;
+border:none;
+background:#5a3422;
+color:white;
+border-radius:18px;
+cursor:pointer;
+font-weight:600;
+}
 
-      .hero p {
-        font-size: 0.85rem;
-      }
+/* CART */
 
-      .section {
-        padding: 70px 0;
-      }
+.cart-box{
+margin-top:60px;
+background:white;
+padding:30px;
+border-radius:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
 
-      .section-title h2,
-      .about-content h2,
-      .contact-box h2 {
-        font-size: 1.8rem;
-      }
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin-bottom:12px;
+padding-bottom:12px;
+border-bottom:1px solid #eee;
+}
 
-      .cards,
-      .gallery {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
+.total{
+font-size:2rem;
+font-weight:700;
+margin-top:20px;
+}
 
-      .card img,
-      .gallery img {
-        height: 160px;
-      }
+.checkout-btn{
+margin-top:20px;
+padding:16px 30px;
+border:none;
+border-radius:18px;
+background:#5a3422;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
 
-      .card-content {
-        padding: 14px;
-      }
+/* POPUP */
 
-      .card-content h3 {
-        font-size: 1rem;
-      }
+#checkoutLayer{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.55);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:99999;
+}
 
-      .card-content p,
-      .about-content p,
-      .section-title p {
-        font-size: 0.8rem;
-      }
+.popup{
+background:#f4ece5;
+width:100%;
+max-width:700px;
+border-radius:38px;
+padding:40px;
+position:relative;
+animation:fadeUp .35s ease;
+}
 
-      .contact-box {
-        padding: 35px 18px;
-      }
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
 
-      footer {
-        font-size: 0.75rem;
-      }
-    }
-  </style>
+.close{
+position:absolute;
+right:28px;
+top:20px;
+font-size:2.5rem;
+cursor:pointer;
+}
+
+.popup h2{
+font-family:'Playfair Display',serif;
+font-size:3rem;
+margin-bottom:30px;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+margin-bottom:16px;
+}
+
+input, textarea{
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+font-family:'Poppins';
+font-size:1rem;
+}
+
+textarea{
+height:120px;
+resize:none;
+margin-bottom:18px;
+}
+
+.payment-box{
+background:white;
+padding:25px;
+border-radius:28px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.payment-box h3{
+font-size:2rem;
+margin-bottom:16px;
+color:#5a3422;
+}
+
+.payment-box img{
+width:220px;
+max-width:100%;
+border-radius:20px;
+}
+
+.payment-box p{
+margin-top:15px;
+line-height:1.8;
+font-size:0.9rem;
+color:#666;
+}
+
+.submit-btn{
+width:100%;
+padding:18px;
+border:none;
+background:#5a3422;
+color:white;
+font-size:1rem;
+font-weight:600;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* NOTIF */
+
+#notif{
+position:fixed;
+top:20px;
+right:20px;
+background:#5a3422;
+color:white;
+padding:18px 22px;
+border-radius:18px;
+display:none;
+z-index:999999;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* FOOTER */
+
+footer{
+margin-top:80px;
+padding:30px;
+text-align:center;
+font-size:0.9rem;
+color:#666;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+body{
+overflow-x:hidden;
+}
+
+.container{
+width:94%;
+}
+
+nav{
+padding:14px 18px;
+border-radius:20px;
+}
+
+.logo{
+font-size:1.5rem;
+}
+
+nav ul{
+gap:14px;
+}
+
+nav ul li a{
+font-size:0.75rem;
+}
+
+.contact-btn{
+padding:10px 18px;
+font-size:0.75rem;
+}
+
+.hero{
+padding:30px 20px;
+min-height:70vh;
+border-radius:30px;
+}
+
+.hero h1{
+font-size:2.7rem;
+}
+
+.hero p{
+font-size:0.82rem;
+}
+
+.menu-grid{
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+
+.card img{
+height:140px;
+}
+
+.card-content{
+padding:12px;
+}
+
+.card-content h3{
+font-size:0.9rem;
+}
+
+.price{
+font-size:0.82rem;
+}
+
+.add-cart{
+padding:10px;
+font-size:0.75rem;
+}
+
+.cart-box{
+padding:20px;
+border-radius:24px;
+}
+
+.total{
+font-size:1.5rem;
+}
+
+.checkout-btn{
+width:100%;
+}
+
+#checkoutLayer{
+align-items:flex-end;
+padding:0;
+}
+
+.popup{
+max-width:100%;
+border-radius:28px 28px 0 0;
+padding:26px 18px;
+max-height:92vh;
+overflow-y:auto;
+}
+
+.popup h2{
+font-size:2rem;
+margin-bottom:20px;
+}
+
+.form-grid{
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+input, textarea{
+padding:14px;
+font-size:0.82rem;
+border-radius:16px;
+}
+
+.payment-box{
+padding:18px;
+}
+
+.payment-box h3{
+font-size:1.5rem;
+}
+
+.submit-btn{
+padding:16px;
+}
+
+footer{
+font-size:0.75rem;
+padding-bottom:40px;
+}
+
+}
+
+</style>
 </head>
+
 <body>
 
-  <header>
-    <div class="container">
-      <nav>
-        <div class="logo">Nuansa Alam</div>
+<div class="container">
 
-        <ul class="menu">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#menu">Menu</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-        </ul>
+<nav>
+<div class="logo">Nuansa Alam</div>
 
-        <a href="#contact" class="btn">Contact</a>
-      </nav>
-    </div>
-  </header>
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#">Menu</a></li>
+<li><a href="#">About</a></li>
+<li><a href="#">Gallery</a></li>
+</ul>
 
-  <section class="hero" id="home">
-    <div class="container">
-      <div class="hero-content">
-        <span>Premium Nature Cafe</span>
-        <h1>Ngopi Santai Dengan Nuansa Alam</h1>
-        <p>
-          Nikmati suasana hangat, kopi berkualitas, dan desain cafe aesthetic yang memberikan pengalaman nyaman dan berkesan.
-        </p>
+<a class="contact-btn">Contact</a>
+</nav>
 
-        <a href="#menu" class="btn">Lihat Menu</a>
-      </div>
-    </div>
-  </section>
+<section class="hero">
+<div class="hero-content">
+<h1>Nuansa Alam Cafe</h1>
+<p>
+Cafe modern dengan nuansa alam yang nyaman, aesthetic,
+dan cocok untuk nongkrong, meeting, maupun quality time.
+</p>
 
-  <section class="section" id="menu">
-    <div class="container">
+<button>Lihat Menu</button>
+</div>
+</section>
 
-      <div class="section-title">
-        <h2>Digital Menu Experience</h2>
-        <p>Pilih menu favorit dan masukkan langsung ke keranjang.</p>
-      </div>
+<h2 class="section-title">Menu Favorit</h2>
 
-      <div class="cards">
+<div class="menu-grid">
 
-        <div class="card menu-item" data-name="Cappuccino" data-price="28000">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
-          <div class="card-content">
-            <h3>Cappuccino</h3>
-            <p>Rp28.000</p>
-            <button class="btn add-cart">Tambah</button>
-          </div>
-        </div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200">
 
-        <div class="card menu-item" data-name="Latte Signature" data-price="32000">
-          <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
-          <div class="card-content">
-            <h3>Latte Signature</h3>
-            <p>Rp32.000</p>
-            <button class="btn add-cart">Tambah</button>
-          </div>
-        </div>
-
-        <div class="card menu-item" data-name="Americano" data-price="24000">
-          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
-          <div class="card-content">
-            <h3>Americano</h3>
-            <p>Rp24.000</p>
-            <button class="btn add-cart">Tambah</button>
-          </div>
-        </div>
-
-        <div class="card menu-item" data-name="Croffle Caramel" data-price="30000">
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop" alt="Coffee">
-          <div class="card-content">
-            <h3>Croffle Caramel</h3>
-            <p>Rp30.000</p>
-            <button class="btn add-cart">Tambah</button>
-          </div>
-        </div>
-
-      </div>
-
-      <div style="margin-top:50px; background:rgba(255,255,255,0.65); padding:35px; border-radius:30px; backdrop-filter:blur(10px);">
-
-        <h2 style="font-family:'Playfair Display', serif; margin-bottom:20px;">Keranjang Pesanan</h2>
-
-        <div id="cartItems" style="display:grid; gap:15px;"></div>
-
-        <div style="margin-top:25px; font-size:1.2rem; font-weight:600;">
-          Total : <span id="totalPrice">Rp0</span>
-        </div>
-
-        <button type="button" class="btn" id="openCheckout" style="margin-top:25px; border:none; cursor:pointer;">
-          Lanjut Checkout
-        </button>
-
-      </div>
-
-    </div>
-  </section>
-
-  <div id="checkoutLayer" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:9999; padding:20px;">
-
-    <div style="background:#f7efe8; width:100%; max-width:650px; width:100%; border-radius:35px; padding:40px; position:relative; animation:fadeUp 0.4s ease;">
-
-      <button id="closeCheckout" style="position:absolute; top:20px; right:20px; border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
-
-      <h2 style="font-family:'Playfair Display', serif; margin-bottom:25px;">Checkout Pesanan</h2>
-
-      <form id="orderForm" style="display:grid; gap:18px;">
-
-        <input type="text" id="name" placeholder="Nama Pemesan" required style="padding:18px; border:none; border-radius:16px;">
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-          <input type="text" id="table" placeholder="Nomor Meja" required style="padding:18px; border:none; border-radius:16px;">
-
-          <input type="number" id="queue" placeholder="Nomor Antrian" required style="padding:18px; border:none; border-radius:16px;">
-        </div>
-
-        <textarea id="notes" rows="4" placeholder="Catatan Pesanan" style="padding:18px; border:none; border-radius:16px;"></textarea>
-
-        <button type="submit" class="btn" style="border:none; cursor:pointer; width:100%;">
-          Konfirmasi Pesanan
-        </button>
-
-      </form>
-
-      <div id="successBox" style="display:none; margin-top:25px; background:#5a3422; color:white; padding:25px; border-radius:22px;">
-        <h3>Pesanan Sedang Diproses</h3>
-        <p style="margin-top:10px; line-height:1.7;">Pesanan otomatis masuk ke dashboard kasir Nuansa Alam.</p>
-      </div>
-
-    </div>
-
-  </div>
-
-  <section class="section" id="about" style="position:relative; overflow:hidden; border-radius:40px; margin:0 20px; background:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;">
-
-    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.55);"></div>
-
-    <div class="container" style="position:relative; z-index:2;">
-
-      <div class="about" style="grid-template-columns:1fr; text-align:center; min-height:500px; display:flex; align-items:center; justify-content:center;">
-
-        <div class="about-content" style="max-width:850px; color:white;">
-          <h2 style="color:white;">Tentang Nuansa Alam</h2>
-
-          <p style="color:#f3f3f3;">
-            Nuansa Alam hadir sebagai tempat terbaik untuk bersantai, bekerja, dan menikmati suasana hangat dengan konsep natural modern yang aesthetic dan nyaman.
-          </p>
-
-          <p style="color:#f3f3f3;">
-            Dengan nuansa premium, interior cozy, dan pilihan menu terbaik, kami menghadirkan pengalaman cafe modern yang tenang, elegan, dan berkesan.
-          </p>
-
-          <a href="#menu" class="btn">Lihat Menu Favorit</a>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <section class="section" id="gallery">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Gallery Cafe</h2>
-        <p>Suasana hangat dan aesthetic khas Nuansa Alam.</p>
-      </div>
-
-      <div class="gallery">
-        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=1200&auto=format&fit=crop" alt="Gallery">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop" alt="Gallery">
-        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1200&auto=format&fit=crop" alt="Gallery">
-        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop" alt="Gallery">
-      </div>
-
-    </div>
-  </section>
-
-  <section class="section" id="contact">
-    <div class="container">
-
-      <div class="contact-box">
-        <h2>Reservasi & Kerjasama</h2>
-
-        <p style="margin-bottom:30px; line-height:1.8;">
-          Hubungi kami untuk reservasi tempat, acara, maupun kerja sama bisnis.
-        </p>
-
-        <a href="https://wa.me/6281234567890" class="btn">Hubungi WhatsApp</a>
-      </div>
-
-    </div>
-  </section>
-
-  <div id="notifPopup" style="position:fixed; top:20px; right:20px; background:#5a3422; color:white; padding:18px 22px; border-radius:18px; z-index:999999; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.25); max-width:320px; line-height:1.7; font-size:0.9rem; backdrop-filter:blur(10px);">
-  🔔 Pesanan Baru
+<div class="card-content">
+<h3>Cappuccino</h3>
+<p>Kopi creamy hangat.</p>
+<div class="price">Rp 14.000</div>
+<button class="add-cart" data-name="Cappuccino" data-price="14000">
+Tambah
+</button>
+</div>
 </div>
 
-  <footer>
-    © 2026 Nuansa Alam Cafe • Designed With Deby Verona
-  </footer>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200">
 
-  <a href="https://wa.me/6281234567890" class="floating">
-    ☎
-  </a>
+<div class="card-content">
+<h3>Steak Premium</h3>
+<p>Daging juicy pilihan.</p>
+<div class="price">Rp 28.000</div>
+<button class="add-cart" data-name="Steak Premium" data-price="28000">
+Tambah
+</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200">
+
+<div class="card-content">
+<h3>Latte</h3>
+<p>Kopi susu creamy.</p>
+<div class="price">Rp 18.000</div>
+<button class="add-cart" data-name="Latte" data-price="18000">
+Tambah
+</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200">
+
+<div class="card-content">
+<h3>Pasta</h3>
+<p>Italian creamy pasta.</p>
+<div class="price">Rp 24.000</div>
+<button class="add-cart" data-name="Pasta" data-price="24000">
+Tambah
+</button>
+</div>
+</div>
+
+</div>
+
+<div class="cart-box">
+
+<h2 class="section-title">Keranjang</h2>
+
+<div id="cartItems"></div>
+
+<div class="total" id="totalPrice">
+Total : Rp0
+</div>
+
+<button class="checkout-btn" id="openCheckout">
+Lanjut Checkout
+</button>
+
+</div>
+
+<footer>
+© 2026 Nuansa Alam Cafe • Designed With Deby Verona
+</footer>
+
+</div>
+
+<!-- POPUP -->
+
+<div id="checkoutLayer">
+
+<div class="popup">
+
+<div class="close" id="closePopup">
+×
+</div>
+
+<h2>Checkout Pesanan</h2>
+
+<form id="checkoutForm">
+
+<input type="text" id="nama" placeholder="Nama Pemesan" required>
+
+<div class="form-grid">
+<input type="text" id="meja" placeholder="Nomor Kursi" required>
+<input type="number" id="jumlah" placeholder="Jumlah Pembelian" required>
+</div>
+
+<textarea id="catatan" placeholder="Catatan Pesanan"></textarea>
+
+<div class="payment-box">
+
+<p>Total Pembayaran</p>
+
+<h3 id="checkoutTotal">
+Rp0
+</h3>
+
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=NuansaAlamCafe">
+
+<p>
+QRIS Simulasi Pembayaran<br>
+Bank BCA : 1234567890<br>
+a/n Nuansa Alam Cafe
+</p>
+
+</div>
+
+<button type="submit" class="submit-btn">
+Konfirmasi Pesanan
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- NOTIF -->
+
+<div id="notif">
+🔔 Pesanan berhasil dikirim
+</div>
 
 <script>
 
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzrTMO35q0WHV7Ff8AWG3ml4F33GoZvJCHMswSNgGFf2V_sv29BzsQy9RFeFw2cx8Sh/exec';
 
+let cart = [];
 
-const scriptURL = 'https://script.google.com/macros/s/AKfycbyBpF-spi2HXPEzHgvf-6En5OzkpZrcrVU6poc71CumxxYDcgsXl2271RkFf4oJfR7P/exec';
-
-// NUANSA ALAM ORDER SYSTEM
-
-let lastOrderTime = '';
-
-const cart = [];
 const cartItems = document.getElementById('cartItems');
 const totalPrice = document.getElementById('totalPrice');
+
 const addButtons = document.querySelectorAll('.add-cart');
+
+addButtons.forEach(button => {
+
+button.addEventListener('click', () => {
+
+const name = button.dataset.name;
+const price = parseInt(button.dataset.price);
+
+cart.push({
+name,
+price
+});
+
+renderCart();
+
+});
+
+});
+
+function renderCart(){
+
+cartItems.innerHTML = '';
+
+let total = 0;
+
+cart.forEach(item => {
+
+total += item.price;
+
+cartItems.innerHTML += `
+<div class="cart-item">
+<span>${item.name}</span>
+<span>Rp${item.price.toLocaleString('id-ID')}</span>
+</div>
+`;
+
+});
+
+totalPrice.innerHTML = `
+Total : Rp${total.toLocaleString('id-ID')}
+`;
+
+document.getElementById('checkoutTotal').innerHTML =
+`Rp${total.toLocaleString('id-ID')}`;
+
+}
+
 const checkoutLayer = document.getElementById('checkoutLayer');
-const openCheckout = document.getElementById('openCheckout');
-const closeCheckout = document.getElementById('closeCheckout');
 
-addButtons.forEach((btn) => {
-  btn.addEventListener('click', (e) => {
+document.getElementById('openCheckout')
+.addEventListener('click', () => {
 
-    const card = e.target.closest('.menu-item');
+if(cart.length === 0){
+alert('Keranjang masih kosong');
+return;
+}
 
-    const item = {
-      name: card.dataset.name,
-      price: Number(card.dataset.price)
-    };
+checkoutLayer.style.display = 'flex';
 
-    cart.push(item);
-
-    renderCart();
-  });
 });
 
-function renderCart() {
+document.getElementById('closePopup')
+.addEventListener('click', () => {
 
-  cartItems.innerHTML = '';
+checkoutLayer.style.display = 'none';
 
-  let total = 0;
-
-  cart.forEach((item) => {
-
-    total += item.price;
-
-    const div = document.createElement('div');
-
-    div.style.background = 'white';
-    div.style.padding = '18px';
-    div.style.borderRadius = '18px';
-
-    div.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong>${item.name}</strong>
-        <span>Rp${item.price.toLocaleString()}</span>
-      </div>
-    `;
-
-    cartItems.appendChild(div);
-  });
-
-  totalPrice.innerText = `Rp${total.toLocaleString()}`;
-}
-
-openCheckout.addEventListener('click', () => {
-  checkoutLayer.style.display = 'flex';
 });
 
-closeCheckout.addEventListener('click', () => {
-  checkoutLayer.style.display = 'none';
+document.getElementById('checkoutForm')
+.addEventListener('submit', async (e) => {
+
+e.preventDefault();
+
+const data = {
+
+nama: document.getElementById('nama').value,
+meja: document.getElementById('meja').value,
+antrian: document.getElementById('jumlah').value,
+catatan: document.getElementById('catatan').value,
+pesanan: cart.map(item => item.name).join(', '),
+total: totalPrice.innerText
+
+};
+
+try{
+
+await fetch(scriptURL,{
+method:'POST',
+body:JSON.stringify(data)
 });
 
-const form = document.getElementById('orderForm');
-const successBox = document.getElementById('successBox');
+showNotif();
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+cart = [];
 
-  const data = {
-    nama: document.getElementById('name').value,
-    meja: document.getElementById('table').value,
-    antrian: document.getElementById('queue').value,
-    pesanan: cart,
-    total: totalPrice.innerText,
-    catatan: document.getElementById('notes').value,
-    waktu: new Date().toLocaleString()
-  };
+renderCart();
 
-  try {
+checkoutLayer.style.display = 'none';
 
-    await fetch(scriptURL, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
+document.getElementById('checkoutForm').reset();
 
-    successBox.style.display = 'block';
+}catch(error){
 
-    form.reset();
+console.log(error);
 
-    cart.length = 0;
+alert('Gagal mengirim pesanan');
 
-    renderCart();
+}
 
-    showNotif(`
-      🔔 Pesanan Baru<br><br>
-      👤 ${data.nama}<br>
-      🍽️ Meja ${data.meja}<br>
-      💳 ${data.total}
-    `);
-
-  } catch (error) {
-    alert('Gagal mengirim pesanan');
-  }
 });
 
-function showNotif(message) {
+function showNotif(){
 
-  const popup = document.getElementById('notifPopup');
+const notif = document.getElementById('notif');
 
-  popup.innerHTML = message;
+notif.style.display = 'block';
 
-  popup.style.display = 'block';
+const audio = new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
 
-  const audio = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+audio.play();
 
-  audio.play();
+setTimeout(() => {
 
-  setTimeout(() => {
-    popup.style.display = 'none';
-  }, 7000);
+notif.style.display = 'none';
+
+},4000);
+
 }
-
-async function checkOrders() {
-
-  try {
-
-    const response = await fetch(scriptURL);
-
-    const result = await response.json();
-
-    if (!result || !result.length) return;
-
-    const latest = result[result.length - 1];
-
-    if (latest.waktu !== lastOrderTime) {
-
-      lastOrderTime = latest.waktu;
-
-      showNotif(`
-        🔔 Pesanan Baru<br><br>
-        👤 ${latest.nama}<br>
-        🍽️ Meja ${latest.meja}<br>
-        💳 ${latest.total}
-      `);
-    }
-
-  } catch(err) {
-    console.log(err);
-  }
-}
-
-setInterval(checkOrders, 3000);
-
-// FIX CHECKOUT BUTTON
-const checkoutBtnFix = document.getElementById('openCheckout');
-
-if (checkoutBtnFix) {
-  checkoutBtnFix.onclick = function() {
-    checkoutLayer.style.display = 'flex';
-  }
-}
-
-// FIX CLOSE BUTTON
-if (closeCheckout) {
-  closeCheckout.onclick = function() {
-    checkoutLayer.style.display = 'none';
-  }
-}
-
-// CLEAN DEBUG
-console.clear();
 
 </script>
 
