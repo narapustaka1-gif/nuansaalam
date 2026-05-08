@@ -1,208 +1,284 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Nara Coffee</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nara Coffee</title>
 
-  <style>
-    body {
-      margin:0;
-      font-family:sans-serif;
-      background:#0f0f0f;
-      color:white;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0b0b0b;
+  color:white;
+  overflow-x:hidden;
+}
 
-    header {
-      text-align:center;
-      padding:30px;
-      font-size:28px;
-      font-weight:bold;
-    }
+/* ===== HERO SLIDER ===== */
+.hero{
+  height:100vh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:url("https://images.unsplash.com/photo-1442512595331-e89e73853f31") center/cover;
+}
 
-    .menu {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-      gap:10px;
-      padding:10px;
-    }
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+}
 
-    .card {
-      background:#1a1a1a;
-      padding:10px;
-      border-radius:8px;
-    }
+.hero-content{
+  position:relative;
+  z-index:2;
+}
 
-    img {
-      width:100%;
-      height:120px;
-      object-fit:cover;
-      border-radius:6px;
-    }
+h1{
+  font-size:56px;
+  margin:0;
+}
 
-    button {
-      width:100%;
-      padding:8px;
-      margin-top:8px;
-      background:#6f4e37;
-      color:white;
-      border:none;
-      cursor:pointer;
-    }
+/* BUTTON */
+.btn{
+  padding:12px 18px;
+  background:#6f4e37;
+  border:none;
+  color:white;
+  margin:5px;
+  cursor:pointer;
+}
 
-    .cart {
-      position:fixed;
-      right:10px;
-      top:10px;
-      background:#6f4e37;
-      padding:10px;
-      cursor:pointer;
-    }
+/* ===== SECTION ===== */
+.section{
+  padding:60px 40px;
+}
 
-    .panel {
-      position:fixed;
-      right:0;
-      top:0;
-      width:100%;
-      max-width:400px;
-      height:100%;
-      background:black;
-      padding:15px;
-      overflow:auto;
-      display:none;
-    }
+/* MENU HORIZONTAL */
+.menu-scroll{
+  display:flex;
+  overflow-x:auto;
+  gap:15px;
+  padding-bottom:10px;
+}
 
-    input, textarea {
-      width:100%;
-      padding:8px;
-      margin-top:5px;
-      background:#222;
-      color:white;
-      border:none;
-    }
-  </style>
+.card{
+  min-width:220px;
+  background:rgba(255,255,255,0.05);
+  padding:10px;
+}
+
+.card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+
+/* GALLERY */
+.gallery{
+  column-count:3;
+  column-gap:15px;
+}
+
+.gallery img{
+  width:100%;
+  margin-bottom:15px;
+}
+
+/* CART */
+.cart-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#6f4e37;
+  padding:10px;
+  z-index:10;
+}
+
+.cart-panel{
+  position:fixed;
+  right:0;
+  top:0;
+  width:320px;
+  height:100%;
+  background:#111;
+  padding:15px;
+  display:none;
+  overflow:auto;
+}
+
+input,textarea{
+  width:100%;
+  padding:8px;
+  margin-top:8px;
+  background:#222;
+  color:white;
+  border:none;
+}
+</style>
 </head>
 
 <body>
 
-<div class="cart" onclick="toggleCart()">
-  Cart (<span id="count">0</span>)
+<!-- CART BUTTON -->
+<div class="cart-btn" onclick="toggleCart()">
+Cart (<span id="count">0</span>)
 </div>
 
-<header>Nara Coffee</header>
+<!-- HERO SLIDER (SIMPLE VERSION) -->
+<section class="hero">
+<div class="overlay"></div>
+<div class="hero-content">
+<h1>Nara Coffee</h1>
+<p>Selamat Datang di Nara Coffee</p>
 
-<div class="menu" id="menu"></div>
+<button class="btn">Pesan Sekarang</button>
+<button class="btn">Reservasi</button>
+</div>
+</section>
 
-<div class="panel" id="panel">
+<!-- MENU -->
+<section class="section">
+<h2>Katalog Menu</h2>
 
-  <h3>Cart</h3>
-  <div id="cart"></div>
+<div class="menu-scroll" id="menu"></div>
+</section>
 
-  <hr>
+<!-- GALLERY -->
+<section class="section">
+<h2>Gallery</h2>
+<div class="gallery">
+<img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93">
+<img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb">
+<img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814">
+</div>
+</section>
 
-  <input id="name" placeholder="Nama">
-  <input id="wa" placeholder="WhatsApp">
-  <textarea id="note" placeholder="Catatan"></textarea>
+<!-- ABOUT -->
+<section class="section">
+<h2>Tentang Nara Coffee</h2>
+<p>
+Nara Coffee adalah ruang tenang untuk menikmati kopi,
+percakapan, dan waktu yang pelan di tengah hiruk pikuk kota.
+</p>
+</section>
 
-  <button onclick="checkout()">Checkout</button>
-  <button onclick="toggleCart()">Tutup</button>
+<!-- RESERVATION -->
+<section class="section">
+<h2>Reservasi</h2>
+
+<input placeholder="Nama">
+<input placeholder="Jumlah Orang">
+<input type="date">
+<input type="time">
+<textarea placeholder="Catatan"></textarea>
+
+<button class="btn">Reservasi Sekarang</button>
+</section>
+
+<!-- CART -->
+<div class="cart-panel" id="cart">
+
+<h2>Cart</h2>
+<div id="list"></div>
+
+<h3 id="total">Total: 0</h3>
+
+<input id="name" placeholder="Nama">
+<input id="wa" placeholder="WA">
+<textarea id="note" placeholder="Catatan"></textarea>
+
+<button onclick="checkout()" class="btn">Checkout</button>
+<button onclick="toggleCart()" class="btn">Tutup</button>
 
 </div>
 
 <script>
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJULBVG1bMjlXnSNdhaSjIJ7BwjGsxV1rHSoZzuB1-hi0mrEFoBo-jqXyUSgXD_1Y/exec"
+const API = "https://script.google.com/macros/s/AKfycbzJULBVG1bMjlXnSNdhaSjIJ7BwjGsxV1rHSoZzuB1-hi0mrEFoBo-jqXyUSgXD_1Y/exec"
 
 let menu = []
 let cart = []
 
-async function loadMenu(){
-  const res = await fetch(SCRIPT_URL)
-  menu = await res.json()
-  renderMenu()
-}
+// LOAD MENU
+fetch(API)
+.then(r=>r.json())
+.then(d=>{
+  menu = d
+  render()
+})
 
-function renderMenu(){
-  const el = document.getElementById("menu")
-  el.innerHTML = ""
+function render(){
+  let el = document.getElementById("menu")
+  el.innerHTML=""
 
-  menu.forEach((item,index)=>{
+  menu.forEach((m,i)=>{
     el.innerHTML += `
-      <div class="card">
-        <img src="${item.gambar}">
-        <h4>${item.nama}</h4>
-        <p>${item.harga}</p>
-        <button onclick='add(${index})'>Tambah</button>
-      </div>
-    `
+    <div class="card">
+      <img src="${m.gambar}">
+      <h3>${m.nama}</h3>
+      <p>${m.harga}</p>
+      <button onclick="add(${i})">+</button>
+    </div>`
   })
 }
 
+// CART
 function add(i){
   let item = menu[i]
 
   let exist = cart.find(x=>x.nama===item.nama)
 
-  if(exist){
-    exist.qty++
-  } else {
-    cart.push({...item, qty:1})
-  }
+  if(exist) exist.qty++
+  else cart.push({...item, qty:1})
 
-  renderCart()
+  update()
 }
 
-function renderCart(){
+function update(){
   document.getElementById("count").innerText = cart.length
 
-  let el = document.getElementById("cart")
-  el.innerHTML = ""
+  let el = document.getElementById("list")
+  el.innerHTML=""
 
-  cart.forEach((item,i)=>{
+  let total=0
+
+  cart.forEach(i=>{
+    total += parseInt(i.harga.replace(/\D/g,''))*i.qty
+
     el.innerHTML += `
-      <div>
-        ${item.nama} x ${item.qty}
-      </div>
+      <div>${i.nama} x ${i.qty}</div>
     `
   })
+
+  document.getElementById("total").innerText="Total: "+total
 }
 
 function toggleCart(){
-  let p = document.getElementById("panel")
-  p.style.display = p.style.display==="block" ? "none" : "block"
+  let c = document.getElementById("cart")
+  c.style.display = c.style.display==="block"?"none":"block"
 }
 
+// CHECKOUT
 function checkout(){
-
-  let name = document.getElementById("name").value
-  let wa = document.getElementById("wa").value
-  let note = document.getElementById("note").value
-
-  if(!name || !wa || cart.length===0){
-    alert("Isi data & cart kosong")
-    return
-  }
-
-  fetch(SCRIPT_URL,{
+  fetch(API,{
     method:"POST",
     body:JSON.stringify({
-      name,
-      wa,
-      note,
+      name:document.getElementById("name").value,
+      wa:document.getElementById("wa").value,
+      note:document.getElementById("note").value,
       cart,
-      total:cart.length,
-      type:"order"
+      total:cart.length
     })
   })
 
-  alert("Order masuk!")
-
-  cart = []
-  renderCart()
+  alert("Order masuk")
+  cart=[]
+  update()
   toggleCart()
 }
-
-loadMenu()
 
 </script>
 
