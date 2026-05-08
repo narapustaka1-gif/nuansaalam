@@ -1,243 +1,284 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee & Co. | Self-Order & Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8F5F2; scroll-behavior: smooth; }
-        .serif { font-family: 'Playfair Display', serif; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .order-card { animation: slideUp 0.5s ease-out forwards; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuansa Alam Cafe | Smart Order</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script> <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #efe7df; color: #2d1d16; overflow-x: hidden; }
+        .container { width: 92%; max-width: 1400px; margin: auto; }
+
+        /* NAVBAR */
+        nav { margin-top: 18px; display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(14px); border-radius: 30px; position: sticky; top: 10px; z-index: 999; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; cursor: pointer; }
+        nav ul { display: flex; gap: 30px; list-style: none; }
+        nav ul li a { text-decoration: none; color: #2d1d16; font-weight: 500; }
+        .contact-btn { padding: 12px 24px; background: #5a3422; color: white; border-radius: 50px; text-decoration: none; }
+
+        /* HERO */
+        .hero { margin-top: 24px; min-height: 88vh; border-radius: 42px; overflow: hidden; position: relative; display: flex; align-items: center; padding: 70px; background: linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1600'); background-size: cover; background-position: center; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 5.2rem; line-height: 1.05; margin: 18px 0; }
+        .hero-buttons { display: flex; gap: 16px; }
+        .hero-buttons button { padding: 16px 32px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; font-family: 'Poppins'; }
+        .primary-btn { background: white; color: #2d1d16; }
+        .secondary-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.2) !important; }
+
+        /* MENU & CARDS */
+        .section-tag { letter-spacing: 2px; font-size: 0.85rem; color: #7d5b4d; margin-bottom: 12px; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 3.4rem; line-height: 1.1; margin-bottom: 20px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 35px; }
+        .menu-card { background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; }
+        .menu-card img { width: 100%; height: 230px; object-fit: cover; }
+        .menu-content { padding: 20px; }
+        .price { font-size: 1.1rem; font-weight: 700; color: #5a3422; margin: 14px 0; }
+        .menu-btn { width: 100%; padding: 14px; border: none; border-radius: 18px; background: #5a3422; color: white; font-weight: 600; cursor: pointer; }
+        
+        /* DASHBOARD KASIR ANIMATION */
+        .order-card-new { animation: slideUp 0.5s ease-out forwards; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .btn-active:active { transform: scale(0.95); }
+
+        @media(max-width:768px){
+            .hero h1{ font-size: 2.9rem; }
+            .menu-grid{ grid-template-columns: repeat(2,1fr); }
+            .hero{ padding: 20px; }
+        }
     </style>
 </head>
-<body class="text-[#3E2723]">
 
-    <audio id="bellSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+<body>
 
-    <div id="customer-view" class="min-h-screen">
-        <nav class="sticky top-0 z-50 glass border-b border-stone-200 px-6 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="serif text-xl font-bold leading-tight">Coffee <br> & Co.</h1>
-                <span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Meja 05</span>
-            </div>
-            <button onclick="loginKasir()" class="text-[10px] text-stone-400 font-bold uppercase tracking-widest hover:text-amber-800 transition">Staff Login</button>
+<audio id="bellSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+<div id="customer-view">
+    <div class="container">
+        <nav>
+            <div class="logo" onclick="loginKasir()">Nuansa Alam</div>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#order">Order</a></li>
+            </ul>
+            <a href="#" class="contact-btn">Contact</a>
         </nav>
 
-        <header class="p-6">
-            <div class="relative h-48 rounded-[2rem] overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-8 flex flex-col justify-end">
-                    <h2 class="text-white text-3xl serif italic">Brewed Fresh,</h2>
-                    <p class="text-stone-300 text-sm">Experience the authentic taste.</p>
+        <section class="hero">
+            <div class="hero-content" style="color: white; z-index: 2; max-width: 650px;">
+                <span>PREMIUM COFFEE EXPERIENCE</span>
+                <h1>Nuansa Alam Cafe</h1>
+                <p style="margin-bottom: 30px; opacity: 0.9;">Nikmati suasana cafe aesthetic bernuansa alam dengan kopi premium dan tempat nyaman.</p>
+                <div class="hero-buttons">
+                    <button class="primary-btn" onclick="document.getElementById('menu').scrollIntoView()">Explore Menu</button>
+                    <button class="secondary-btn">Reservation</button>
                 </div>
             </div>
-        </header>
+        </section>
 
-        <main class="px-6 pb-32 space-y-4" id="menu-container">
-            <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100">
-                <div class="flex items-center space-x-4">
-                    <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f" class="w-20 h-20 rounded-2xl object-cover">
-                    <div>
-                        <h3 class="font-bold text-stone-800">Cafe Latte</h3>
-                        <p class="text-amber-700 font-bold">Rp 28.000</p>
+        <section id="menu" class="menu-section" style="margin-top: 90px;">
+            <div class="section-tag">OUR FAVORITE MENU</div>
+            <h2 class="section-title">Special Menu</h2>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200">
+                    <div class="menu-content">
+                        <h3>Creamy Latte</h3>
+                        <p>Kopi creamy dengan rasa lembut.</p>
+                        <div class="price">Rp 18.000</div>
+                        <button class="menu-btn" onclick="addToCart('Creamy Latte', 18000)">Tambah Pesanan</button>
                     </div>
                 </div>
-                <button onclick="addToCart('Cafe Latte', 28000)" class="bg-[#4E342E] text-white w-12 h-12 rounded-2xl shadow-lg flex items-center justify-center btn-active text-xl">+</button>
-            </div>
-
-            <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100">
-                <div class="flex items-center space-x-4">
-                    <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3" class="w-20 h-20 rounded-2xl object-cover">
-                    <div>
-                        <h3 class="font-bold text-stone-800">Croissant Choco</h3>
-                        <p class="text-amber-700 font-bold">Rp 24.000</p>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200">
+                    <div class="menu-content">
+                        <h3>Steak Premium</h3>
+                        <p>Daging juicy saus spesial.</p>
+                        <div class="price">Rp 32.000</div>
+                        <button class="menu-btn" onclick="addToCart('Steak Premium', 32000)">Tambah Pesanan</button>
                     </div>
                 </div>
-                <button onclick="addToCart('Croissant Choco', 24000)" class="bg-[#4E342E] text-white w-12 h-12 rounded-2xl shadow-lg flex items-center justify-center btn-active text-xl">+</button>
-            </div>
-        </main>
+                </div>
+        </section>
 
-        <div id="cart-bar" class="fixed bottom-6 left-6 right-6 glass border border-white/40 shadow-2xl rounded-[2rem] p-5 hidden flex justify-between items-center z-50 order-card">
-            <div>
-                <p class="text-[10px] uppercase font-bold text-stone-500 tracking-widest">Total Pesanan</p>
-                <p id="total-price" class="text-xl font-bold text-amber-900">Rp 0</p>
+        <section id="order" style="margin-top:90px; margin-bottom: 50px;">
+            <div class="section-tag">YOUR ORDER</div>
+            <h2 class="section-title">Pesanan Anda</h2>
+            <div style="background:white; padding:35px; border-radius:35px; box-shadow:0 10px 35px rgba(0,0,0,0.05);">
+                <div id="cartItems"></div>
+                <h2 id="totalPrice" style="margin-top:20px; color:#5a3422;">Total : Rp0</h2>
+                <button id="openCheckout" style="margin-top:24px; padding:16px 28px; border:none; background:#5a3422; color:white; border-radius:18px; font-weight:600; cursor:pointer; width:100%;">
+                    Lanjut Pesan
+                </button>
             </div>
-            <button onclick="processOrder()" id="btn-order" class="bg-[#4E342E] text-white px-8 py-4 rounded-2xl font-bold btn-active shadow-lg">Pesan Sekarang</button>
-        </div>
+        </section>
     </div>
+</div>
 
-    <div id="kasir-view" class="hidden min-h-screen bg-stone-100">
-        <nav class="bg-[#2D1B18] text-white p-6 flex justify-between items-center sticky top-0 z-50">
-            <div>
-                <h1 class="font-bold text-lg tracking-tight">KITCHEN MONITOR</h1>
-                <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    <p class="text-[10px] opacity-70 uppercase font-bold">Sistem Aktif</p>
-                </div>
-            </div>
-            <button onclick="location.reload()" class="bg-white/10 px-4 py-2 rounded-xl text-xs font-bold hover:bg-white/20">LOGOUT</button>
-        </nav>
-
-        <div class="p-6 max-w-4xl mx-auto">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="serif text-2xl font-bold text-stone-800">Antrean Pesanan</h2>
-                <div id="order-count" class="bg-amber-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md">0 Antrean</div>
-            </div>
-
-            <div id="antrean-container" class="space-y-4">
-                <div class="text-center py-24">
-                    <p class="text-stone-400 italic">Belum ada pesanan masuk...</p>
-                </div>
-            </div>
+<div id="checkoutLayer" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; padding:20px; z-index:99999;">
+    <div style="background:#f4ece5; width:100%; max-width:650px; padding:35px; border-radius:35px; position:relative;">
+        <div id="closePopup" style="position:absolute; right:20px; top:12px; font-size:2.2rem; cursor:pointer;">×</div>
+        <h2 class="section-title" style="font-size:2.5rem; margin-bottom:20px;">Checkout</h2>
+        <input id="customerName" type="text" placeholder="Nama Pemesan" style="width:100%; padding:16px; margin-bottom:14px; border:none; border-radius:16px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+            <input id="seatNumber" type="text" placeholder="Nomor Kursi" style="padding:16px; border:none; border-radius:16px;">
+            <input id="totalOrder" type="number" placeholder="Jumlah Pesanan" style="padding:16px; border:none; border-radius:16px;">
         </div>
+        <div style="background:white; padding:25px; border-radius:25px; text-align:center; margin-bottom:18px;">
+            <p>Total Pembayaran</p>
+            <h2 id="checkoutTotal" style="color:#5a3422; margin:10px 0;">Rp0</h2>
+            <img id="qrisImage" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=NuansaAlamCafe" style="width:180px; border-radius:18px;">
+            <p style="margin-top:10px; font-size:0.8rem; color:#666;">BCA : 1234567890 a/n Nuansa Alam</p>
+        </div>
+        <button id="btnConfirm" onclick="confirmOrder()" style="width:100%; padding:16px; border:none; background:#5a3422; color:white; border-radius:18px; font-weight:600; cursor:pointer;">
+            Konfirmasi & Kirim Pesanan
+        </button>
     </div>
+</div>
 
-    <script>
-        // --- CONFIGURATION ---
-        // Ganti URL ini dengan URL Web App dari Google Apps Script kamu
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec';
-        const STAFF_PASS = "1234";
+<div id="kasir-view" class="hidden min-h-screen bg-zinc-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-3xl font-bold text-zinc-800">Kitchen Monitor</h1>
+                <p class="text-zinc-500">Nuansa Alam Cafe • Real-time Orders</p>
+            </div>
+            <button onclick="location.reload()" class="bg-white px-6 py-2 rounded-full shadow text-sm font-bold">Logout</button>
+        </div>
+        <div id="antrean-container" class="grid gap-6">
+            </div>
+    </div>
+</div>
 
-        let cart = [];
-        let total = 0;
-        let lastDataCount = 0;
-        const bell = document.getElementById('bellSound');
+<script>
+    const SCRIPT_URL = 'URL_APPS_SCRIPT_KAMU'; // GANTI DENGAN URL GAS KAMU
+    let cart = [];
+    let totalHarga = 0;
+    let lastOrderCount = 0;
 
-        // --- CUSTOMER LOGIC ---
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            total += price;
-            updateUI();
-        }
+    function addToCart(name, price) {
+        cart.push({name, price});
+        renderCart();
+    }
 
-        function updateUI() {
-            document.getElementById('total-price').innerText = 'Rp ' + total.toLocaleString();
-            const bar = document.getElementById('cart-bar');
-            if (cart.length > 0) {
-                bar.classList.remove('hidden');
-                bar.classList.add('flex');
-            } else {
-                bar.classList.add('hidden');
-            }
-        }
+    function renderCart() {
+        const cartItems = document.getElementById('cartItems');
+        const totalPriceEl = document.getElementById('totalPrice');
+        const checkoutTotal = document.getElementById('checkoutTotal');
+        
+        cartItems.innerHTML = '';
+        totalHarga = 0;
 
-        async function processOrder() {
-            const nama = prompt("Siapa nama Anda?");
-            if (!nama) return;
+        cart.forEach(item => {
+            totalHarga += item.price;
+            cartItems.innerHTML += `
+                <div style="display:flex; justify-content:space-between; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid #eee;">
+                    <span>${item.name}</span>
+                    <span>Rp${item.price.toLocaleString('id-ID')}</span>
+                </div>
+            `;
+        });
 
-            const btn = document.getElementById('btn-order');
-            btn.innerText = "Mengirim...";
-            btn.disabled = true;
+        totalPriceEl.innerHTML = `Total : Rp${totalHarga.toLocaleString('id-ID')}`;
+        checkoutTotal.innerHTML = `Rp${totalHarga.toLocaleString('id-ID')}`;
+    }
 
-            const payload = {
-                action: 'tambah',
-                nama: nama,
-                meja: "05",
-                item: cart.map(i => i.name).join(", "),
-                total: total,
-                waktu: new Date().toLocaleTimeString()
-            };
+    // POPUP LOGIC
+    document.getElementById('openCheckout').addEventListener('click', () => {
+        if(cart.length === 0) return alert('Pilih menu dulu!');
+        document.getElementById('checkoutLayer').style.display = 'flex';
+    });
 
-            try {
-                // Mengirim data ke Google Sheets
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    body: JSON.stringify(payload)
-                });
+    document.getElementById('closePopup').addEventListener('click', () => {
+        document.getElementById('checkoutLayer').style.display = 'none';
+    });
 
-                alert(`Terima kasih ${nama}! Pesanan sudah diterima kasir.`);
-                cart = []; total = 0; updateUI();
-            } catch (e) {
-                alert("Gagal mengirim pesanan. Periksa koneksi.");
-            }
-            btn.innerText = "Pesan Sekarang"; btn.disabled = false;
-        }
+    // KIRIM PESANAN KE GOOGLE SHEETS
+    async function confirmOrder() {
+        const name = document.getElementById('customerName').value;
+        const seat = document.getElementById('seatNumber').value;
+        const btn = document.getElementById('btnConfirm');
 
-        // --- STAFF LOGIC ---
-        function loginKasir() {
-            const pass = prompt("Masukkan Password Staff:");
-            if (pass === STAFF_PASS) {
-                // UNLOCK AUDIO (Agar notifikasi suara bisa berbunyi otomatis)
-                bell.play().then(() => {
-                    bell.pause();
-                    bell.currentTime = 0;
-                }).catch(e => console.log("Audio unlock failed"));
+        if(!name || !seat) return alert('Isi Nama dan Nomor Kursi!');
 
-                // Switch View
-                document.getElementById('customer-view').classList.add('hidden');
-                document.getElementById('kasir-view').classList.remove('hidden');
-                document.body.style.backgroundColor = "#F1F1F1";
-                
-                // Minta izin notifikasi browser (opsional)
-                if (Notification.permission !== "granted") Notification.requestPermission();
+        btn.innerText = "Mengirim...";
+        btn.disabled = true;
 
-                startMonitoring();
-            } else {
-                alert("Password Salah!");
-            }
-        }
+        const payload = {
+            action: 'tambah',
+            nama: name,
+            meja: seat,
+            item: cart.map(i => i.name).join(", "),
+            total: totalHarga
+        };
 
-        async function startMonitoring() {
-            // Cek pesanan baru setiap 5 detik
-            setInterval(async () => {
-                try {
-                    const response = await fetch(SCRIPT_URL + '?action=baca');
-                    const orders = await response.json();
-
-                    if (orders.length > lastDataCount) {
-                        // Jika ada data baru dan ini bukan tarikan pertama, bunyikan bell
-                        if (lastDataCount !== 0) {
-                            bell.play();
-                            showPushNotification();
-                        }
-                        lastDataCount = orders.length;
-                        renderDashboard(orders);
-                    }
-                } catch (e) {
-                    console.log("Monitoring error...");
-                }
-            }, 5000);
-        }
-
-        function renderDashboard(data) {
-            const container = document.getElementById('antrean-container');
-            document.getElementById('order-count').innerText = `${data.length} Antrean`;
-            container.innerHTML = '';
-
-            // Render dari yang terbaru (reverse)
-            data.slice().reverse().forEach((order, index) => {
-                container.innerHTML += `
-                    <div class="bg-white p-6 rounded-[2rem] shadow-sm border-l-8 border-amber-600 order-card flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="bg-stone-100 text-stone-800 text-[10px] font-black px-2 py-1 rounded-lg">MEJA ${order.meja}</span>
-                                <h4 class="font-black text-xl text-stone-800 uppercase tracking-tight">${order.nama}</h4>
-                            </div>
-                            <p class="text-amber-900 font-medium text-sm mb-2 italic">${order.item}</p>
-                            <p class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Total: Rp ${parseInt(order.total).toLocaleString()}</p>
-                        </div>
-                        <button onclick="this.closest('.order-card').style.opacity='0.2'; this.remove()" class="bg-stone-800 text-white px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-black transition btn-active shadow-lg">Selesai</button>
-                    </div>
-                `;
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(payload)
             });
+            alert('Pesanan Terkirim! Mohon tunggu di kursi.');
+            cart = [];
+            renderCart();
+            document.getElementById('checkoutLayer').style.display = 'none';
+        } catch (e) {
+            alert('Gagal mengirim ke server.');
         }
+        btn.innerText = "Konfirmasi & Kirim Pesanan";
+        btn.disabled = false;
+    }
 
-        function showPushNotification() {
-            if (Notification.permission === "granted") {
-                new Notification("🔔 PESANAN BARU!", {
-                    body: "Ada pesanan masuk di Meja 05. Segera cek dashboard!",
-                    icon: "https://cdn-icons-png.flaticon.com/512/3063/3063822.png"
-                });
-            }
+    // STAFF LOGIN & MONITORING
+    function loginKasir() {
+        const pass = prompt("Password Staff:");
+        if(pass === "1234") {
+            // Unlock Audio
+            const bell = document.getElementById('bellSound');
+            bell.play().then(() => { bell.pause(); bell.currentTime = 0; });
+
+            document.getElementById('customer-view').style.display = 'none';
+            document.getElementById('kasir-view').classList.remove('hidden');
+            startMonitoring();
         }
-    </script>
+    }
+
+    async function startMonitoring() {
+        setInterval(async () => {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=baca');
+                const orders = await response.json();
+                
+                if(orders.length > lastOrderCount) {
+                    if(lastOrderCount !== 0) document.getElementById('bellSound').play();
+                    lastOrderCount = orders.length;
+                    renderKitchen(orders);
+                }
+            } catch (e) {}
+        }, 5000);
+    }
+
+    function renderKitchen(data) {
+        const container = document.getElementById('antrean-container');
+        container.innerHTML = '';
+        data.slice().reverse().forEach(order => {
+            container.innerHTML += `
+                <div class="bg-white p-6 rounded-3xl shadow-sm border-l-8 border-amber-800 flex justify-between items-center order-card-new">
+                    <div>
+                        <div class="flex items-center gap-3 mb-1">
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-1 rounded">KURSI ${order.meja}</span>
+                            <h3 class="text-xl font-bold uppercase">${order.nama}</h3>
+                        </div>
+                        <p class="text-zinc-600 font-medium">${order.item}</p>
+                        <p class="text-xs text-zinc-400 mt-2">Total: Rp${parseInt(order.total).toLocaleString()}</p>
+                    </div>
+                    <button onclick="this.closest('.order-card-new').style.opacity='0.3'" class="bg-zinc-800 text-white px-6 py-2 rounded-xl text-xs font-bold">SELESAI</button>
+                </div>
+            `;
+        });
+    }
+</script>
+
 </body>
 </html>
