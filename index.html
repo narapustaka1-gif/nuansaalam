@@ -1,260 +1,332 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuansa Alam | Smart Order System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #5a3422;
-            --bg-light: #efe7df;
-            --accent: #D4AF37;
-        }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-light); color: #2d1d16; }
-        .serif { font-family: 'Playfair Display', serif; }
-        
-        /* Glassmorphism & Effects */
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.4); }
-        .sidebar-active { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(90, 52, 34, 0.2); }
-        
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
-        
-        /* Custom UI */
-        .menu-card:hover img { transform: scale(1.08); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nara Cafe Ordering System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex min-h-screen">
+<body class="bg-[#d2b08c] min-h-screen text-gray-800">
 
-    <audio id="bellSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+  <!-- NAVBAR -->
+  <nav class="bg-[#44533d] text-white px-6 py-4 flex justify-between items-center shadow-lg">
+    <h1 class="text-2xl font-bold">☕ Nara Cafe</h1>
 
-    <aside class="w-20 md:w-64 glass h-screen sticky top-0 flex flex-col items-center py-8 z-50">
-        <div class="logo serif text-2xl font-black mb-12 text-center hidden md:block cursor-pointer" onclick="loginStaff()">Nuansa <br> Alam</div>
-        <div class="logo serif text-xl font-black mb-12 md:hidden" onclick="loginStaff()">NA</div>
+    <div class="flex gap-3">
+      <button onclick="showPage('customer')" class="bg-[#d2b08c] text-black px-4 py-2 rounded-full font-semibold">
+        Customer View
+      </button>
 
-        <nav class="flex-1 space-y-4 w-full px-4">
-            <button class="w-full flex items-center justify-center md:justify-start space-x-4 p-4 rounded-2xl sidebar-active">
-                <span>🏠</span> <span class="hidden md:block font-bold">Menu Utama</span>
-            </button>
-            <button class="w-full flex items-center justify-center md:justify-start space-x-4 p-4 rounded-2xl hover:bg-white transition text-stone-500">
-                <span>⭐</span> <span class="hidden md:block font-bold">Favorit</span>
-            </button>
-            <button class="w-full flex items-center justify-center md:justify-start space-x-4 p-4 rounded-2xl hover:bg-white transition text-stone-500">
-                <span>🕒</span> <span class="hidden md:block font-bold">Riwayat</span>
-            </button>
-        </nav>
+      <button onclick="showPage('cashier')" class="bg-white text-black px-4 py-2 rounded-full font-semibold">
+        Kasir View
+      </button>
+    </div>
+  </nav>
 
-        <div class="px-4 w-full">
-            <div class="bg-amber-100 p-4 rounded-2xl hidden md:block border border-amber-200">
-                <p class="text-[10px] uppercase font-black text-amber-800 tracking-widest">Meja Aktif</p>
-                <p class="text-xl font-black text-amber-900">Meja 05</p>
-            </div>
+  <!-- CUSTOMER PAGE -->
+  <section id="customerPage" class="p-6">
+
+    <div class="grid lg:grid-cols-2 gap-10 items-center bg-[#44533d] rounded-3xl p-8 text-white">
+
+      <div>
+        <h1 class="text-5xl font-serif leading-tight mb-6">
+          Fresh Coffee <br>
+          & Pastries,
+          Every Day
+        </h1>
+
+        <p class="text-gray-200 mb-8 leading-relaxed">
+          Pesan langsung dari meja tanpa antre. Tinggal scan QR, pilih menu,
+          bayar, dan tunggu pesanan datang.
+        </p>
+
+        <div class="flex gap-4">
+          <button class="bg-[#d2b08c] text-black px-5 py-3 rounded-full font-semibold">
+            Order Online
+          </button>
+
+          <button class="border border-white px-5 py-3 rounded-full">
+            Browse Menu
+          </button>
         </div>
-    </aside>
+      </div>
 
-    <main class="flex-1 p-4 md:p-10 overflow-x-hidden">
-        
-        <div id="customer-view" class="animate-fade">
-            <header class="flex justify-between items-end mb-10">
-                <div>
-                    <h1 class="text-4xl font-extrabold tracking-tight">Eksplorasi Rasa.</h1>
-                    <p class="text-stone-500">Pilih menu terbaik untuk menemani harimu.</p>
-                </div>
-            </header>
-
-            <div class="flex space-x-4 mb-10 overflow-x-auto no-scrollbar pb-2">
-                <button class="px-6 py-3 bg-white rounded-2xl font-bold shadow-sm border border-white">Semua</button>
-                <button class="px-6 py-3 hover:bg-white rounded-2xl font-bold transition text-stone-400">Coffee</button>
-                <button class="px-6 py-3 hover:bg-white rounded-2xl font-bold transition text-stone-400">Main Course</button>
-                <button class="px-6 py-3 hover:bg-white rounded-2xl font-bold transition text-stone-400">Dessert</button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div class="bg-white rounded-[2rem] p-4 shadow-sm border border-stone-200 group transition-all hover:shadow-xl hover:-translate-y-1">
-                    <div class="h-48 rounded-[1.5rem] overflow-hidden mb-4">
-                        <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
-                    <h3 class="font-bold text-lg px-2">Crema d'Oro Latte</h3>
-                    <p class="text-xs text-stone-400 px-2 mb-4 italic">Sentuhan espresso emas dengan susu lembut.</p>
-                    <div class="flex justify-between items-center px-2">
-                        <span class="font-black text-amber-900">Rp 28.000</span>
-                        <button onclick="addToCart('Latte', 28000)" class="bg-[#5a3422] text-white size-10 rounded-xl flex items-center justify-center font-bold">+</button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-[2rem] p-4 shadow-sm border border-stone-200 group transition-all hover:shadow-xl hover:-translate-y-1">
-                    <div class="h-48 rounded-[1.5rem] overflow-hidden mb-4">
-                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
-                    <h3 class="font-bold text-lg px-2">Wagyu Steak Premium</h3>
-                    <p class="text-xs text-stone-400 px-2 mb-4 italic">Daging pilihan dengan saus truffle.</p>
-                    <div class="flex justify-between items-center px-2">
-                        <span class="font-black text-amber-900">Rp 125.000</span>
-                        <button onclick="addToCart('Wagyu Steak', 125000)" class="bg-[#5a3422] text-white size-10 rounded-xl flex items-center justify-center font-bold">+</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="kasir-view" class="hidden animate-fade">
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-4xl font-extrabold tracking-tight">Monitoring Pesanan.</h1>
-                <div class="flex space-x-4">
-                    <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-stone-200">
-                        <p class="text-[10px] uppercase font-bold text-stone-400">Total Hari Ini</p>
-                        <p class="font-black" id="total-revenue">Rp 0</p>
-                    </div>
-                    <button onclick="location.reload()" class="bg-stone-800 text-white px-6 py-3 rounded-2xl font-bold">Keluar</button>
-                </div>
-            </div>
-
-            <div id="antrean-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="col-span-full py-20 text-center opacity-30 italic">Belum ada pesanan masuk...</div>
-            </div>
-        </div>
-    </main>
-
-    <div id="floating-cart" class="fixed bottom-8 right-8 z-[100] transform scale-0 transition-all duration-500">
-        <button onclick="toggleCheckout(true)" class="bg-[#5a3422] text-white p-6 rounded-[2rem] shadow-2xl flex items-center space-x-4 border-4 border-white">
-            <span class="bg-white/20 p-2 rounded-xl">🛒</span>
-            <div class="text-left">
-                <p class="text-[10px] uppercase font-bold opacity-60">Total Keranjang</p>
-                <p id="total-cart-price" class="font-black text-lg">Rp 0</p>
-            </div>
-        </button>
+      <div>
+        <img
+          src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop"
+          class="rounded-3xl shadow-2xl h-[500px] w-full object-cover"
+        >
+      </div>
     </div>
 
-    <div id="modal-checkout" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-[#2d1d16]/60 backdrop-blur-md"></div>
-        <div class="glass w-full max-w-lg rounded-[3rem] p-10 relative animate-fade shadow-2xl">
-            <button onclick="toggleCheckout(false)" class="absolute top-8 right-8 text-2xl">✕</button>
-            
-            <h2 class="serif text-4xl font-black mb-2">Satu langkah lagi.</h2>
-            <p class="text-stone-500 mb-8 font-medium">Konfirmasi pesananmu di bawah ini.</p>
 
-            <div class="space-y-6 mb-10">
-                <div class="group">
-                    <label class="text-[10px] uppercase font-black text-stone-400 ml-2">Nama Pemesan</label>
-                    <input id="input-nama" type="text" class="w-full bg-white/50 border border-stone-200 p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#5a3422] transition">
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-stone-100 flex justify-between items-center shadow-inner">
-                    <div>
-                        <p class="text-[10px] uppercase font-black text-stone-400">Total Pembayaran</p>
-                        <p id="final-price" class="text-2xl font-black text-amber-900">Rp 0</p>
-                    </div>
-                    <div class="size-20 bg-stone-100 rounded-xl overflow-hidden p-1 border border-stone-200">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=NuansaAlam" class="w-full h-full grayscale">
-                    </div>
-                </div>
-            </div>
+    <!-- FORM ORDER -->
 
-            <button id="btn-confirm" onclick="sendToGoogle()" class="w-full bg-[#5a3422] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:scale-[1.02] transition active:scale-95">
-                KONFIRMASI PESANAN
-            </button>
+    <div class="bg-white mt-10 rounded-3xl p-8 shadow-xl">
+
+      <h2 class="text-3xl font-bold mb-8">
+        🍰 Order Menu
+      </h2>
+
+      <div class="grid lg:grid-cols-2 gap-10">
+
+        <div>
+          <label class="block mb-2 font-semibold">Nama Customer</label>
+          <input id="customerName" type="text" placeholder="Masukkan nama"
+            class="w-full border p-3 rounded-xl mb-5">
+
+          <label class="block mb-2 font-semibold">Nomor Meja</label>
+          <select id="tableNumber" class="w-full border p-3 rounded-xl mb-5">
+            <option>Meja 01</option>
+            <option>Meja 02</option>
+            <option>Meja 03</option>
+            <option>Meja 04</option>
+          </select>
+
+          <label class="block mb-2 font-semibold">Nomor Antrian</label>
+          <input id="queueNumber" value="A00" readonly
+            class="w-full border p-3 rounded-xl mb-5 bg-gray-100">
         </div>
+
+
+        <div>
+          <label class="block mb-2 font-semibold">Pilih Menu</label>
+
+          <div class="space-y-3">
+
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Latte</span>
+              <input type="checkbox" value="Latte" class="menuItem">
+            </label>
+
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Cappuccino</span>
+              <input type="checkbox" value="Cappuccino" class="menuItem">
+            </label>
+
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Croissant</span>
+              <input type="checkbox" value="Croissant" class="menuItem">
+            </label>
+
+            <label class="flex justify-between border p-4 rounded-xl">
+              <span>Signature Cupcake</span>
+              <input type="checkbox" value="Signature Cupcake" class="menuItem">
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- QR SIMULATION -->
+
+      <div class="mt-10 bg-[#f8f4ef] rounded-2xl p-6 border">
+        <h3 class="text-2xl font-bold mb-4">💳 Simulasi Pembayaran QRIS</h3>
+
+        <div class="flex flex-col items-center">
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NARA-CAFE-PAYMENT"
+            class="rounded-xl shadow-lg mb-4"
+          >
+
+          <p class="text-gray-600 text-center">
+            Scan QR untuk simulasi pembayaran.
+          </p>
+        </div>
+      </div>
+
+
+      <button
+        onclick="submitOrder()"
+        class="mt-8 bg-[#44533d] hover:bg-[#2f3a2b] transition text-white px-8 py-4 rounded-full text-lg font-semibold w-full">
+        Kirim Pesanan
+      </button>
+
     </div>
+  </section>
 
-    <script>
-        const SCRIPT_URL = 'URL_APPS_SCRIPT_KAMU';
-        let cart = [];
-        let total = 0;
-        let lastCount = 0;
 
-        function addToCart(name, price) {
-            cart.push({name, price});
-            total += price;
-            updateUI();
+  <!-- CASHIER PAGE -->
+
+  <section id="cashierPage" class="hidden p-6">
+
+    <div class="bg-white rounded-3xl shadow-xl p-8">
+
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-bold">📋 Dashboard Kasir</h2>
+
+        <div class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
+          Realtime Order Active
+        </div>
+      </div>
+
+
+      <!-- NOTIFICATION -->
+
+      <div id="notificationBox" class="hidden bg-yellow-100 border border-yellow-400 p-4 rounded-xl mb-6 text-yellow-800 font-semibold">
+        🔔 Pesanan baru masuk!
+      </div>
+
+
+      <!-- ORDER TABLE -->
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-[#44533d] text-white">
+              <th class="p-4 text-left">No</th>
+              <th class="p-4 text-left">Nama</th>
+              <th class="p-4 text-left">Meja</th>
+              <th class="p-4 text-left">Pesanan</th>
+              <th class="p-4 text-left">Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="orderList">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+
+  <script>
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec";
+
+    let lastOrderCount = 0;
+
+
+    function showPage(page) {
+      document.getElementById('customerPage').classList.add('hidden');
+      document.getElementById('cashierPage').classList.add('hidden');
+
+      if (page === 'customer') {
+        document.getElementById('customerPage').classList.remove('hidden');
+      }
+
+      if (page === 'cashier') {
+        document.getElementById('cashierPage').classList.remove('hidden');
+      }
+    }
+
+
+    function generateQueue() {
+      const random = Math.floor(Math.random() * 999);
+      document.getElementById('queueNumber').value = 'A' + random;
+    }
+
+    generateQueue();
+
+
+    async function submitOrder() {
+
+      const name = document.getElementById('customerName').value;
+      const table = document.getElementById('tableNumber').value;
+      const queue = document.getElementById('queueNumber').value;
+
+      const menus = [...document.querySelectorAll('.menuItem:checked')]
+        .map(item => item.value)
+        .join(', ');
+
+
+      if (!name || !menus) {
+        alert('Lengkapi pesanan terlebih dahulu');
+        return;
+      }
+
+
+      const payload = {
+        nama: name,
+        meja: table,
+        antrian: queue,
+        pesanan: menus,
+        status: 'Baru'
+      };
+
+
+      try {
+
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        alert('Pesanan berhasil dikirim!');
+
+        document.getElementById('customerName').value = '';
+
+        document.querySelectorAll('.menuItem').forEach(item => {
+          item.checked = false;
+        });
+
+        generateQueue();
+
+      } catch (error) {
+        console.error(error);
+        alert('Gagal mengirim pesanan');
+      }
+    }
+
+
+    async function loadOrders() {
+
+      try {
+
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        const orderList = document.getElementById('orderList');
+
+        orderList.innerHTML = '';
+
+        if (data.length > lastOrderCount && lastOrderCount !== 0) {
+
+          const notif = document.getElementById('notificationBox');
+          notif.classList.remove('hidden');
+
+          const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
+          audio.play();
+
+          setTimeout(() => {
+            notif.classList.add('hidden');
+          }, 5000);
         }
 
-        function updateUI() {
-            document.getElementById('total-cart-price').innerText = `Rp ${total.toLocaleString()}`;
-            document.getElementById('final-price').innerText = `Rp ${total.toLocaleString()}`;
-            const floating = document.getElementById('floating-cart');
-            floating.style.transform = cart.length > 0 ? 'scale(1)' : 'scale(0)';
-        }
 
-        function toggleCheckout(show) {
-            document.getElementById('modal-checkout').style.display = show ? 'flex' : 'none';
-        }
+        lastOrderCount = data.length;
 
-        async function sendToGoogle() {
-            const nama = document.getElementById('input-nama').value;
-            if(!nama) return alert('Nama harus diisi!');
-            
-            const btn = document.getElementById('btn-confirm');
-            btn.innerText = 'MENGIRIM...';
-            btn.disabled = true;
 
-            const payload = { action: 'tambah', nama, meja: '05', item: cart.map(c => c.name).join(', '), total };
+        data.reverse().forEach((order, index) => {
 
-            try {
-                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-                alert('Pesananmu sudah masuk ke dapur! Mohon ditunggu.');
-                cart = []; total = 0; updateUI(); toggleCheckout(false);
-            } catch (e) { alert('Terjadi kesalahan!'); }
-            btn.innerText = 'KONFIRMASI PESANAN'; btn.disabled = false;
-        }
+          orderList.innerHTML += `
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-4">${index + 1}</td>
+              <td class="p-4">${order.nama}</td>
+              <td class="p-4">${order.meja}</td>
+              <td class="p-4">${order.pesanan}</td>
+              <td class="p-4">
+                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">
+                  ${order.status}
+                </span>
+              </td>
+            </tr>
+          `;
+        });
 
-        // STAFF DASHBOARD LOGIC
-        function loginStaff() {
-            const pw = prompt("Password Staff:");
-            if(pw === "1234") {
-                document.getElementById('customer-view').style.display = 'none';
-                document.getElementById('kasir-view').classList.remove('hidden');
-                document.getElementById('bellSound').play().then(() => {
-                    document.getElementById('bellSound').pause();
-                    document.getElementById('bellSound').currentTime = 0;
-                });
-                startMonitor();
-            }
-        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
-        async function startMonitor() {
-            setInterval(async () => {
-                try {
-                    const res = await fetch(SCRIPT_URL + '?action=baca');
-                    const data = await res.json();
-                    if(data.length > lastCount) {
-                        if(lastCount !== 0) document.getElementById('bellSound').play();
-                        lastCount = data.length;
-                        renderOrders(data);
-                    }
-                } catch(e) {}
-            }, 5000);
-        }
 
-        function renderOrders(data) {
-            const container = document.getElementById('antrean-container');
-            container.innerHTML = '';
-            let dailyTotal = 0;
+    loadOrders();
 
-            data.slice().reverse().forEach(order => {
-                dailyTotal += parseInt(order.total);
-                container.innerHTML += `
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-stone-200 relative animate-fade">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="bg-stone-100 text-stone-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Meja ${order.meja}</span>
-                            <span class="text-[10px] font-bold text-stone-400 uppercase">${new Date().toLocaleTimeString()}</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-stone-800 uppercase tracking-tighter mb-1">${order.nama}</h3>
-                        <p class="text-stone-500 font-medium leading-relaxed mb-6">${order.item}</p>
-                        
-                        <div class="flex justify-between items-center border-t border-stone-100 pt-6">
-                            <div class="text-amber-900 font-black text-xl">Rp ${parseInt(order.total).toLocaleString()}</div>
-                            <button onclick="this.innerHTML='✓ SERVED'; this.className='bg-green-100 text-green-700 px-6 py-2 rounded-xl font-bold text-xs transition-all'" class="bg-stone-800 text-white px-6 py-2 rounded-xl font-bold text-xs hover:bg-black transition">
-                                PROSES SELESAI
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('total-revenue').innerText = `Rp ${dailyTotal.toLocaleString()}`;
-        }
-    </script>
+    setInterval(loadOrders, 5000);
+
+  </script>
+
 </body>
 </html>
