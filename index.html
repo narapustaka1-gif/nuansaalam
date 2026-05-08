@@ -670,6 +670,10 @@
     </div>
   </section>
 
+  <div id="notifPopup" style="position:fixed; top:20px; right:20px; background:#5a3422; color:white; padding:18px 22px; border-radius:18px; z-index:999999; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.25); max-width:320px; line-height:1.7; font-size:0.9rem; backdrop-filter:blur(10px);">
+  🔔 Pesanan Baru
+</div>
+
   <footer>
     © 2026 Nuansa Alam Cafe • Designed With Premium Aesthetic
   </footer>
@@ -680,7 +684,57 @@
 
 <script>
 
-const scriptURL = 'PASTE_GOOGLE_APPS_SCRIPT_URL_DISINI';
+/*
+========================================
+TUTORIAL QRIS OTOMATIS (MIDTRANS)
+========================================
+
+1. Daftar akun Midtrans
+2. Ambil:
+   - Client Key
+   - Server Key
+3. Aktifkan QRIS di dashboard Midtrans
+4. Tambahkan script Midtrans:
+
+<script type="text/javascript"
+src="https://app.sandbox.midtrans.com/snap/snap.js"
+data-client-key="CLIENT_KEY_KAMU"></script>
+
+5. Saat checkout:
+- Website mengirim total pembayaran
+- Midtrans membuat QRIS otomatis
+- Customer scan & bayar
+- Status pembayaran otomatis sukses
+
+========================================
+ALUR SISTEM
+========================================
+Customer Pesan
+↓
+Masuk Keranjang
+↓
+Checkout
+↓
+QRIS Otomatis Muncul
+↓
+Customer Bayar
+↓
+Pesanan Masuk Dashboard Kasir
+
+========================================
+NOTE
+========================================
+Untuk production:
+- gunakan backend Node.js/PHP
+- simpan Server Key di backend
+- jangan taruh Server Key di frontend
+
+========================================
+*/
+
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyBpF-spi2HXPEzHgvf-6En5OzkpZrcrVU6poc71CumxxYDcgsXl2271RkFf4oJfR7P/exec';
+
+let lastOrderTime = '';
 
 const cart = [];
 const cartItems = document.getElementById('cartItems');
@@ -774,10 +828,65 @@ form.addEventListener('submit', async (e) => {
 
     renderCart();
 
+    showNotif(`
+      🔔 Pesanan Baru<br><br>
+      👤 ${data.nama}<br>
+      🍽️ Meja ${data.meja}<br>
+      💳 ${data.total}
+    `);
+
   } catch (error) {
     alert('Gagal mengirim pesanan');
   }
 });
+
+function showNotif(message) {
+
+  const popup = document.getElementById('notifPopup');
+
+  popup.innerHTML = message;
+
+  popup.style.display = 'block';
+
+  const audio = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+
+  audio.play();
+
+  setTimeout(() => {
+    popup.style.display = 'none';
+  }, 7000);
+}
+
+async function checkOrders() {
+
+  try {
+
+    const response = await fetch(scriptURL);
+
+    const result = await response.json();
+
+    if (!result || !result.length) return;
+
+    const latest = result[result.length - 1];
+
+    if (latest.waktu !== lastOrderTime) {
+
+      lastOrderTime = latest.waktu;
+
+      showNotif(`
+        🔔 Pesanan Baru<br><br>
+        👤 ${latest.nama}<br>
+        🍽️ Meja ${latest.meja}<br>
+        💳 ${latest.total}
+      `);
+    }
+
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+setInterval(checkOrders, 3000);
 
 </script>
 
