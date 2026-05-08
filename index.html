@@ -3,65 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee & Co. | Brewed Fresh</title>
+    <title>Coffee & Co. | Self-Order & Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F2EBE3; }
+        body { font-family: 'Inter', sans-serif; background-color: #F8F5F2; scroll-behavior: smooth; }
         .serif { font-family: 'Playfair Display', serif; }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .order-card { animation: slideUp 0.5s ease-out forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-active:active { transform: scale(0.95); }
     </style>
 </head>
 <body class="text-[#3E2723]">
 
-    <nav class="flex justify-between items-center px-12 py-6">
-        <div class="text-2xl font-bold serif">Coffee <br> & Co.</div>
-        <ul class="hidden md:flex space-x-8 font-medium">
-            <li><a href="#" class="hover:text-amber-700">Home</a></li>
-            <li><a href="#" class="hover:text-amber-700">Menu</a></li>
-            <li><a href="#" class="hover:text-amber-700">About</a></li>
-            <li><a href="#" class="hover:text-amber-700">Gallery</a></li>
-        </ul>
-        <button class="bg-[#4E342E] text-white px-6 py-2 rounded-full hover:bg-black transition">CONTACT</button>
-    </nav>
+    <audio id="bellSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-    <section class="mx-6 md:mx-12 relative h-[500px] rounded-3xl overflow-hidden bg-black">
-        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085" alt="Coffee" class="absolute inset-0 w-full h-full object-cover opacity-60">
-        <div class="relative z-10 p-12 flex flex-col justify-center h-full text-white max-w-2xl">
-            <h1 class="text-6xl serif mb-4 leading-tight">Brewed Fresh, <br> Served Warm</h1>
-            <p class="mb-8 opacity-90">Nikmati racikan kopi terbaik dari biji pilihan yang dipanggang dengan penuh cinta untuk menemani hari-harimu.</p>
-            <button class="bg-white text-black font-bold w-fit px-8 py-3 rounded-full hover:bg-amber-100 transition">Visit us</button>
-        </div>
-    </section>
+    <div id="customer-view" class="min-h-screen">
+        <nav class="sticky top-0 z-50 glass border-b border-stone-200 px-6 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="serif text-xl font-bold leading-tight">Coffee <br> & Co.</h1>
+                <span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Meja 05</span>
+            </div>
+            <button onclick="loginKasir()" class="text-[10px] text-stone-400 font-bold uppercase tracking-widest hover:text-amber-800 transition">Staff Login</button>
+        </nav>
 
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 px-12 py-12">
-        <div class="bg-stone-800 h-64 rounded-2xl overflow-hidden relative group">
-             <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f" class="object-cover h-full w-full opacity-80">
-             <span class="absolute bottom-4 left-4 text-white font-bold">Cafe Latte</span>
-        </div>
-        <div class="bg-stone-800 h-64 rounded-2xl overflow-hidden relative">
-             <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d" class="object-cover h-full w-full opacity-80">
-             <span class="absolute bottom-4 left-4 text-white font-bold">Cappuccino</span>
-        </div>
-        <div class="bg-stone-300 h-64 rounded-2xl overflow-hidden">
-             <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3" class="object-cover h-full w-full">
-        </div>
-        <div class="flex flex-col justify-center p-4">
-             <h3 class="serif text-xl font-bold mb-2">Our Signature Coffee</h3>
-             <p class="text-sm opacity-70">Dibuat khusus oleh barista berpengalaman kami.</p>
-        </div>
-    </section>
+        <header class="p-6">
+            <div class="relative h-48 rounded-[2rem] overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-8 flex flex-col justify-end">
+                    <h2 class="text-white text-3xl serif italic">Brewed Fresh,</h2>
+                    <p class="text-stone-300 text-sm">Experience the authentic taste.</p>
+                </div>
+            </div>
+        </header>
 
-    <section class="grid md:grid-cols-2 gap-8 px-12 py-12 items-center">
-        <div class="rounded-3xl overflow-hidden h-80">
-            <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb" class="w-full h-full object-cover">
-        </div>
-        <div>
-            <h2 class="serif text-3xl font-bold mb-4">Tentang Kopi & Co.</h2>
-            <p class="mb-4 opacity-80 text-sm leading-relaxed">Kami percaya bahwa setiap cangkir kopi memiliki cerita sendiri. Dimulai dari petani lokal hingga meja Anda, kami menjaga kualitas setiap tetesnya.</p>
-            <div class="flex text-amber-600 mb-4">★★★★★</div>
-            <button class="underline font-bold">Baca Selengkapnya</button>
-        </div>
-    </section>
+        <main class="px-6 pb-32 space-y-4" id="menu-container">
+            <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100">
+                <div class="flex items-center space-x-4">
+                    <img src="https://images.unsplash.com/photo-1541167760496-162955ed8a9f" class="w-20 h-20 rounded-2xl object-cover">
+                    <div>
+                        <h3 class="font-bold text-stone-800">Cafe Latte</h3>
+                        <p class="text-amber-700 font-bold">Rp 28.000</p>
+                    </div>
+                </div>
+                <button onclick="addToCart('Cafe Latte', 28000)" class="bg-[#4E342E] text-white w-12 h-12 rounded-2xl shadow-lg flex items-center justify-center btn-active text-xl">+</button>
+            </div>
 
+            <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100">
+                <div class="flex items-center space-x-4">
+                    <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3" class="w-20 h-20 rounded-2xl object-cover">
+                    <div>
+                        <h3 class="font-bold text-stone-800">Croissant Choco</h3>
+                        <p class="text-amber-700 font-bold">Rp 24.000</p>
+                    </div>
+                </div>
+                <button onclick="addToCart('Croissant Choco', 24000)" class="bg-[#4E342E] text-white w-12 h-12 rounded-2xl shadow-lg flex items-center justify-center btn-active text-xl">+</button>
+            </div>
+        </main>
+
+        <div id="cart-bar" class="fixed bottom-6 left-6 right-6 glass border border-white/40 shadow-2xl rounded-[2rem] p-5 hidden flex justify-between items-center z-50 order-card">
+            <div>
+                <p class="text-[10px] uppercase font-bold text-stone-500 tracking-widest">Total Pesanan</p>
+                <p id="total-price" class="text-xl font-bold text-amber-900">Rp 0</p>
+            </div>
+            <button onclick="processOrder()" id="btn-order" class="bg-[#4E342E] text-white px-8 py-4 rounded-2xl font-bold btn-active shadow-lg">Pesan Sekarang</button>
+        </div>
+    </div>
+
+    <div id="kasir-view" class="hidden min-h-screen bg-stone-100">
+        <nav class="bg-[#2D1B18] text-white p-6 flex justify-between items-center sticky top-0 z-50">
+            <div>
+                <h1 class="font-bold text-lg tracking-tight">KITCHEN MONITOR</h1>
+                <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <p class="text-[10px] opacity-70 uppercase font-bold">Sistem Aktif</p>
+                </div>
+            </div>
+            <button onclick="location.reload()" class="bg-white/10 px-4 py-2 rounded-xl text-xs font-bold hover:bg-white/20">LOGOUT</button>
+        </nav>
+
+        <div class="p-6 max-w-4xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="serif text-2xl font-bold text-stone-800">Antrean Pesanan</h2>
+                <div id="order-count" class="bg-amber-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md">0 Antrean</div>
+            </div>
+
+            <div id="antrean-container" class="space-y-4">
+                <div class="text-center py-24">
+                    <p class="text-stone-400 italic">Belum ada pesanan masuk...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // Ganti URL ini dengan URL Web App dari Google Apps Script kamu
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzM2qYSpbAIpzmM1dyf8uNY7SCsbWE03rK8zFN8JswKw4gJgy3jMlRprQPhSi-6Xi7A/exec';
+        const STAFF_PASS = "1234";
+
+        let cart = [];
+        let total = 0;
+        let lastDataCount = 0;
+        const bell = document.getElementById('bellSound');
+
+        // --- CUSTOMER LOGIC ---
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            total += price;
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('total-price').innerText = 'Rp ' + total.toLocaleString();
+            const bar = document.getElementById('cart-bar');
+            if (cart.length > 0) {
+                bar.classList.remove('hidden');
+                bar.classList.add('flex');
+            } else {
+                bar.classList.add('hidden');
+            }
+        }
+
+        async function processOrder() {
+            const nama = prompt("Siapa nama Anda?");
+            if (!nama) return;
+
+            const btn = document.getElementById('btn-order');
+            btn.innerText = "Mengirim...";
+            btn.disabled = true;
+
+            const payload = {
+                action: 'tambah',
+                nama: nama,
+                meja: "05",
+                item: cart.map(i => i.name).join(", "),
+                total: total,
+                waktu: new Date().toLocaleTimeString()
+            };
+
+            try {
+                // Mengirim data ke Google Sheets
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    body: JSON.stringify(payload)
+                });
+
+                alert(`Terima kasih ${nama}! Pesanan sudah diterima kasir.`);
+                cart = []; total = 0; updateUI();
+            } catch (e) {
+                alert("Gagal mengirim pesanan. Periksa koneksi.");
+            }
+            btn.innerText = "Pesan Sekarang"; btn.disabled = false;
+        }
+
+        // --- STAFF LOGIC ---
+        function loginKasir() {
+            const pass = prompt("Masukkan Password Staff:");
+            if (pass === STAFF_PASS) {
+                // UNLOCK AUDIO (Agar notifikasi suara bisa berbunyi otomatis)
+                bell.play().then(() => {
+                    bell.pause();
+                    bell.currentTime = 0;
+                }).catch(e => console.log("Audio unlock failed"));
+
+                // Switch View
+                document.getElementById('customer-view').classList.add('hidden');
+                document.getElementById('kasir-view').classList.remove('hidden');
+                document.body.style.backgroundColor = "#F1F1F1";
+                
+                // Minta izin notifikasi browser (opsional)
+                if (Notification.permission !== "granted") Notification.requestPermission();
+
+                startMonitoring();
+            } else {
+                alert("Password Salah!");
+            }
+        }
+
+        async function startMonitoring() {
+            // Cek pesanan baru setiap 5 detik
+            setInterval(async () => {
+                try {
+                    const response = await fetch(SCRIPT_URL + '?action=baca');
+                    const orders = await response.json();
+
+                    if (orders.length > lastDataCount) {
+                        // Jika ada data baru dan ini bukan tarikan pertama, bunyikan bell
+                        if (lastDataCount !== 0) {
+                            bell.play();
+                            showPushNotification();
+                        }
+                        lastDataCount = orders.length;
+                        renderDashboard(orders);
+                    }
+                } catch (e) {
+                    console.log("Monitoring error...");
+                }
+            }, 5000);
+        }
+
+        function renderDashboard(data) {
+            const container = document.getElementById('antrean-container');
+            document.getElementById('order-count').innerText = `${data.length} Antrean`;
+            container.innerHTML = '';
+
+            // Render dari yang terbaru (reverse)
+            data.slice().reverse().forEach((order, index) => {
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded-[2rem] shadow-sm border-l-8 border-amber-600 order-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-1">
+                                <span class="bg-stone-100 text-stone-800 text-[10px] font-black px-2 py-1 rounded-lg">MEJA ${order.meja}</span>
+                                <h4 class="font-black text-xl text-stone-800 uppercase tracking-tight">${order.nama}</h4>
+                            </div>
+                            <p class="text-amber-900 font-medium text-sm mb-2 italic">${order.item}</p>
+                            <p class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Total: Rp ${parseInt(order.total).toLocaleString()}</p>
+                        </div>
+                        <button onclick="this.closest('.order-card').style.opacity='0.2'; this.remove()" class="bg-stone-800 text-white px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-black transition btn-active shadow-lg">Selesai</button>
+                    </div>
+                `;
+            });
+        }
+
+        function showPushNotification() {
+            if (Notification.permission === "granted") {
+                new Notification("🔔 PESANAN BARU!", {
+                    body: "Ada pesanan masuk di Meja 05. Segera cek dashboard!",
+                    icon: "https://cdn-icons-png.flaticon.com/512/3063/3063822.png"
+                });
+            }
+        }
+    </script>
 </body>
 </html>
