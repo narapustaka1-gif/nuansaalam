@@ -544,5 +544,162 @@ healing, hingga quality time bersama teman dan keluarga.
 
 </div>
 
+<!-- RESERVATION SECTION -->
+
+<section style="margin-top:90px;">
+
+<div style="background:#5a3422; color:white; padding:50px; border-radius:35px; display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:center;">
+
+<div>
+<div class="section-tag" style="color:#d8b9aa;">RESERVATION</div>
+<h2 class="section-title" style="color:white;">Reserve Your Favorite Place</h2>
+<p style="line-height:1.9; opacity:0.9;">
+Nikmati pengalaman nongkrong premium bersama teman, pasangan,
+dan keluarga dengan reservasi meja langsung.
+</p>
+</div>
+
+<div style="background:white; padding:30px; border-radius:28px;">
+<input type="text" placeholder="Nama Reservasi" style="width:100%; padding:16px; margin-bottom:14px; border:none; background:#f3ece6; border-radius:16px;">
+<input type="date" style="width:100%; padding:16px; margin-bottom:14px; border:none; background:#f3ece6; border-radius:16px;">
+<input type="time" style="width:100%; padding:16px; margin-bottom:14px; border:none; background:#f3ece6; border-radius:16px;">
+<button style="width:100%; padding:16px; border:none; background:#5a3422; color:white; border-radius:18px; font-weight:600; cursor:pointer;">
+Reservasi Sekarang
+</button>
+</div>
+
+</div>
+
+</section>
+
+<!-- CART -->
+
+<section style="margin-top:90px;">
+
+<div class="section-tag">ORDER MENU</div>
+<h2 class="section-title">Pesanan Anda</h2>
+
+<div style="background:white; padding:35px; border-radius:35px; box-shadow:0 10px 35px rgba(0,0,0,0.05);">
+
+<div id="cartItems"></div>
+
+<h2 id="totalPrice" style="margin-top:20px; color:#5a3422;">
+Total : Rp0
+</h2>
+
+<button id="openCheckout" style="margin-top:24px; padding:16px 28px; border:none; background:#5a3422; color:white; border-radius:18px; font-weight:600; cursor:pointer;">
+Lanjut Pesan
+</button>
+
+</div>
+
+</section>
+
+<!-- POPUP CHECKOUT -->
+
+<div id="checkoutLayer" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; padding:20px; z-index:99999;">
+
+<div style="background:#f4ece5; width:100%; max-width:650px; padding:35px; border-radius:35px; position:relative;">
+
+<div id="closePopup" style="position:absolute; right:20px; top:12px; font-size:2.2rem; cursor:pointer;">×</div>
+
+<h2 class="section-title" style="font-size:2.5rem; margin-bottom:20px;">Checkout Pesanan</h2>
+
+<input id="customerName" type="text" placeholder="Nama Pemesan" style="width:100%; padding:16px; margin-bottom:14px; border:none; border-radius:16px;">
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+<input id="seatNumber" type="text" placeholder="Nomor Kursi" style="padding:16px; border:none; border-radius:16px;">
+<input id="totalOrder" type="number" placeholder="Jumlah Pesanan" style="padding:16px; border:none; border-radius:16px;">
+</div>
+
+<div style="background:white; padding:25px; border-radius:25px; text-align:center; margin-bottom:18px;">
+<p>Total Pembayaran</p>
+<h2 id="checkoutTotal" style="color:#5a3422; margin:10px 0;">Rp0</h2>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=NuansaAlamCafe" style="width:220px; max-width:100%; border-radius:18px;">
+<p style="margin-top:14px; line-height:1.8; color:#666;">
+QRIS Simulasi Pembayaran<br>
+BCA : 1234567890<br>
+a/n Nuansa Alam Cafe
+</p>
+</div>
+
+<button style="width:100%; padding:16px; border:none; background:#5a3422; color:white; border-radius:18px; font-weight:600; cursor:pointer;">
+Konfirmasi Pesanan
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let cart = [];
+
+const addButtons = document.querySelectorAll('.menu-btn');
+const cartItems = document.getElementById('cartItems');
+const totalPrice = document.getElementById('totalPrice');
+const checkoutTotal = document.getElementById('checkoutTotal');
+
+addButtons.forEach(button=>{
+
+button.addEventListener('click',()=>{
+
+const card = button.closest('.menu-card');
+
+const name = card.querySelector('h3').innerText;
+const priceText = card.querySelector('.price').innerText;
+const price = parseInt(priceText.replace(/[^0-9]/g,''));
+
+cart.push({name,price});
+
+renderCart();
+
+});
+
+});
+
+function renderCart(){
+
+cartItems.innerHTML='';
+
+let total = 0;
+
+cart.forEach(item=>{
+
+total += item.price;
+
+cartItems.innerHTML += `
+<div style="display:flex; justify-content:space-between; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid #eee;">
+<span>${item.name}</span>
+<span>Rp${item.price.toLocaleString('id-ID')}</span>
+</div>
+`;
+
+});
+
+totalPrice.innerHTML = `Total : Rp${total.toLocaleString('id-ID')}`;
+checkoutTotal.innerHTML = `Rp${total.toLocaleString('id-ID')}`;
+
+}
+
+const checkoutLayer = document.getElementById('checkoutLayer');
+
+document.getElementById('openCheckout').addEventListener('click',()=>{
+
+if(cart.length===0){
+alert('Pesanan masih kosong');
+return;
+}
+
+checkoutLayer.style.display='flex';
+
+});
+
+document.getElementById('closePopup').addEventListener('click',()=>{
+checkoutLayer.style.display='none';
+});
+
+</script>
+
 </body>
 </html>
