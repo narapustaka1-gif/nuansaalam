@@ -242,7 +242,33 @@
       margin-bottom: 20px;
     }
 
-    footer {
+    #checkoutLayer > div {
+    width:100%;
+  }
+
+  @media(max-width:768px){
+
+    #checkoutLayer {
+      align-items:flex-end;
+      padding:10px;
+      overflow-y:auto;
+    }
+
+    #checkoutLayer > div {
+      width:100%;
+      max-width:100%;
+      border-radius:28px 28px 0 0;
+      padding:28px 20px;
+      max-height:92vh;
+      overflow-y:auto;
+    }
+
+    #checkoutLayer h2 {
+      font-size:1.5rem;
+    }
+  }
+
+footer {
       text-align: center;
       padding: 35px 20px;
       color: #6f5a4c;
@@ -310,10 +336,124 @@
       }
     }
 
-    @media(max-width: 600px) {
-      .container {
-        width: 96%;
-      }
+    @media(max-width: 768px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .container {
+    width: 94%;
+  }
+
+  nav {
+    padding: 14px 18px;
+    border-radius: 18px;
+  }
+
+  nav ul {
+    gap: 12px;
+  }
+
+  nav ul li a {
+    font-size: 0.72rem;
+  }
+
+  .hero {
+    min-height: 78vh;
+    border-radius: 28px;
+    padding: 40px 20px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+
+  .hero p {
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .card {
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .card img,
+  .gallery img {
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .card-content {
+    padding: 12px;
+  }
+
+  .card-content h3 {
+    font-size: 0.9rem;
+  }
+
+  .card-content p {
+    font-size: 0.72rem;
+  }
+
+  .btn {
+    padding: 10px 18px;
+    font-size: 0.72rem;
+    border-radius: 14px;
+  }
+
+  #order form,
+  #checkoutLayer form {
+    gap: 14px;
+  }
+
+  #order form > div,
+  #checkoutLayer form > div {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 12px !important;
+    font-size: 0.75rem !important;
+    border-radius: 14px !important;
+  }
+
+  .contact-box {
+    padding: 30px 20px;
+    border-radius: 22px;
+    max-width: 100%;
+  }
+
+  .contact-box h2 {
+    font-size: 1.5rem;
+  }
+
+  footer {
+    font-size: 0.72rem;
+    padding-bottom: 40px;
+  }
+}
 
       .about {
         grid-template-columns: 1fr 1fr;
@@ -575,7 +715,7 @@
 
   <div id="checkoutLayer" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:9999; padding:20px;">
 
-    <div style="background:#f7efe8; width:100%; max-width:650px; border-radius:35px; padding:40px; position:relative; animation:fadeUp 0.4s ease;">
+    <div style="background:#f7efe8; width:100%; max-width:650px; width:100%; border-radius:35px; padding:40px; position:relative; animation:fadeUp 0.4s ease;">
 
       <button id="closeCheckout" style="position:absolute; top:20px; right:20px; border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
 
@@ -675,7 +815,7 @@
 </div>
 
   <footer>
-    © 2026 Nuansa Alam Cafe • Designed With Premium Aesthetic
+    © 2026 Nuansa Alam Cafe • Designed With Deby Verona
   </footer>
 
   <a href="https://wa.me/6281234567890" class="floating">
