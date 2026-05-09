@@ -2,6 +2,314 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Absensi Sekolah Modern</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 16px;
+            color: #333;
+        }
+
+        .container { max-width: 450px; margin: 0 auto; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tabs */
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab {
+            flex: 1; padding: 12px; border: none; border-radius: 15px;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .tab-active { background: #667eea; color: white; }
+        .tab-inactive { background: #eee; color: #777; }
+
+        /* Forms */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px 16px; border: 1.5px solid #ddd;
+            border-radius: 12px; font-size: 1rem; outline: none;
+        }
+        .form-group input:focus { border-color: #667eea; }
+
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 14px; border: none; border-radius: 15px;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-absen { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; margin-top: 15px; }
+        .btn-absen:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-logout { background: transparent; color: #dc3545; border: 1px solid #dc3545; margin-top: 10px; }
+
+        /* Dashboard Info */
+        .photo-area { text-align: center; margin-bottom: 20px; }
+        .photo-preview {
+            width: 110px; height: 110px; border-radius: 50%;
+            object-fit: cover; border: 3px solid #667eea; background: #f8f9fa;
+        }
+        .info-box {
+            background: #f8f9fa; border-radius: 20px; padding: 15px;
+            text-align: center; border: 1px solid #eee; margin-bottom: 15px;
+        }
+        .status-hadir { color: #2ecc71; font-weight: 700; }
+        .status-belum { color: #e67e22; font-weight: 700; }
+
+        /* History List */
+        .history-title { font-weight: 700; margin-bottom: 10px; font-size: 0.9rem; }
+        .history-item {
+            display: flex; justify-content: space-between; padding: 10px 0;
+            border-bottom: 1px solid #eee; font-size: 0.85rem;
+        }
+
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        footer { text-align: center; color: white; font-size: 0.75rem; opacity: 0.8; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- AUTH CARD -->
+    <div id="authCard" class="card fade-in">
+        <h1 class="title">📚 AbsenKita</h1>
+        <div class="tab-container">
+            <button id="loginTab" class="tab tab-active">Login</button>
+            <button id="registerTab" class="tab tab-inactive">Daftar</button>
+        </div>
+
+        <div id="loginForm">
+            <div class="form-group">
+                <label>Email / NIS</label>
+                <input type="email" id="loginEmail" placeholder="nama@sekolah.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" id="doLogin">Masuk</button>
+        </div>
+
+        <div id="registerForm" class="hidden">
+            <div class="form-group"><label>Nama Lengkap</label><input type="text" id="regName"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="regEmail"></div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <select id="regKelas">
+                    <option value="X">Kelas X</option>
+                    <option value="XI">Kelas XI</option>
+                    <option value="XII">Kelas XII</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Password</label><input type="password" id="regPassword"></div>
+            <button class="btn btn-primary" id="doRegister">Daftar Sekarang</button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD CARD -->
+    <div id="dashboardCard" class="card hidden fade-in">
+        <h1 class="title">Dashboard Siswa</h1>
+        
+        <div class="photo-area">
+            <img id="photoPreview" class="photo-preview" src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" alt="Profile">
+            <br>
+            <button class="btn" style="width: auto; padding: 8px 15px; font-size: 0.8rem; margin-top: 10px; background: #eee;" id="takePhotoBtn">📸 Ambil Foto</button>
+        </div>
+
+        <div class="info-box">
+            <h2 id="displayName" style="font-size: 1.2rem;">-</h2>
+            <p id="displayClass" style="color: #667eea; font-weight: 600; font-size: 0.9rem;">-</p>
+            <div id="statusAbsen" class="status-belum" style="margin-top: 10px;">Belum Absen</div>
+        </div>
+
+        <button class="btn btn-absen" id="absenBtn">✅ Absen Sekarang</button>
+        
+        <div style="margin-top: 25px;">
+            <p class="history-title">Riwayat 3 Hari Terakhir:</p>
+            <div id="historyList">
+                <!-- Riwayat muncul di sini -->
+            </div>
+        </div>
+
+        <button class="btn btn-logout" id="logoutBtn">Logout</button>
+    </div>
+
+    <footer>© 2026 Deby Verona • Sistem Absensi Mobile</footer>
+</div>
+
+<script>
+    // Database Sederhana (LocalStorage)
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    let logAbsensi = JSON.parse(localStorage.getItem('logAbsensi')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+    let tempPhoto = null;
+
+    // Elements
+    const authCard = document.getElementById('authCard');
+    const dashboardCard = document.getElementById('dashboardCard');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const historyList = document.getElementById('historyList');
+    const absenBtn = document.getElementById('absenBtn');
+
+    function getToday() { return new Date().toISOString().split('T')[0]; }
+
+    function updateDashboard() {
+        if (!currentUser) return;
+        
+        document.getElementById('displayName').innerText = currentUser.name;
+        document.getElementById('displayClass').innerText = "Kelas " + currentUser.kelas;
+        
+        const today = getToday();
+        const hasAbsen = logAbsensi.find(l => l.email === currentUser.email && l.date === today);
+        
+        const statusEl = document.getElementById('statusAbsen');
+        if (hasAbsen) {
+            statusEl.innerText = "✅ Sudah Absen (" + hasAbsen.time + ")";
+            statusEl.className = "status-hadir";
+            absenBtn.disabled = true;
+            absenBtn.innerText = "Selesai untuk Hari Ini";
+            if (hasAbsen.photo) document.getElementById('photoPreview').src = hasAbsen.photo;
+        } else {
+            statusEl.innerText = "⚪ Belum Absen";
+            statusEl.className = "status-belum";
+            absenBtn.disabled = false;
+            absenBtn.innerText = "✅ Absen Sekarang";
+        }
+
+        // Tampilkan Riwayat
+        const myHistory = logAbsensi.filter(l => l.email === currentUser.email).reverse().slice(0, 3);
+        historyList.innerHTML = myHistory.length ? '' : '<p style="color:#999; font-size:0.8rem;">Belum ada riwayat.</p>';
+        myHistory.forEach(item => {
+            historyList.innerHTML += `
+                <div class="history-item">
+                    <span>📅 ${item.date}</span>
+                    <span style="font-weight:600;">${item.time}</span>
+                </div>
+            `;
+        });
+    }
+
+    // Event: Ambil Foto
+    document.getElementById('takePhotoBtn').addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.capture = 'user'; // Pakai kamera depan
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                tempPhoto = event.target.result;
+                document.getElementById('photoPreview').src = tempPhoto;
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    });
+
+    // Event: Tombol Absen
+    absenBtn.addEventListener('click', () => {
+        if (!tempPhoto) return alert("❌ Wajib ambil foto dulu sebagai bukti!");
+        
+        const now = new Date();
+        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+        
+        logAbsensi.push({
+            email: currentUser.email,
+            date: getToday(),
+            time: timeStr,
+            photo: tempPhoto
+        });
+        
+        localStorage.setItem('logAbsensi', JSON.stringify(logAbsensi));
+        tempPhoto = null;
+        updateDashboard();
+        alert("Berhasil absen jam " + timeStr);
+    });
+
+    // Auth Logic
+    document.getElementById('doLogin').addEventListener('click', () => {
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        const user = users.find(u => u.email === email && u.password === pass);
+        
+        if (user) {
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            location.reload();
+        } else {
+            alert("Email atau Password salah!");
+        }
+    });
+
+    document.getElementById('doRegister').addEventListener('click', () => {
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const pass = document.getElementById('regPassword').value;
+        const kelas = document.getElementById('regKelas').value;
+
+        if (!name || !email || !pass) return alert("Isi semua data!");
+        if (users.find(u => u.email === email)) return alert("Email sudah terdaftar!");
+
+        users.push({ name, email, password: pass, kelas });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert("Pendaftaran sukses! Silakan login.");
+        location.reload();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('currentUser');
+        location.reload();
+    });
+
+    // Tab Switcher
+    document.getElementById('loginTab').onclick = () => {
+        loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+        loginTab.className = 'tab tab-active'; registerTab.className = 'tab tab-inactive';
+    };
+    document.getElementById('registerTab').onclick = () => {
+        loginForm.classList.add('hidden'); registerForm.classList.remove('hidden');
+        registerTab.className = 'tab tab-active'; loginTab.className = 'tab tab-inactive';
+    };
+
+    // Init
+    if (currentUser) {
+        authCard.classList.add('hidden');
+        dashboardCard.classList.remove('hidden');
+        updateDashboard();
+    }
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nara Coffee | Premium Bakery & Cafe</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
