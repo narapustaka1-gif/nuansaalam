@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard - UMKM Management</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- jsPDF & AutoTable for Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- ExcelJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <style>
+        /* ==================== CUSTOM STYLES ==================== */
+        
+        /* Font Smoothing */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Tailwind Config Override */
+        :root {
+            --color-primary: #7c3aed; /* Ungu */
+            --color-secondary: #3b82f6; /* Biru */
+            --color-accent: #8b5cf6; /* Ungu terang */
+            --color-success: #10b981; /* Hijau */
+            --color-danger: #ef4444; /* Merah */
+            --color-warning: #f59e0b; /* Kuning */
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-dark {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Neumorphism Soft Shadow */
+        .soft-shadow {
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        .soft-shadow-dark {
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Smooth Animations */
+        .transition-all {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .transition-smooth {
+            animation: smooth-fade 0.5s ease-out;
+        }
+
+        @keyframes smooth-fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse-soft {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Smooth Page Transition */
+        .page-transition {
+            animation: page-slide 0.4s ease-out;
+        }
+
+        @keyframes page-slide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Hover Effect */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.25) !important;
+        }
+
+        /* Button Active State */
+        .btn-active {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        .btn-inactive {
+            background: transparent;
+            color: #9ca3af;
+        }
+
+        /* Scrollbar Custom */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Dark Mode */
+        .dark {
+            color-scheme: dark;
+        }
+
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 40;
+            color: white;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(124, 58, 237, 0.6);
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(17, 24, 39, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            animation: toast-slide 0.3s ease-out;
+            max-width: 90vw;
+            font-size: 14px;
+        }
+
+        @keyframes toast-slide {
+            from {
+                transform: translateX(-50%) translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal Animation */
+        .modal-open {
+            animation: modal-fade 0.3s ease-out;
+        }
+
+        @keyframes modal-fade {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Input Focus */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            border-color: #7c3aed;
+        }
+
+        /* Dark Mode Input */
+        .dark input:focus,
+        .dark textarea:focus,
+        .dark select:focus {
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        /* Badge Animation */
+        .badge-pulse {
+            animation: badge-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+            }
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 30;
+        }
+
+        .dark .bottom-nav {
+            background: rgba(17, 24, 39, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .fab {
+                bottom: 90px;
+                right: 16px;
+                width: 52px;
+                height: 52px;
+            }
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Success Color */
+        .text-success {
+            color: #10b981;
+        }
+
+        .bg-success {
+            background-color: #ecfdf5;
+        }
+
+        .dark .bg-success {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Danger Color */
+        .text-danger {
+            color: #ef4444;
+        }
+
+        .bg-danger {
+            background-color: #fef2f2;
+        }
+
+        .dark .bg-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Action buttons on hover */
+        .transaction-item:hover .action-buttons {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .action-buttons {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .employee-item:hover .action-buttons {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-slate-950 text-gray-900 dark:text-white transition-colors">
+    <!-- ==================== CONTAINER UTAMA ==================== -->
+    <div id="app" class="pb-24">
+        <!-- DASHBOARD PAGE -->
+        <div id="page-dashboard" class="page-transition">
+            <!-- Header dengan Dark Mode Toggle -->
+            <div class="sticky top-0 z-20 glass dark:glass-dark p-4 md:p-6 soft-shadow">
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold gradient-text">Finance Dashboard</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="greetingText">Selamat datang kembali</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button id="darkModeToggle" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 015.646 5.646 9.001 9.001 0 0120.354 15.354Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+                <!-- Saldo Utama Card -->
+                <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl p-6 md:p-8 text-white soft-shadow card-hover">
+                    <div class="flex items-start justify-between mb-8">
+                        <div>
+                            <p class="text-white/70 text-sm md:text-base mb-2">Saldo Utama</p>
+                            <h2 class="text-3xl md:text-5xl font-bold" id="mainBalance">Rp 0</h2>
+                        </div>
+                        <div class="p-3 bg-white/20 rounded-2xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span class="bg-white/20 px-3 py-1 rounded-full" id="balanceStatus">Update hari ini</span>
+                    </div>
+                </div>
+
+                <!-- Grid Statistics -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Pemasukan -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 dark:text-gray-300 font-semibold">Total Pemasukan</h3>
+                            <div class="p-3 bg-success rounded-xl">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-2xl md:text-3xl font-bold text-success" id="totalIncome">Rp 0</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Bulan ini</p>
+                    </div>
+
+                    <!-- Pengeluaran -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 dark:text-gray-300 font-semibold">Total Pengeluaran</h3>
+                            <div class="p-3 bg-danger rounded-xl">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-2xl md:text-3xl font-bold text-danger" id="totalExpense">Rp 0</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Bulan ini</p>
+                    </div>
+
+                    <!-- Saldo Terakhir -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 dark:text-gray-300 font-semibold">Laba/Rugi</h3>
+                            <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-2xl md:text-3xl font-bold" id="profitLoss">Rp 0</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="profitStatus">Bulan ini</p>
+                    </div>
+                </div>
+
+                <!-- Grafik Bulanan -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg md:text-xl font-bold">Trend Keuangan 12 Bulan</h3>
+                        <button class="text-sm text-purple-600 dark:text-purple-400 hover:underline">Lihat Detail</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg md:text-xl font-bold">Transaksi Terbaru</h3>
+                        <button onclick="switchPage('transactions')" class="text-sm text-purple-600 dark:text-purple-400 hover:underline font-semibold">Lihat Semua</button>
+                    </div>
+                    <div id="recentTransactions" class="space-y-3">
+                        <!-- Akan diisi dengan JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSACTIONS PAGE -->
+        <div id="page-transactions" class="page-transition hidden">
+            <div class="sticky top-0 z-20 glass dark:glass-dark p-4 md:p-6 soft-shadow">
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold">Riwayat Transaksi</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola semua transaksi Anda</p>
+                    </div>
+                    <button onclick="exportTransactionsPDF()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold">
+                        📄 Export PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+                <!-- Filter & Search -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="searchTransaction" placeholder="Cari transaksi..." class="col-span-1 md:col-span-2 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 soft-shadow">
+                    <select id="filterType" class="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 soft-shadow">
+                        <option value="">Semua Jenis</option>
+                        <option value="income">Pemasukan</option>
+                        <option value="expense">Pengeluaran</option>
+                    </select>
+                </div>
+
+                <!-- Transactions List -->
+                <div id="transactionsList" class="space-y-3">
+                    <!-- Akan diisi dengan JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPLOYEES PAGE -->
+        <div id="page-employees" class="page-transition hidden">
+            <div class="sticky top-0 z-20 glass dark:glass-dark p-4 md:p-6 soft-shadow">
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold">Data Karyawan & Komisi</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola karyawan, gaji, dan komisi</p>
+                    </div>
+                    <button onclick="exportEmployeesPDF()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold">
+                        📄 Export PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+                <!-- Employee Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Total Karyawan</p>
+                        <p class="text-3xl font-bold" id="totalEmployees">0</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Total Gaji/Bulan</p>
+                        <p class="text-3xl font-bold" id="totalSalary">Rp 0</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Rata-rata Gaji</p>
+                        <p class="text-3xl font-bold" id="avgSalary">Rp 0</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Total Komisi Bulan Ini</p>
+                        <p class="text-3xl font-bold text-success" id="totalCommission">Rp 0</p>
+                    </div>
+                </div>
+
+                <!-- Employees List -->
+                <div id="employeesList" class="space-y-3">
+                    <!-- Akan diisi dengan JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- REPORTS PAGE -->
+        <div id="page-reports" class="page-transition hidden">
+            <div class="sticky top-0 z-20 glass dark:glass-dark p-4 md:p-6 soft-shadow">
+                <div class="max-w-6xl mx-auto">
+                    <h1 class="text-2xl md:text-3xl font-bold">Laporan Keuangan</h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Analisis keuangan mendalam</p>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+                <!-- Report Selector -->
+                <div class="flex gap-2 overflow-x-auto pb-2">
+                    <button onclick="switchReport('monthly')" class="report-btn btn-active px-6 py-2 rounded-xl whitespace-nowrap transition-all">Bulanan</button>
+                    <button onclick="switchReport('category')" class="report-btn px-6 py-2 rounded-xl whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800">Kategori</button>
+                    <button onclick="switchReport('yearly')" class="report-btn px-6 py-2 rounded-xl whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800">Tahunan</button>
+                    <button onclick="switchReport('employee')" class="report-btn px-6 py-2 rounded-xl whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800">Performa Karyawan</button>
+                </div>
+
+                <!-- Monthly Report -->
+                <div id="report-monthly" class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                    <h3 class="text-lg font-bold mb-6">Laporan Bulanan</h3>
+                    <div class="chart-container">
+                        <canvas id="reportChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Report -->
+                <div id="report-category" class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow hidden">
+                    <h3 class="text-lg font-bold mb-6">Pengeluaran Berdasarkan Kategori</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                        <div id="categoryDetails" class="space-y-3">
+                            <!-- Akan diisi dengan JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Yearly Report -->
+                <div id="report-yearly" class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow hidden">
+                    <h3 class="text-lg font-bold mb-6">Laporan Tahunan</h3>
+                    <div class="space-y-4">
+                        <div id="yearlyStats" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Akan diisi dengan JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employee Performance Report -->
+                <div id="report-employee" class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow hidden">
+                    <h3 class="text-lg font-bold mb-6">Performa Karyawan (Pemasukan & Komisi)</h3>
+                    <div id="employeePerformance" class="space-y-3">
+                        <!-- Akan diisi dengan JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FLOATING ACTION BUTTON ==================== -->
+    <button id="fabButton" class="fab" onclick="openTransactionModal()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+    </button>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <div class="bottom-nav">
+        <div class="max-w-6xl mx-auto flex items-center justify-around px-4 py-3">
+            <button onclick="switchPage('dashboard')" class="nav-btn active flex flex-col items-center gap-2 px-4 py-2 rounded-xl transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 11l4-4"></path>
+                </svg>
+                <span class="text-xs font-semibold">Dashboard</span>
+            </button>
+            <button onclick="switchPage('transactions')" class="nav-btn flex flex-col items-center gap-2 px-4 py-2 rounded-xl transition-all text-gray-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <span class="text-xs font-semibold">Transaksi</span>
+            </button>
+            <button onclick="switchPage('employees')" class="nav-btn flex flex-col items-center gap-2 px-4 py-2 rounded-xl transition-all text-gray-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 8.048M7 14H5a2 2 0 00-2 2v2a2 2 0 002 2h14a2 2 0 002-2v-2a2 2 0 00-2-2h-2m-5-10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span class="text-xs font-semibold">Karyawan</span>
+            </button>
+            <button onclick="switchPage('reports')" class="nav-btn flex flex-col items-center gap-2 px-4 py-2 rounded-xl transition-all text-gray-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <span class="text-xs font-semibold">Laporan</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL TAMBAH TRANSAKSI ==================== -->
+    <div id="transactionModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-end md:items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl md:rounded-2xl w-full md:w-full md:max-w-md max-h-[90vh] overflow-y-auto modal-open">
+            <!-- Header Modal -->
+            <div class="sticky top-0 bg-white dark:bg-slate-900 p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h2 class="text-2xl font-bold">Tambah Transaksi</h2>
+                <button onclick="closeTransactionModal()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form id="transactionForm" class="p-6 space-y-4" onsubmit="saveTransaction(event)">
+                <!-- Jenis Transaksi -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Jenis Transaksi</label>
+                    <div class="flex gap-3">
+                        <button type="button" class="trans-type-btn flex-1 py-3 px-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 font-semibold transition-all" data-type="income">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Pemasukan
+                        </button>
+                        <button type="button" class="trans-type-btn flex-1 py-3 px-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 font-semibold transition-all" data-type="expense">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                            </svg>
+                            Pengeluaran
+                        </button>
+                    </div>
+                    <input type="hidden" id="transType" value="income">
+                </div>
+
+                <!-- Kategori -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Kategori</label>
+                    <select id="transCategory" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500" required onchange="updateEmployeeField()">
+                        <option value="">Pilih Kategori</option>
+                        <option value="sales">Penjualan</option>
+                        <option value="service">Jasa</option>
+                        <option value="salary">Gaji Karyawan</option>
+                        <option value="commission">Komisi/Bagi Hasil Karyawan</option>
+                        <option value="supplies">Perlengkapan</option>
+                        <option value="utilities">Utilitas</option>
+                        <option value="rent">Sewa Tempat</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+
+                <!-- Field Nama Karyawan (Tampil jika kategori Gaji atau Komisi) -->
+                <div id="employeeField" class="hidden">
+                    <label class="block text-sm font-semibold mb-2">Pilih/Masukkan Nama Karyawan</label>
+                    <div class="flex gap-2 mb-2">
+                        <select id="employeeSelect" class="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800">
+                            <option value="">-- Pilih dari daftar --</option>
+                        </select>
+                    </div>
+                    <input type="text" id="employeeCustom" placeholder="Atau ketik nama baru..." class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <input type="hidden" id="selectedEmployee" value="">
+                </div>
+
+                <!-- Keterangan -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Keterangan</label>
+                    <textarea id="transDescription" placeholder="Tambahkan deskripsi..." class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none" rows="3" required></textarea>
+                </div>
+
+                <!-- Nominal -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Nominal</label>
+                    <div class="flex items-center">
+                        <span class="text-gray-500 dark:text-gray-400 px-4 py-3 bg-gray-100 dark:bg-slate-800 rounded-l-xl font-semibold">Rp</span>
+                        <input type="number" id="transAmount" placeholder="0" class="flex-1 px-4 py-3 rounded-r-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500" min="0" required>
+                    </div>
+                </div>
+
+                <!-- Tanggal -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Tanggal</label>
+                    <input type="date" id="transDate" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeTransactionModal()" class="flex-1 py-3 px-4 rounded-xl border border-gray-200 dark:border-gray-700 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold hover:shadow-lg transition-all">
+                        Simpan Transaksi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL KONFIRMASI HAPUS ==================== -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-sm modal-open">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Hapus Data?</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="deleteMessage">Data akan dihapus secara permanen</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-2 px-4 rounded-lg border border-gray-200 dark:border-gray-700 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+                    Batal
+                </button>
+                <button onclick="confirmDelete()" class="flex-1 py-2 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ==================== GLOBAL STATE ==================== 
+        let transactions = [];
+        let employees = [];
+        let currentPage = 'dashboard';
+        let chartInstances = {};
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let deleteTarget = null;
+        let editingTransactionId = null;
+
+        // ==================== INITIALIZATION ==================== 
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize dark mode
+            initDarkMode();
+            
+            // Load data from localStorage
+            loadData();
+            
+            // Generate dummy data jika belum ada
+            if (transactions.length === 0) {
+                generateDummyData();
+            }
+            
+            // Set current date on transaction form
+            document.getElementById('transDate').valueAsDate = new Date();
+            
+            // Initialize charts
+            initCharts();
+            
+            // Update UI
+            updateDashboard();
+            updateRecentTransactions();
+            updateTransactionsList();
+            updateEmployeesList();
+            
+            // Add event listeners
+            setupEventListeners();
+            
+            // Feather icons
+            feather.replace();
+        });
+
+        // ==================== DARK MODE ==================== 
+        function initDarkMode() {
+            const html = document.documentElement;
+            if (isDarkMode) {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+        }
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            initDarkMode();
+        });
+
+        // ==================== DATA MANAGEMENT ==================== 
+        function generateDummyData() {
+            const now = new Date();
+            
+            // Generate dummy employees
+            const employeeNames = ['Budi', 'Siti', 'Ahmad', 'Dewi', 'Rudi'];
+            employees = employeeNames.map((name, i) => ({
+                id: i + 1,
+                name: name,
+                position: ['Kasir', 'Staff', 'Manager', 'Admin'][Math.floor(Math.random() * 4)],
+                salary: (2000000 + Math.floor(Math.random() * 5000000)),
+                phone: `081${Math.floor(Math.random() * 1000000000)}`,
+                startDate: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0]
+            }));
+            
+            // Generate dummy transactions for last 12 months
+            for (let i = 0; i < 60; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - Math.floor(Math.random() * 365));
+                
+                const type = Math.random() > 0.3 ? 'income' : 'expense';
+                const categories = type === 'income' 
+                    ? ['sales', 'service', 'commission'] 
+                    : ['salary', 'supplies', 'utilities', 'rent', 'other'];
+                
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const employeeName = (category === 'salary' || category === 'commission') ? employees[Math.floor(Math.random() * employees.length)].name : null;
+                
+                transactions.push({
+                    id: Date.now() + Math.random(),
+                    type: type,
+                    category: category,
+                    description: type === 'income' ? 'Penjualan' : 'Pengeluaran',
+                    amount: Math.floor(Math.random() * 5000000) + 100000,
+                    date: date.toISOString().split('T')[0],
+                    employeeName: employeeName
+                });
+            }
+            
+            saveData();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('financeData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                transactions = data.transactions || [];
+                employees = data.employees || [];
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('financeData', JSON.stringify({
+                transactions: transactions,
+                employees: employees
+            }));
+        }
+
+        // ==================== PAGE SWITCHING ==================== 
+        function switchPage(page) {
+            // Hide all pages
+            document.querySelectorAll('[id^="page-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(`page-${page}`).classList.remove('hidden');
+            
+            // Update active nav button
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-gray-500');
+            });
+            event.target.closest('.nav-btn').classList.add('active');
+            event.target.closest('.nav-btn').classList.remove('text-gray-500');
+            
+            currentPage = page;
+            
+            // Reinitialize charts jika diperlukan
+            setTimeout(() => {
+                if (page === 'reports') {
+                    initReportCharts();
+                }
+                if (chartInstances[`${page}Chart`]) {
+                    chartInstances[`${page}Chart`].resize();
+                }
+            }, 100);
+        }
+
+        // ==================== DASHBOARD ==================== 
+        function updateDashboard() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            // Calculate statistics
+            const thisMonthTransactions = transactions.filter(t => {
+                const d = new Date(t.date);
+                return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+            });
+            
+            const totalIncome = thisMonthTransactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const totalExpense = thisMonthTransactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const profit = totalIncome - totalExpense;
+            
+            // Update UI
+            document.getElementById('mainBalance').textContent = formatCurrency(totalIncome - totalExpense);
+            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalExpense').textContent = formatCurrency(totalExpense);
+            document.getElementById('profitLoss').textContent = formatCurrency(profit);
+            document.getElementById('profitStatus').textContent = profit >= 0 ? 'Untung ✓' : 'Rugi';
+            
+            // Greeting
+            const hour = now.getHours();
+            let greeting = 'Selamat datang kembali';
+            if (hour < 12) greeting = 'Selamat pagi';
+            else if (hour < 15) greeting = 'Selamat siang';
+            else if (hour < 18) greeting = 'Selamat sore';
+            else greeting = 'Selamat malam';
+            document.getElementById('greetingText').textContent = greeting;
+        }
+
+        function updateRecentTransactions() {
+            const container = document.getElementById('recentTransactions');
+            const recent = transactions.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada transaksi</p>';
+                return;
+            }
+            
+            container.innerHTML = recent.map(t => `
+                <div class="transaction-item flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-all">
+                    <div class="p-3 rounded-xl ${t.type === 'income' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}">
+                        <svg class="w-5 h-5 ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.type === 'income' ? 'M12 4v16m8-8H4' : 'M20 12H4'}"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-semibold truncate">${t.description}${t.employeeName ? ' - ' + t.employeeName : ''}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${formatDate(t.date)}</p>
+                    </div>
+                    <p class="font-bold text-right ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                        ${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        // ==================== TRANSACTIONS ==================== 
+        function updateTransactionsList() {
+            const container = document.getElementById('transactionsList');
+            const searchTerm = document.getElementById('searchTransaction')?.value.toLowerCase() || '';
+            const filterType = document.getElementById('filterType')?.value || '';
+            
+            let filtered = transactions.filter(t => {
+                const matchSearch = t.description.toLowerCase().includes(searchTerm) || (t.employeeName && t.employeeName.toLowerCase().includes(searchTerm));
+                const matchType = !filterType || t.type === filterType;
+                return matchSearch && matchType;
+            });
+            
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">Tidak ada transaksi</p>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(t => `
+                <div class="transaction-item bg-white dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between soft-shadow">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="p-3 rounded-xl ${t.type === 'income' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}">
+                            <svg class="w-5 h-5 ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.type === 'income' ? 'M12 4v16m8-8H4' : 'M20 12H4'}"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold truncate">${t.description}${t.employeeName ? ' - ' + t.employeeName : ''}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${getCategoryLabel(t.category)} • ${formatDate(t.date)}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="font-bold ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                                ${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}
+                            </p>
+                        </div>
+                        <div class="action-buttons flex gap-2">
+                            <button onclick="editTransaction('${t.id}')" class="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteTransaction('${t.id}')" class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateEmployeeField() {
+            const category = document.getElementById('transCategory').value;
+            const field = document.getElementById('employeeField');
+            const select = document.getElementById('employeeSelect');
+            
+            if (category === 'salary' || category === 'commission') {
+                field.classList.remove('hidden');
+                // Populate employee select
+                select.innerHTML = '<option value="">-- Pilih dari daftar --</option>' + 
+                    employees.map(e => `<option value="${e.name}">${e.name}</option>`).join('');
+            } else {
+                field.classList.add('hidden');
+            }
+        }
+
+        function openTransactionModal() {
+            document.getElementById('transactionModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTransactionModal() {
+            document.getElementById('transactionModal').classList.add('hidden');
+            document.body.style.overflow = '';
+            document.getElementById('transactionForm').reset();
+            editingTransactionId = null;
+            document.getElementById('transType').value = 'income';
+        }
+
+        function editTransaction(id) {
+            const trans = transactions.find(t => t.id == id);
+            if (!trans) return;
+            
+            editingTransactionId = id;
+            document.getElementById('transType').value = trans.type;
+            document.getElementById('transCategory').value = trans.category;
+            document.getElementById('transDescription').value = trans.description;
+            document.getElementById('transAmount').value = trans.amount;
+            document.getElementById('transDate').value = trans.date;
+            
+            if (trans.employeeName) {
+                updateEmployeeField();
+                document.getElementById('selectedEmployee').value = trans.employeeName;
+                document.getElementById('employeeSelect').value = trans.employeeName;
+            }
+            
+            openTransactionModal();
+        }
+
+        function saveTransaction(e) {
+            e.preventDefault();
+            
+            const id = editingTransactionId || Date.now();
+            const employeeName = document.getElementById('employeeCustom').value || document.getElementById('employeeSelect').value || null;
+            
+            const newTransaction = {
+                id: id,
+                type: document.getElementById('transType').value,
+                category: document.getElementById('transCategory').value,
+                description: document.getElementById('transDescription').value,
+                amount: parseInt(document.getElementById('transAmount').value),
+                date: document.getElementById('transDate').value,
+                employeeName: employeeName
+            };
+            
+            if (editingTransactionId) {
+                const idx = transactions.findIndex(t => t.id == editingTransactionId);
+                transactions[idx] = newTransaction;
+            } else {
+                transactions.push(newTransaction);
+            }
+            
+            saveData();
+            
+            // Update UI
+            updateDashboard();
+            updateRecentTransactions();
+            updateTransactionsList();
+            updateEmployeesList();
+            
+            // Close modal
+            closeTransactionModal();
+            
+            // Show toast
+            showToast(editingTransactionId ? 'Transaksi berhasil diupdate!' : 'Transaksi berhasil ditambahkan!', 'success');
+        }
+
+        function deleteTransaction(id) {
+            deleteTarget = id;
+            document.getElementById('deleteMessage').textContent = 'Transaksi akan dihapus secara permanen';
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function confirmDelete() {
+            if (deleteTarget) {
+                transactions = transactions.filter(t => t.id != deleteTarget);
+                saveData();
+                updateDashboard();
+                updateRecentTransactions();
+                updateTransactionsList();
+                updateEmployeesList();
+                closeDeleteModal();
+                showToast('Transaksi berhasil dihapus!', 'success');
+            }
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            deleteTarget = null;
+        }
+
+        // ==================== EMPLOYEES ==================== 
+        function updateEmployeesList() {
+            const container = document.getElementById('employeesList');
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            let totalEmployees = employees.length;
+            let totalSalary = employees.reduce((sum, e) => sum + e.salary, 0);
+            let avgSalary = totalEmployees > 0 ? totalSalary / totalEmployees : 0;
+            
+            // Calculate commission for this month
+            let totalCommission = 0;
+            transactions.forEach(t => {
+                if (t.category === 'commission') {
+                    const d = new Date(t.date);
+                    if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+                        totalCommission += t.amount;
+                    }
+                }
+            });
+            
+            document.getElementById('totalEmployees').textContent = totalEmployees;
+            document.getElementById('totalSalary').textContent = formatCurrency(totalSalary);
+            document.getElementById('avgSalary').textContent = formatCurrency(avgSalary);
+            document.getElementById('totalCommission').textContent = formatCurrency(totalCommission);
+            
+            if (employees.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada karyawan</p>';
+                return;
+            }
+            
+            container.innerHTML = employees.map(e => {
+                // Get commission for this employee this month
+                let empCommission = 0;
+                transactions.forEach(t => {
+                    if (t.category === 'commission' && t.employeeName === e.name) {
+                        const d = new Date(t.date);
+                        if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+                            empCommission += t.amount;
+                        }
+                    }
+                });
+                
+                // Get total income from this employee
+                let empIncome = 0;
+                transactions.forEach(t => {
+                    if (t.type === 'income' && t.category === 'commission' && t.employeeName === e.name) {
+                        empIncome += t.amount;
+                    }
+                });
+                
+                return `
+                    <div class="employee-item bg-white dark:bg-slate-900 rounded-xl p-4 soft-shadow">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                                ${e.name.charAt(0)}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold">${e.name}</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">${e.position}</p>
+                                <p class="text-xs text-gray-400 mt-1">Sejak: ${formatDate(e.startDate)}</p>
+                            </div>
+                            <div class="action-buttons flex gap-2">
+                                <button onclick="deleteEmployee('${e.id}')" class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 text-sm">
+                            <div class="bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Gaji/Bulan</p>
+                                <p class="font-bold">${formatCurrency(e.salary)}</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Komisi Bulan Ini</p>
+                                <p class="font-bold text-green-600 dark:text-green-400">${formatCurrency(empCommission)}</p>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Total Pemasukan</p>
+                                <p class="font-bold text-blue-600 dark:text-blue-400">${formatCurrency(empIncome)}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteEmployee(id) {
+            deleteTarget = id;
+            document.getElementById('deleteMessage').textContent = 'Data karyawan akan dihapus secara permanen';
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        // ==================== REPORTS ==================== 
+        function switchReport(report) {
+            document.querySelectorAll('[id^="report-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.getElementById(`report-${report}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.report-btn').forEach(btn => {
+                btn.classList.remove('btn-active');
+                btn.classList.add('bg-gray-100', 'dark:bg-gray-800');
+            });
+            event.target.classList.add('btn-active');
+            event.target.classList.remove('bg-gray-100', 'dark:bg-gray-800');
+        }
+
+        function initReportCharts() {
+            // Monthly Report
+            createMonthlyChart();
+            
+            // Category Report
+            createCategoryChart();
+            
+            // Yearly Report
+            createYearlyReport();
+            
+            // Employee Performance
+            createEmployeePerformance();
+        }
+
+        // ==================== CHARTS ==================== 
+        function initCharts() {
+            createMonthlyChart();
+        }
+
+        function createMonthlyChart() {
+            const ctx = document.getElementById('monthlyChart');
+            if (!ctx) return;
+            
+            const data = getLast12MonthsData();
+            
+            if (chartInstances.monthlyChart) {
+                chartInstances.monthlyChart.destroy();
+            }
+            
+            chartInstances.monthlyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Pemasukan',
+                            data: data.income,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#10b981',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            data: data.expense,
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#ef4444',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { size: 12, weight: '600' },
+                                color: isDarkMode ? '#e5e7eb' : '#4b5563'
+                            }
+                        },
+                        filler: {
+                            propagate: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => formatCurrencyShort(value),
+                                color: isDarkMode ? '#9ca3af' : '#9ca3af',
+                                font: { size: 11 }
+                            },
+                            grid: {
+                                color: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: isDarkMode ? '#9ca3af' : '#9ca3af',
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCategoryChart() {
+            const ctx = document.getElementById('categoryChart');
+            if (!ctx) return;
+            
+            const data = getCategoryData();
+            
+            if (chartInstances.categoryChart) {
+                chartInstances.categoryChart.destroy();
+            }
+            
+            chartInstances.categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            '#7c3aed',
+                            '#3b82f6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#8b5cf6',
+                            '#ec4899'
+                        ],
+                        borderColor: isDarkMode ? '#1e293b' : '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15,
+                                color: isDarkMode ? '#e5e7eb' : '#4b5563'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            updateCategoryDetails(data);
+        }
+
+        function updateCategoryDetails(data) {
+            const container = document.getElementById('categoryDetails');
+            if (!container) return;
+            
+            container.innerHTML = data.labels.map((label, i) => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full" style="background-color: ['#7c3aed', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'][${i}]"></div>
+                        <span class="text-sm font-semibold">${label}</span>
+                    </div>
+                    <span class="font-bold">${formatCurrency(data.values[i])}</span>
+                </div>
+            `).join('');
+        }
+
+        function createYearlyReport() {
+            const container = document.getElementById('yearlyStats');
+            if (!container) return;
+            
+            const yearData = getYearlyData();
+            
+            container.innerHTML = yearData.map(year => `
+                <div class="bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-xl p-4">
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Tahun ${year.year}</p>
+                    <p class="text-2xl font-bold mb-4">${formatCurrency(year.profit)}</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Pemasukan:</span>
+                            <span class="font-semibold text-green-600 dark:text-green-400">${formatCurrency(year.income)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Pengeluaran:</span>
+                            <span class="font-semibold text-red-600 dark:text-red-400">${formatCurrency(year.expense)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function createEmployeePerformance() {
+            const container = document.getElementById('employeePerformance');
+            if (!container) return;
+            
+            const empData = getEmployeePerformanceData();
+            
+            container.innerHTML = empData.map(emp => `
+                <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-lg">${emp.name}</h4>
+                        <span class="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full">${emp.position}</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-sm">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Gaji/Bulan</p>
+                            <p class="font-bold">${formatCurrency(emp.salary)}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Total Komisi</p>
+                            <p class="font-bold text-green-600 dark:text-green-400">${formatCurrency(emp.totalCommission)}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Rata-rata Komisi/Hari</p>
+                            <p class="font-bold text-blue-600 dark:text-blue-400">${formatCurrency(emp.avgDailyCommission)}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== DATA PROCESSING ==================== 
+        function getLast12MonthsData() {
+            const labels = [];
+            const income = [];
+            const expense = [];
+            
+            const now = new Date();
+            
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(now);
+                date.setMonth(date.getMonth() - i);
+                
+                const month = date.getMonth();
+                const year = date.getFullYear();
+                
+                labels.push(new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(date));
+                
+                const monthTransactions = transactions.filter(t => {
+                    const d = new Date(t.date);
+                    return d.getMonth() === month && d.getFullYear() === year;
+                });
+                
+                income.push(monthTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0));
+                expense.push(monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            }
+            
+            return { labels, income, expense };
+        }
+
+        function getCategoryData() {
+            const expenseTransactions = transactions.filter(t => t.type === 'expense');
+            const categoryMap = {};
+            
+            expenseTransactions.forEach(t => {
+                const label = getCategoryLabel(t.category);
+                categoryMap[label] = (categoryMap[label] || 0) + t.amount;
+            });
+            
+            const labels = Object.keys(categoryMap);
+            const values = Object.values(categoryMap);
+            
+            return { labels, values };
+        }
+
+        function getYearlyData() {
+            const yearMap = {};
+            
+            transactions.forEach(t => {
+                const year = new Date(t.date).getFullYear();
+                if (!yearMap[year]) {
+                    yearMap[year] = { income: 0, expense: 0 };
+                }
+                
+                if (t.type === 'income') {
+                    yearMap[year].income += t.amount;
+                } else {
+                    yearMap[year].expense += t.amount;
+                }
+            });
+            
+            return Object.keys(yearMap)
+                .sort()
+                .map(year => ({
+                    year: year,
+                    income: yearMap[year].income,
+                    expense: yearMap[year].expense,
+                    profit: yearMap[year].income - yearMap[year].expense
+                }));
+        }
+
+        function getEmployeePerformanceData() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            return employees.map(emp => {
+                // Total commission this year
+                let totalCommission = 0;
+                let commissionDays = new Set();
+                
+                transactions.forEach(t => {
+                    if (t.category === 'commission' && t.employeeName === emp.name) {
+                        const d = new Date(t.date);
+                        if (d.getFullYear() === currentYear) {
+                            totalCommission += t.amount;
+                            commissionDays.add(t.date);
+                        }
+                    }
+                });
+                
+                const avgDaily = commissionDays.size > 0 ? totalCommission / commissionDays.size : 0;
+                
+                return {
+                    name: emp.name,
+                    position: emp.position,
+                    salary: emp.salary,
+                    totalCommission: totalCommission,
+                    avgDailyCommission: avgDaily
+                };
+            });
+        }
+
+        // ==================== EXPORT FUNCTIONS ==================== 
+        function exportTransactionsPDF() {
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <h2 style="margin-bottom: 20px;">Laporan Transaksi</h2>
+                <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Tanggal</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Keterangan</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Kategori</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">Nominal</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Jenis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${transactions.sort((a, b) => new Date(b.date) - new Date(a.date)).map(t => `
+                            <tr>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${formatDate(t.date)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${t.description}${t.employeeName ? ' - ' + t.employeeName : ''}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${getCategoryLabel(t.category)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">${formatCurrency(t.amount)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${t.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            html2pdf().set({
+                margin: 10,
+                filename: 'laporan-transaksi.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+            }).save(element);
+        }
+
+        function exportEmployeesPDF() {
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <h2 style="margin-bottom: 20px;">Laporan Data Karyawan</h2>
+                <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Nama</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Posisi</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">No. Telepon</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">Gaji/Bulan</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Tanggal Bergabung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${employees.map(e => `
+                            <tr>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${e.name}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${e.position}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${e.phone}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">${formatCurrency(e.salary)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${formatDate(e.startDate)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            html2pdf().set({
+                margin: 10,
+                filename: 'laporan-karyawan.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+            }).save(element);
+        }
+
+        // ==================== UTILITY FUNCTIONS ==================== 
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function formatCurrencyShort(value) {
+            if (value >= 1000000) {
+                return 'Rp' + Math.floor(value / 1000000) + 'M';
+            }
+            if (value >= 1000) {
+                return 'Rp' + Math.floor(value / 1000) + 'K';
+            }
+            return 'Rp' + value;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return new Intl.DateTimeFormat('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            }).format(date);
+        }
+
+        function getCategoryLabel(category) {
+            const labels = {
+                'sales': 'Penjualan',
+                'service': 'Jasa',
+                'salary': 'Gaji Karyawan',
+                'commission': 'Komisi/Bagi Hasil',
+                'supplies': 'Perlengkapan',
+                'utilities': 'Utilitas',
+                'rent': 'Sewa Tempat',
+                'other': 'Lainnya'
+            };
+            return labels[category] || category;
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'success' ? 'bg-green-900' : 'bg-gray-900'}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toast-slide-out 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ==================== EVENT LISTENERS ==================== 
+        function setupEventListeners() {
+            // Transaction type buttons
+            document.querySelectorAll('.trans-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.trans-type-btn').forEach(b => {
+                        b.classList.remove('bg-purple-600', 'text-white', 'border-purple-600');
+                        b.classList.add('border-gray-200', 'dark:border-gray-700');
+                    });
+                    btn.classList.add('bg-purple-600', 'text-white', 'border-purple-600');
+                    btn.classList.remove('border-gray-200', 'dark:border-gray-700');
+                    document.getElementById('transType').value = btn.dataset.type;
+                });
+            });
+            
+            // Search and filter
+            document.getElementById('searchTransaction')?.addEventListener('keyup', updateTransactionsList);
+            document.getElementById('filterType')?.addEventListener('change', updateTransactionsList);
+            
+            // Close modal on backdrop click
+            document.getElementById('transactionModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'transactionModal') {
+                    closeTransactionModal();
+                }
+            });
+            
+            // Close delete modal on backdrop click
+            document.getElementById('deleteModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'deleteModal') {
+                    closeDeleteModal();
+                }
+            });
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            feather.replace();
+        });
+    </script>
+</body>
+</html>
