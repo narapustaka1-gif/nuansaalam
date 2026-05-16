@@ -11,6 +11,12 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <!-- jsPDF & AutoTable for Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- ExcelJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    
     <!-- Feather Icons -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     
@@ -343,6 +349,23 @@
         .dark .bg-danger {
             background-color: rgba(239, 68, 68, 0.1);
         }
+
+        /* Action buttons on hover */
+        .transaction-item:hover .action-buttons {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .action-buttons {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .employee-item:hover .action-buttons {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="bg-white dark:bg-slate-950 text-gray-900 dark:text-white transition-colors">
@@ -360,7 +383,7 @@
                     <div class="flex items-center gap-3">
                         <button id="darkModeToggle" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 015.646 5.646 9.001 9.001 0 0020.354 15.354Z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 015.646 5.646 9.001 9.001 0 0120.354 15.354Z"></path>
                             </svg>
                         </button>
                     </div>
@@ -459,9 +482,14 @@
         <!-- TRANSACTIONS PAGE -->
         <div id="page-transactions" class="page-transition hidden">
             <div class="sticky top-0 z-20 glass dark:glass-dark p-4 md:p-6 soft-shadow">
-                <div class="max-w-6xl mx-auto">
-                    <h1 class="text-2xl md:text-3xl font-bold">Riwayat Transaksi</h1>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola semua transaksi Anda</p>
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold">Riwayat Transaksi</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola semua transaksi Anda</p>
+                    </div>
+                    <button onclick="exportTransactionsPDF()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold">
+                        📄 Export PDF
+                    </button>
                 </div>
             </div>
 
@@ -486,15 +514,20 @@
         <!-- EMPLOYEES PAGE -->
         <div id="page-employees" class="page-transition hidden">
             <div class="sticky top-0 z-20 glass dark:glass-dark p-4 md:p-6 soft-shadow">
-                <div class="max-w-6xl mx-auto">
-                    <h1 class="text-2xl md:text-3xl font-bold">Data Karyawan</h1>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola data karyawan dan gaji</p>
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold">Data Karyawan & Komisi</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola karyawan, gaji, dan komisi</p>
+                    </div>
+                    <button onclick="exportEmployeesPDF()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold">
+                        📄 Export PDF
+                    </button>
                 </div>
             </div>
 
             <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
                 <!-- Employee Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
                         <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Total Karyawan</p>
                         <p class="text-3xl font-bold" id="totalEmployees">0</p>
@@ -506,6 +539,10 @@
                     <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
                         <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Rata-rata Gaji</p>
                         <p class="text-3xl font-bold" id="avgSalary">Rp 0</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow">
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Total Komisi Bulan Ini</p>
+                        <p class="text-3xl font-bold text-success" id="totalCommission">Rp 0</p>
                     </div>
                 </div>
 
@@ -531,6 +568,7 @@
                     <button onclick="switchReport('monthly')" class="report-btn btn-active px-6 py-2 rounded-xl whitespace-nowrap transition-all">Bulanan</button>
                     <button onclick="switchReport('category')" class="report-btn px-6 py-2 rounded-xl whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800">Kategori</button>
                     <button onclick="switchReport('yearly')" class="report-btn px-6 py-2 rounded-xl whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800">Tahunan</button>
+                    <button onclick="switchReport('employee')" class="report-btn px-6 py-2 rounded-xl whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800">Performa Karyawan</button>
                 </div>
 
                 <!-- Monthly Report -->
@@ -561,6 +599,14 @@
                         <div id="yearlyStats" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Akan diisi dengan JavaScript -->
                         </div>
+                    </div>
+                </div>
+
+                <!-- Employee Performance Report -->
+                <div id="report-employee" class="bg-white dark:bg-slate-900 rounded-2xl p-6 soft-shadow hidden">
+                    <h3 class="text-lg font-bold mb-6">Performa Karyawan (Pemasukan & Komisi)</h3>
+                    <div id="employeePerformance" class="space-y-3">
+                        <!-- Akan diisi dengan JavaScript -->
                     </div>
                 </div>
             </div>
@@ -642,16 +688,29 @@
                 <!-- Kategori -->
                 <div>
                     <label class="block text-sm font-semibold mb-2">Kategori</label>
-                    <select id="transCategory" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                    <select id="transCategory" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500" required onchange="updateEmployeeField()">
                         <option value="">Pilih Kategori</option>
                         <option value="sales">Penjualan</option>
                         <option value="service">Jasa</option>
                         <option value="salary">Gaji Karyawan</option>
+                        <option value="commission">Komisi/Bagi Hasil Karyawan</option>
                         <option value="supplies">Perlengkapan</option>
                         <option value="utilities">Utilitas</option>
                         <option value="rent">Sewa Tempat</option>
                         <option value="other">Lainnya</option>
                     </select>
+                </div>
+
+                <!-- Field Nama Karyawan (Tampil jika kategori Gaji atau Komisi) -->
+                <div id="employeeField" class="hidden">
+                    <label class="block text-sm font-semibold mb-2">Pilih/Masukkan Nama Karyawan</label>
+                    <div class="flex gap-2 mb-2">
+                        <select id="employeeSelect" class="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800">
+                            <option value="">-- Pilih dari daftar --</option>
+                        </select>
+                    </div>
+                    <input type="text" id="employeeCustom" placeholder="Atau ketik nama baru..." class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <input type="hidden" id="selectedEmployee" value="">
                 </div>
 
                 <!-- Keterangan -->
@@ -688,6 +747,31 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL KONFIRMASI HAPUS ==================== -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-sm modal-open">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Hapus Data?</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="deleteMessage">Data akan dihapus secara permanen</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-2 px-4 rounded-lg border border-gray-200 dark:border-gray-700 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+                    Batal
+                </button>
+                <button onclick="confirmDelete()" class="flex-1 py-2 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
         // ==================== GLOBAL STATE ==================== 
@@ -696,6 +780,8 @@
         let currentPage = 'dashboard';
         let chartInstances = {};
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let deleteTarget = null;
+        let editingTransactionId = null;
 
         // ==================== INITIALIZATION ==================== 
         document.addEventListener('DOMContentLoaded', () => {
@@ -749,26 +835,6 @@
         function generateDummyData() {
             const now = new Date();
             
-            // Generate dummy transactions for last 12 months
-            for (let i = 0; i < 60; i++) {
-                const date = new Date(now);
-                date.setDate(date.getDate() - Math.floor(Math.random() * 365));
-                
-                const type = Math.random() > 0.3 ? 'income' : 'expense';
-                const categories = type === 'income' 
-                    ? ['sales', 'service'] 
-                    : ['salary', 'supplies', 'utilities', 'rent', 'other'];
-                
-                transactions.push({
-                    id: Date.now() + Math.random(),
-                    type: type,
-                    category: categories[Math.floor(Math.random() * categories.length)],
-                    description: type === 'income' ? 'Penjualan' : 'Pengeluaran',
-                    amount: Math.floor(Math.random() * 5000000) + 100000,
-                    date: date.toISOString().split('T')[0]
-                });
-            }
-            
             // Generate dummy employees
             const employeeNames = ['Budi', 'Siti', 'Ahmad', 'Dewi', 'Rudi'];
             employees = employeeNames.map((name, i) => ({
@@ -779,6 +845,30 @@
                 phone: `081${Math.floor(Math.random() * 1000000000)}`,
                 startDate: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0]
             }));
+            
+            // Generate dummy transactions for last 12 months
+            for (let i = 0; i < 60; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - Math.floor(Math.random() * 365));
+                
+                const type = Math.random() > 0.3 ? 'income' : 'expense';
+                const categories = type === 'income' 
+                    ? ['sales', 'service', 'commission'] 
+                    : ['salary', 'supplies', 'utilities', 'rent', 'other'];
+                
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const employeeName = (category === 'salary' || category === 'commission') ? employees[Math.floor(Math.random() * employees.length)].name : null;
+                
+                transactions.push({
+                    id: Date.now() + Math.random(),
+                    type: type,
+                    category: category,
+                    description: type === 'income' ? 'Penjualan' : 'Pengeluaran',
+                    amount: Math.floor(Math.random() * 5000000) + 100000,
+                    date: date.toISOString().split('T')[0],
+                    employeeName: employeeName
+                });
+            }
             
             saveData();
         }
@@ -879,14 +969,14 @@
             }
             
             container.innerHTML = recent.map(t => `
-                <div class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-all">
+                <div class="transaction-item flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-all">
                     <div class="p-3 rounded-xl ${t.type === 'income' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}">
                         <svg class="w-5 h-5 ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.type === 'income' ? 'M12 4v16m8-8H4' : 'M20 12H4'}"></path>
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="font-semibold truncate">${t.description}</p>
+                        <p class="font-semibold truncate">${t.description}${t.employeeName ? ' - ' + t.employeeName : ''}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">${formatDate(t.date)}</p>
                     </div>
                     <p class="font-bold text-right ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
@@ -903,7 +993,7 @@
             const filterType = document.getElementById('filterType')?.value || '';
             
             let filtered = transactions.filter(t => {
-                const matchSearch = t.description.toLowerCase().includes(searchTerm);
+                const matchSearch = t.description.toLowerCase().includes(searchTerm) || (t.employeeName && t.employeeName.toLowerCase().includes(searchTerm));
                 const matchType = !filterType || t.type === filterType;
                 return matchSearch && matchType;
             });
@@ -916,7 +1006,7 @@
             }
             
             container.innerHTML = filtered.map(t => `
-                <div class="bg-white dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between soft-shadow">
+                <div class="transaction-item bg-white dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between soft-shadow">
                     <div class="flex items-center gap-4 flex-1">
                         <div class="p-3 rounded-xl ${t.type === 'income' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}">
                             <svg class="w-5 h-5 ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -924,17 +1014,46 @@
                             </svg>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="font-semibold truncate">${t.description}</p>
+                            <p class="font-semibold truncate">${t.description}${t.employeeName ? ' - ' + t.employeeName : ''}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400">${getCategoryLabel(t.category)} • ${formatDate(t.date)}</p>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <p class="font-bold ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
-                            ${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}
-                        </p>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="font-bold ${t.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                                ${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}
+                            </p>
+                        </div>
+                        <div class="action-buttons flex gap-2">
+                            <button onclick="editTransaction('${t.id}')" class="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteTransaction('${t.id}')" class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function updateEmployeeField() {
+            const category = document.getElementById('transCategory').value;
+            const field = document.getElementById('employeeField');
+            const select = document.getElementById('employeeSelect');
+            
+            if (category === 'salary' || category === 'commission') {
+                field.classList.remove('hidden');
+                // Populate employee select
+                select.innerHTML = '<option value="">-- Pilih dari daftar --</option>' + 
+                    employees.map(e => `<option value="${e.name}">${e.name}</option>`).join('');
+            } else {
+                field.classList.add('hidden');
+            }
         }
 
         function openTransactionModal() {
@@ -946,69 +1065,186 @@
             document.getElementById('transactionModal').classList.add('hidden');
             document.body.style.overflow = '';
             document.getElementById('transactionForm').reset();
+            editingTransactionId = null;
+            document.getElementById('transType').value = 'income';
+        }
+
+        function editTransaction(id) {
+            const trans = transactions.find(t => t.id == id);
+            if (!trans) return;
+            
+            editingTransactionId = id;
+            document.getElementById('transType').value = trans.type;
+            document.getElementById('transCategory').value = trans.category;
+            document.getElementById('transDescription').value = trans.description;
+            document.getElementById('transAmount').value = trans.amount;
+            document.getElementById('transDate').value = trans.date;
+            
+            if (trans.employeeName) {
+                updateEmployeeField();
+                document.getElementById('selectedEmployee').value = trans.employeeName;
+                document.getElementById('employeeSelect').value = trans.employeeName;
+            }
+            
+            openTransactionModal();
         }
 
         function saveTransaction(e) {
             e.preventDefault();
             
+            const id = editingTransactionId || Date.now();
+            const employeeName = document.getElementById('employeeCustom').value || document.getElementById('employeeSelect').value || null;
+            
             const newTransaction = {
-                id: Date.now(),
+                id: id,
                 type: document.getElementById('transType').value,
                 category: document.getElementById('transCategory').value,
                 description: document.getElementById('transDescription').value,
                 amount: parseInt(document.getElementById('transAmount').value),
-                date: document.getElementById('transDate').value
+                date: document.getElementById('transDate').value,
+                employeeName: employeeName
             };
             
-            transactions.push(newTransaction);
+            if (editingTransactionId) {
+                const idx = transactions.findIndex(t => t.id == editingTransactionId);
+                transactions[idx] = newTransaction;
+            } else {
+                transactions.push(newTransaction);
+            }
+            
             saveData();
             
             // Update UI
             updateDashboard();
             updateRecentTransactions();
             updateTransactionsList();
+            updateEmployeesList();
             
             // Close modal
             closeTransactionModal();
             
             // Show toast
-            showToast('Transaksi berhasil ditambahkan!', 'success');
+            showToast(editingTransactionId ? 'Transaksi berhasil diupdate!' : 'Transaksi berhasil ditambahkan!', 'success');
+        }
+
+        function deleteTransaction(id) {
+            deleteTarget = id;
+            document.getElementById('deleteMessage').textContent = 'Transaksi akan dihapus secara permanen';
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function confirmDelete() {
+            if (deleteTarget) {
+                transactions = transactions.filter(t => t.id != deleteTarget);
+                saveData();
+                updateDashboard();
+                updateRecentTransactions();
+                updateTransactionsList();
+                updateEmployeesList();
+                closeDeleteModal();
+                showToast('Transaksi berhasil dihapus!', 'success');
+            }
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            deleteTarget = null;
         }
 
         // ==================== EMPLOYEES ==================== 
         function updateEmployeesList() {
             const container = document.getElementById('employeesList');
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
             
             let totalEmployees = employees.length;
             let totalSalary = employees.reduce((sum, e) => sum + e.salary, 0);
             let avgSalary = totalEmployees > 0 ? totalSalary / totalEmployees : 0;
             
+            // Calculate commission for this month
+            let totalCommission = 0;
+            transactions.forEach(t => {
+                if (t.category === 'commission') {
+                    const d = new Date(t.date);
+                    if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+                        totalCommission += t.amount;
+                    }
+                }
+            });
+            
             document.getElementById('totalEmployees').textContent = totalEmployees;
             document.getElementById('totalSalary').textContent = formatCurrency(totalSalary);
             document.getElementById('avgSalary').textContent = formatCurrency(avgSalary);
+            document.getElementById('totalCommission').textContent = formatCurrency(totalCommission);
             
             if (employees.length === 0) {
                 container.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada karyawan</p>';
                 return;
             }
             
-            container.innerHTML = employees.map(e => `
-                <div class="bg-white dark:bg-slate-900 rounded-xl p-4 soft-shadow">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold">
-                            ${e.name.charAt(0)}
+            container.innerHTML = employees.map(e => {
+                // Get commission for this employee this month
+                let empCommission = 0;
+                transactions.forEach(t => {
+                    if (t.category === 'commission' && t.employeeName === e.name) {
+                        const d = new Date(t.date);
+                        if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+                            empCommission += t.amount;
+                        }
+                    }
+                });
+                
+                // Get total income from this employee
+                let empIncome = 0;
+                transactions.forEach(t => {
+                    if (t.type === 'income' && t.category === 'commission' && t.employeeName === e.name) {
+                        empIncome += t.amount;
+                    }
+                });
+                
+                return `
+                    <div class="employee-item bg-white dark:bg-slate-900 rounded-xl p-4 soft-shadow">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                                ${e.name.charAt(0)}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold">${e.name}</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">${e.position}</p>
+                                <p class="text-xs text-gray-400 mt-1">Sejak: ${formatDate(e.startDate)}</p>
+                            </div>
+                            <div class="action-buttons flex gap-2">
+                                <button onclick="deleteEmployee('${e.id}')" class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex-1">
-                            <p class="font-semibold">${e.name}</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">${e.position}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold">${formatCurrency(e.salary)}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">/bulan</p>
+                        <div class="grid grid-cols-3 gap-3 text-sm">
+                            <div class="bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Gaji/Bulan</p>
+                                <p class="font-bold">${formatCurrency(e.salary)}</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Komisi Bulan Ini</p>
+                                <p class="font-bold text-green-600 dark:text-green-400">${formatCurrency(empCommission)}</p>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Total Pemasukan</p>
+                                <p class="font-bold text-blue-600 dark:text-blue-400">${formatCurrency(empIncome)}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function deleteEmployee(id) {
+            deleteTarget = id;
+            document.getElementById('deleteMessage').textContent = 'Data karyawan akan dihapus secara permanen';
+            document.getElementById('deleteModal').classList.remove('hidden');
         }
 
         // ==================== REPORTS ==================== 
@@ -1035,6 +1271,9 @@
             
             // Yearly Report
             createYearlyReport();
+            
+            // Employee Performance
+            createEmployeePerformance();
         }
 
         // ==================== CHARTS ==================== 
@@ -1219,6 +1458,36 @@
             `).join('');
         }
 
+        function createEmployeePerformance() {
+            const container = document.getElementById('employeePerformance');
+            if (!container) return;
+            
+            const empData = getEmployeePerformanceData();
+            
+            container.innerHTML = empData.map(emp => `
+                <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-lg">${emp.name}</h4>
+                        <span class="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full">${emp.position}</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-sm">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Gaji/Bulan</p>
+                            <p class="font-bold">${formatCurrency(emp.salary)}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Total Komisi</p>
+                            <p class="font-bold text-green-600 dark:text-green-400">${formatCurrency(emp.totalCommission)}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mb-1">Rata-rata Komisi/Hari</p>
+                            <p class="font-bold text-blue-600 dark:text-blue-400">${formatCurrency(emp.avgDailyCommission)}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // ==================== DATA PROCESSING ==================== 
         function getLast12MonthsData() {
             const labels = [];
@@ -1289,6 +1558,114 @@
                 }));
         }
 
+        function getEmployeePerformanceData() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            return employees.map(emp => {
+                // Total commission this year
+                let totalCommission = 0;
+                let commissionDays = new Set();
+                
+                transactions.forEach(t => {
+                    if (t.category === 'commission' && t.employeeName === emp.name) {
+                        const d = new Date(t.date);
+                        if (d.getFullYear() === currentYear) {
+                            totalCommission += t.amount;
+                            commissionDays.add(t.date);
+                        }
+                    }
+                });
+                
+                const avgDaily = commissionDays.size > 0 ? totalCommission / commissionDays.size : 0;
+                
+                return {
+                    name: emp.name,
+                    position: emp.position,
+                    salary: emp.salary,
+                    totalCommission: totalCommission,
+                    avgDailyCommission: avgDaily
+                };
+            });
+        }
+
+        // ==================== EXPORT FUNCTIONS ==================== 
+        function exportTransactionsPDF() {
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <h2 style="margin-bottom: 20px;">Laporan Transaksi</h2>
+                <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Tanggal</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Keterangan</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Kategori</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">Nominal</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Jenis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${transactions.sort((a, b) => new Date(b.date) - new Date(a.date)).map(t => `
+                            <tr>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${formatDate(t.date)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${t.description}${t.employeeName ? ' - ' + t.employeeName : ''}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${getCategoryLabel(t.category)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">${formatCurrency(t.amount)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${t.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            html2pdf().set({
+                margin: 10,
+                filename: 'laporan-transaksi.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+            }).save(element);
+        }
+
+        function exportEmployeesPDF() {
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <h2 style="margin-bottom: 20px;">Laporan Data Karyawan</h2>
+                <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Nama</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Posisi</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">No. Telepon</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">Gaji/Bulan</th>
+                            <th style="border: 1px solid #e5e7eb; padding: 10px; text-align: left;">Tanggal Bergabung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${employees.map(e => `
+                            <tr>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${e.name}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${e.position}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${e.phone}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px; text-align: right;">${formatCurrency(e.salary)}</td>
+                                <td style="border: 1px solid #e5e7eb; padding: 10px;">${formatDate(e.startDate)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            html2pdf().set({
+                margin: 10,
+                filename: 'laporan-karyawan.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+            }).save(element);
+        }
+
         // ==================== UTILITY FUNCTIONS ==================== 
         function formatCurrency(value) {
             return new Intl.NumberFormat('id-ID', {
@@ -1323,6 +1700,7 @@
                 'sales': 'Penjualan',
                 'service': 'Jasa',
                 'salary': 'Gaji Karyawan',
+                'commission': 'Komisi/Bagi Hasil',
                 'supplies': 'Perlengkapan',
                 'utilities': 'Utilitas',
                 'rent': 'Sewa Tempat',
@@ -1333,7 +1711,7 @@
 
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
-            toast.className = `toast bg-${type === 'success' ? 'green' : 'gray'}-900`;
+            toast.className = `toast ${type === 'success' ? 'bg-green-900' : 'bg-gray-900'}`;
             toast.textContent = message;
             document.body.appendChild(toast);
             
@@ -1366,6 +1744,13 @@
             document.getElementById('transactionModal')?.addEventListener('click', (e) => {
                 if (e.target.id === 'transactionModal') {
                     closeTransactionModal();
+                }
+            });
+            
+            // Close delete modal on backdrop click
+            document.getElementById('deleteModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'deleteModal') {
+                    closeDeleteModal();
                 }
             });
         }
